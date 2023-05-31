@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "orbital-app",
+    "scheme": "orbital-app",
     "slug": "orbital-app",
     "version": "1.0.0",
     "orientation": "portrait",
