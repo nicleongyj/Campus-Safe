@@ -1,21 +1,33 @@
 import { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
+import background from "../../assets/background.png";
+
 export default function RegisterPage() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secondaryPassword, setSecondaryPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
   const handleSubmit = async () => {
+    if (name == "") {
+      setErrMsg("Please fill up your name");
+      return;
+    }
     if (email == "") {
       setErrMsg("Please fill up username");
       return;
     }
     if (password == "") {
       setErrMsg("Please fill up password");
+      return;
+    }
+    if (password !== secondaryPassword) {
+      setErrMsg("Passwords do not match");
       return;
     }
 
@@ -31,46 +43,95 @@ export default function RegisterPage() {
 
   return (
     <View style={styles.container}>
-      <View style={{ flex: 1, marginTop: 180 }}>
-        <Text style={styles.header1}>Register your account</Text>
-        <Text style={{ fontSize: 15, fontWeight: "bold", color: "red", marginBottom: 10}}>
-          {" "}
-          {errMsg !== "" && <Text>{errMsg}</Text>}
-          {/* {loading && <ActivityIndicator />} */}
-        </Text>
-      </View>
-      <View style={{ flex: 5, marginTop: 10 }}>
-        <Text style={styles.text}>Enter Email</Text>
-        <TextInput
-          autoCapitalize="none"
-          mode="outlined"
-          style={styles.textBox}
-          textColor="black"
-          value={email}
-          onChangeText={setEmail}
-        ></TextInput>
-        <Text style={styles.text}>Enter Password</Text>
-        <TextInput
-          autoCapitalize="none"
-          secureTextEntry
-          mode="outlined"
-          style={styles.textBox}
-          textColor="black"
-          value={password}
-          onChangeText={setPassword}
-        ></TextInput>
-        <Button
-          onPress={() => handleSubmit()}
-          mode="contained"
-          style={styles.button}
-          buttonColor="powderblue"
-          loading={loading}
-          ActivityIndicator
-          textColor="black"
-        >
-          Register
-        </Button>
-      </View>
+      <ImageBackground
+        source={background}
+        resizeMode="stretch"
+        style={{ flex: 1 }}
+      >
+        {/*HEADER CONTAINER*/}
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Register your account</Text>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "bold",
+              color: "red",
+              marginBottom: 10,
+            }}
+          >
+            {" "}
+            {errMsg !== "" && <Text>{errMsg}</Text>}
+            {/* {loading && <ActivityIndicator />} */}
+          </Text>
+        </View>
+
+        {/*INPUT CONTAINER*/}
+        <View style={styles.inputContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Name:</Text>
+            <TextInput
+              autoCapitalize="none"
+              mode="flat"
+              style={styles.textBox}
+              textColor="black"
+              value={name}
+              onChangeText={setName}
+            ></TextInput>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Email:</Text>
+            <TextInput
+              autoCapitalize="none"
+              mode="flat"
+              style={styles.textBox}
+              textColor="black"
+              value={email}
+              onChangeText={setEmail}
+            ></TextInput>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Password:</Text>
+            <TextInput
+              autoCapitalize="none"
+              secureTextEntry
+              mode="flat"
+              style={styles.textBox}
+              textColor="black"
+              value={password}
+              onChangeText={setPassword}
+            ></TextInput>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Confirm Password:</Text>
+            <TextInput
+              autoCapitalize="none"
+              secureTextEntry
+              mode="flat"
+              style={styles.textBox}
+              textColor="black"
+              value={secondaryPassword}
+              onChangeText={setSecondaryPassword}
+            ></TextInput>
+          </View>
+        </View>
+
+        {/*BUTTON CONTAINER*/}
+        <View style={styles.buttonContainer}>
+          <Button
+            onPress={handleSubmit}
+            style={styles.button}
+            mode="elevated"
+            buttonColor="black"
+            loading={loading}
+            textColor="white"
+          >
+            Register
+          </Button>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -78,35 +139,52 @@ export default function RegisterPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "azure",
   },
-  text: {
-    fontSize: 15,
+  headerContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  inputContainer: {
+    flex: 1,
+    padding: "5%",
+    alignItems: "center",
   },
 
-  button: {
-    marginTop: 13,
-    borderColor: "black",
-    borderWidth: 1,
+  textContainer: {
+    marginBottom: 10,
   },
-  header1: {
+  buttonContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  header: {
     justifyContent: "center",
     alignContent: "center",
     marginBottom: 50,
     fontSize: 40,
     fontWeight: "bold",
   },
-  input: {
-    width: 400,
-    height: 40,
+
+  text: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "dimgray",
   },
+  button: {
+    borderColor: "black",
+    borderWidth: 0,
+    width: "70%",
+    fontWeight: "bold",
+  },
+
   textBox: {
-    height: 40,
-    backgroundColor: "cornsilk",
+    backgroundColor: "rgba(0,0,0,0)",
+    height: 30,
     width: 300,
-    marginTop: 5,
-    marginBottom: 5,
+    fontSize: "15%",
+    fontFamily: "Arial",
   },
 });

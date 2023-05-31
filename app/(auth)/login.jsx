@@ -1,11 +1,16 @@
-import { useState } from "react";
 import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
-import { ActivityIndicator, Button, TextInput } from "react-native-paper";
-import { Link } from "expo-router";
+import { Button, TextInput } from "react-native-paper";
+import { useState } from "react";
 import { supabase } from "../../lib/supabase";
-import Index from "../(home)/index";
+import { Link } from "expo-router";
 
-export default function LoginPage() {
+import background from "../../assets/background.png";
+import campusSafe from "../../assets/CampusSafe.png";
+import emailIcon from "../../assets/emailIcon.png";
+import keyIcon from "../../assets/key.png";
+import toolIcon from "../../assets/tools.png";
+
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,88 +40,109 @@ export default function LoginPage() {
     if (error) {
       setErrMsg(error.message);
     }
-    return <Index />;
   };
 
   return (
     <View style={styles.container}>
+      <ImageBackground
+        source={background}
+        resizeMode="stretch"
+        style={{ flex: 1 }}
+      >
+
+        {/*LOGO CONTAINER*/}
         <View style={styles.logoContainer}>
-          <Image
-            source={require("../../assets/CampusSafe.png")}
-            style={styles.logo}
-          />
+          <Image source={campusSafe} style={styles.logo} />
           <Text style={styles.cs}>CampusSafe</Text>
         </View>
 
-        <View style={styles.formContainer}>
-          <Text style={styles.welcome}>Welcome back!</Text>
-          <Text style={styles.signIn}>Sign in to start reporting!</Text>
-          {errMsg !== "" && <Text style={styles.error}>{errMsg}</Text>}
-          {loading && <ActivityIndicator />}
-          <Text style={{ fontWeight: "bold" }}>Email:</Text>
-          <TextInput
-            autoCapitalize="none"
-            mode="outlined"
-            style={styles.textBox}
-            value={email}
-            onChangeText={setEmail}
-          />
-          <Text style={{ marginTop: 10, fontWeight: "bold" }}>Password:</Text>
-          <TextInput
-            secureTextEntry // Sets password type
-            autoCapitalize="none"
-            mode="outlined"
-            style={styles.textBox}
-            value={password}
-            onChangeText={setPassword}
-          />
+        <View style={styles.textContainer}>
+          <Text style={styles.header}>Welcome back!</Text>
+          <Text style={styles.subHeader}>Sign in to start reporting!</Text>
 
-          <View style={styles.buttonContainer}>
-            <Link href="/register" style={{ marginTop: 15 }}>
-              <Button style={styles.registerButton}>Go to register</Button>
-            </Link>
-
-            <Button
-              onPress={handleSubmit}
-              mode="contained"
-              style={styles.button}
-              buttonColor="powderblue"
-              loading={loading}
+          {/*EMAIL CONTAINER*/}
+          <View style={styles.inputContainer}>
+            <Image source={emailIcon} style={styles.emailIcon} />
+            <TextInput
+              autoCapitalize="none"
+              mode="flat"
               textColor="black"
-            >
-              Sign In
-            </Button>
+              style={styles.textBox}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="email"
+              placeholderTextColor={"gray"}
+            />
           </View>
 
-          <View style={styles.resetContainer}>
-            <Link href="/Stafflogin" style={{ marginTop: 15 }}>
-              <Button
-                mode="contained"
-                style={styles.reset}
-                buttonColor="white"
-                textColor="black"
-              >
-                Log in as staff
-              </Button>
+          {/*PASSWORD CONTAINER*/}
+          <View style={styles.inputContainer}>
+            <Image source={keyIcon} style={styles.emailIcon} />
+            <TextInput
+              secureTextEntry
+              autoCapitalize="none"
+              mode="flat"
+              color="azure"
+              style={styles.textBox}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="password"
+              placeholderTextColor={"grey"}
+            ></TextInput>
+          </View>
+          <Text style={styles.error}>
+            {" "}
+            {errMsg !== "" && <Text>{errMsg}</Text>}
+          </Text>
+        </View>
+
+        {/*LOWER CONTAINER*/}
+        <View style={styles.bottomContainer}>
+          <Button
+            onPress={handleSubmit}
+            mode="elevated"
+            style={styles.button}
+            buttonColor="black"
+            loading={loading}
+            textColor="white"
+          >
+            Sign In
+          </Button>
+          <Link
+            href="/Stafflogin"
+            style={{
+              marginTop: 10,
+            }}
+          >
+            <Button
+              style={styles.staffButton}
+              mode="elevated"
+              buttonColor="white"
+              textColor="black"
+              icon={toolIcon}
+            >
+              Log in as staff
+            </Button>
+          </Link>
+
+          {/*REGISTER CONTAINER*/}
+          <View style={{ marginTop: 30, flexDirection: "row" }}>
+            <Text style={{ color: "dimgrey", fontWeight: "bold" }}>
+              Don't have an account?{" "}
+            </Text>
+            <Link
+              href="/register"
+              style={{
+                color: "orangered",
+                fontWeight: "bold",
+                textDecorationLine: "underline",
+              }}
+            >
+              Register an account
             </Link>
-
-            
-            <Link href="/newHome" style={{ marginTop: 15 }}>
-              <Button
-                mode="contained"
-                style={styles.reset}
-                buttonColor="white"
-                textColor="black"
-              >
-                test
-              </Button>
-            </Link>
-
-
-
-
           </View>
         </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -124,71 +150,78 @@ export default function LoginPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "column",
+    alignItems: "stretch",
     backgroundColor: "azure",
   },
   logoContainer: {
     flex: 1,
     alignItems: "center",
-    marginTop: 30,
+    justifyContent: "center",
+    flexDirection: "row",
+    paddingTop: "25%",
+    paddingRight: "5%",
   },
-  logo: {
-    height: 130,
-    width: 130,
-  },
-  cs: {
-    fontSize: 50,
-    fontStyle: "normal",
-    fontFamily: "Futura",
-    color: "darkblue",
-    fontWeight: "bold",
-  },
-  formContainer: {
+  textContainer: {
     flex: 3,
+    flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
   },
-  welcome: {
-    marginTop: 10,
-    fontSize: 30,
-    fontWeight: "bold",
+  bottomContainer: {
+    flex: 4,
+    alignItems: "center",
   },
-  signIn: {
-    marginBottom: 15,
-    fontSize: 20,
-    fontWeight: "bold",
+  logo: {
+    width: 110,
+    height: 110,
   },
   error: {
     fontSize: 15,
     fontWeight: "bold",
     color: "red",
-    marginBottom: 10,
+    marginTop: "3%",
+  },
+  cs: {
+    fontSize: "30%",
+    fontStyle: "normal",
+    fontFamily: "Futura",
+    color: "darkblue",
+    fontWeight: "bold",
+  },
+  header: {
+    fontSize: "30%",
+    fontWeight: "bold",
+    marginBottom: "2%",
+  },
+  subHeader: {
+    fontSize: "20%",
+    fontWeight: "bold",
+  },
+  inputContainer: {
+    marginTop: "5%",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  emailIcon: {
+    height: 30,
+    width: 30,
+    marginRight: "3%",
   },
   textBox: {
-    height: 40,
-    backgroundColor: "cornsilk",
+    backgroundColor: "rgba(0,0,0,0)",
+    height: 30,
     width: 300,
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    marginTop: 15,
-  },
-  registerButton: {
-    borderColor: "black",
-    borderWidth: 1,
+    fontSize: "15%",
+    fontFamily: "Arial",
   },
   button: {
-    marginTop: 13,
-    marginLeft: 25,
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 0,
+    width: "70%",
+    fontWeight: "bold",
   },
-  resetContainer: {
-    marginTop: 10,
-  },
-  reset: {
+  staffButton: {
     borderWidth: 1,
     borderColor: "black",
   },
