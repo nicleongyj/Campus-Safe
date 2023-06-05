@@ -4,13 +4,16 @@ import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
 
+import { connect } from "react-redux";
+import { setUserType } from "../../redux/store";
+
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
 import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
 import toolIcon from "../../assets/tools.png";
 
-export default function Login() {
+function Login({ setUserType }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +34,8 @@ export default function Login() {
       return;
     }
 
+    setUserType("student");
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -49,7 +54,6 @@ export default function Login() {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-
         {/*LOGO CONTAINER*/}
         <View style={styles.logoContainer}>
           <Image source={campusSafe} style={styles.logo} />
@@ -128,7 +132,7 @@ export default function Login() {
           {/*REGISTER CONTAINER*/}
           <View style={{ marginTop: 30, flexDirection: "row" }}>
             <Text style={{ color: "dimgrey", fontWeight: "bold" }}>
-              Don't have an account?{" "}
+              Don&#39;t have an account?{" "}
             </Text>
             <Link
               href="/register"
@@ -183,19 +187,19 @@ const styles = StyleSheet.create({
     marginTop: "3%",
   },
   cs: {
-    fontSize: "30%",
+    fontSize: 35,
     fontStyle: "normal",
-    fontFamily: "Futura",
+    // fontFamily: "Futura",
     color: "darkblue",
     fontWeight: "bold",
   },
   header: {
-    fontSize: "30%",
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: "2%",
   },
   subHeader: {
-    fontSize: "20%",
+    fontSize: 20,
     fontWeight: "bold",
   },
   inputContainer: {
@@ -212,8 +216,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0)",
     height: 30,
     width: 300,
-    fontSize: "15%",
-    fontFamily: "Arial",
+    fontSize: 15,
+    // fontFamily: "Arial",
   },
   button: {
     borderColor: "black",
@@ -226,3 +230,5 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
 });
+
+export default connect(null, { setUserType })(Login);

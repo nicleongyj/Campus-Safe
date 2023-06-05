@@ -1,36 +1,38 @@
-import { View, Text } from "react-native";
-import { useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+// import { useState } from "react";
 import "react-native-gesture-handler";
-import { Button } from "react-native-paper";
-import {Link} from "expo-router";
+// import { Button } from "react-native-paper";
+// import { Link } from "expo-router";
 
-export default function Homepage() {
-  const [check, setCheck] = useState("false");
 
-  const handlePress = () => {
-    setCheck(check +"a");
-  };
+import { connect } from "react-redux";
 
-  const Bold = ({ children }) => (
-    <Text style={{ fontWeight: "bold" }}>{children}</Text>
-  );
+function Homepage() {
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Homepage</Text>
-      <Button mode="contained" onPress={handlePress}>
-        activate
-      </Button>
-      <Link href="../(staffhome)/staffhome" style={{ marginTop: 15 }}>
-        <Button
-          mode="contained"
-          buttonColor="powderblue"
-          textColor="black"
-        >
-          Login
-        </Button>
-      </Link>
-
+    <View style={styles.container}>
+        <Text style={styles.header}>Welcome back!</Text>
+        <Text style={styles.header}>What would you like to do today?</Text>
     </View>
   );
 }
+
+const mapStateToProps = (state) => ({
+  userType: state.userType,
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    backgroundColor: "azure",
+  },
+  header: {
+    fontSize:20,
+    fontWeight: 'bold',
+  }
+
+});
+
+export default connect(mapStateToProps)(Homepage);

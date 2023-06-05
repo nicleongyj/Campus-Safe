@@ -2,16 +2,14 @@ import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
-import { Link } from "expo-router";
+
+import { connect } from "react-redux";
+import { setUserType } from "../../redux/store";
 
 import background from "../../assets/background.png";
 import toolIcon from "../../assets/tools.png";
 
-// import { useNavigation } from "expo-router";
-
-export default function StaffLogin() {
-  // const navigation = useNavigation();
-
+function StaffLogin({ setUserType }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,10 +17,6 @@ export default function StaffLogin() {
   const [code, setCode] = useState("");
 
   const STAFFCODE = "0000";
-
-  // const goNavigate = () => {
-  //   navigation.navigate("RegisterPage");
-  // }
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -51,6 +45,7 @@ export default function StaffLogin() {
     });
 
     setLoading(false);
+    setUserType("staff");
 
     if (error) {
       setErrMsg(error.message);
@@ -160,7 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
   },
   header: {
@@ -185,7 +180,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0)",
     height: 30,
     width: 300,
-    fontSize: "15%",
-    fontFamily: "Arial",
+    fontSize: 15,
+    // fontFamily: "Arial",
   },
 });
+
+export default connect(null, { setUserType })(StaffLogin);

@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0)",
     height: 30,
     width: 300,
-    fontSize: "15%",
-    fontFamily: "Arial",
+    fontSize: 15,
+    // fontFamily: "Arial",
   },
 });
