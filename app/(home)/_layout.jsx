@@ -17,13 +17,14 @@ function HomeLayout({ userType }) {
           },
           headerTitleStyle: {
             color: "white",
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 25,
           },
           tabBarActiveTintColor: "dodgerblue",
           tabBarLabelStyle: {
             fontWeight: "bold",
           },
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -37,13 +38,14 @@ function HomeLayout({ userType }) {
           },
           headerTitleStyle: {
             color: "white",
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 25,
           },
           tabBarActiveTintColor: "dodgerblue",
           tabBarLabelStyle: {
             fontWeight: "bold",
           },
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -58,14 +60,26 @@ function HomeLayout({ userType }) {
           },
           headerTitleStyle: {
             color: "white",
-            fontWeight: 'bold',
+            fontWeight: "bold",
             fontSize: 25,
           },
           tabBarActiveTintColor: "dodgerblue",
           tabBarLabelStyle: {
             fontWeight: "bold",
           },
+          headerShown: false,
         }}
+      />
+      <Tabs.Screen
+        name="reportForm"
+        options={{ href: null,
+          headerTitle:"Report an accident",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 25,
+            color:'orangered',
+          },}}
+        
       />
     </Tabs>
   );
