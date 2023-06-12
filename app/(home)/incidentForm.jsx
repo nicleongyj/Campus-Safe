@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
+import { insertData } from "../../lib/supabase";
 
 export default function IncidentForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -35,7 +36,19 @@ export default function IncidentForm() {
   //additional details
   const [details, setDetails] = useState("");
 
-  const handleSubmit = () => {
+  //Determine type of incident
+  const handleIncidentType = () => {
+    return others ? others : incident;
+  }
+  const formData = {
+    type: handleIncidentType(),
+    urgent_level: urgency,
+    location: location,
+    details: details,
+  };
+
+
+  const handleSubmit = async () => {
     if (incident == "Select an item") {
       setErrMsg("Fill up incident type!");
       return;
@@ -54,17 +67,26 @@ export default function IncidentForm() {
     }
 
     //SUPABASE LOGIC
-    //
-    //
-
-    Alert.alert(
-      "Your report has been received!",
-      "View the status of your report in 'View your reports'",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-    );
-  };
+    const error = await insertData(formData, "incidentreps");
+    console.log(error);
+    if (!error) {
+      Alert.alert(
+        "Your report has been received!",
+        "View the status of your report in 'View your reports'",
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+      );
+    } else {
+      Alert.alert(
+        "Error",
+        "Please try again!",
+        [{ text: "OK", onPress: () => console.log("Error, OK Pressed")}]
+        );
+        return;
+      }
+  }
+  
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.topContainer}>
         <Link href="/">
           <Button
@@ -167,7 +189,7 @@ export default function IncidentForm() {
           </Button>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
