@@ -1,21 +1,60 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
 import { connect } from "react-redux";
-import { setUserType } from "../../redux/store";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { setUserType, setUserEmail } from "../../redux/store";
+import { TextInput } from "react-native-paper";
 
-function Profile({ setUserType }) {
+import loginBackground from '../../assets/loginBackground.jpg'
+
+function Profile({ setUserType, userType, userEmail }) {
   const handleLogOut = () => {
     setUserType("");
+    setUserEmail("");
     supabase.auth.signOut();
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <ImageBackground
+        source={loginBackground}
+        resizeMode="stretch"
+        style={{ flex: 1 }}
+      >
       <View style={styles.topContainer}>
         <Text style={styles.header}>Profile page</Text>
+      </View>
+
+      <View style={styles.middleContainer}>
+        <View style={styles.infoContainer}>
+          <Text style={styles.text}>Account type:</Text>
+          <TextInput
+            mode="flat"
+            style={styles.textInput}
+            disabled={true}
+            placeholder="Account type"
+            textColor="black"
+          >
+            {userType}
+          </TextInput>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <Text style={styles.text}>Account email:</Text>
+          <TextInput
+            mode="flat"
+            style={styles.textInput}
+            disabled={true}
+            placeholder="Account email"
+            textColor="black"
+          >
+            {userEmail}
+          </TextInput>
+
+          {/* <Button mode='elevated' onPress={() => console.log(userType)}>Check usertype</Button> */}
+        </View>
+
       </View>
 
       <View style={styles.bottomContainer}>
@@ -29,7 +68,8 @@ function Profile({ setUserType }) {
           Log out
         </Button>
       </View>
-    </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 }
 
@@ -38,15 +78,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "white",
+    flexDirection: "column",
   },
   topContainer: {
-    flex: 5,
+    flex: 1,
     alignItems: "center",
     padding: 10,
+    marginTop: 100,
   },
   header: {
     fontWeight: "bold",
     fontSize: 30,
+  },
+  middleContainer: {
+    flex: 5,
+    alignItems: "center",
+  },
+  infoContainer: {
+    alignItems: "center",
+    marginBottom: 30,
   },
   bottomContainer: {
     flex: 1,
@@ -54,12 +104,28 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: "10%",
   },
+  text: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
   button: {
     borderColor: "black",
     borderWidth: 0,
     width: "70%",
     fontWeight: "bold",
   },
+  textInput: {
+    backgroundColor: "whitesmoke",
+    height: 25,
+    width: 300,
+    fontWeight: 'bold',
+  },
 });
 
-export default connect(null, { setUserType })(Profile);
+const mapStateToProps = (state) => ({
+  userType: state.userType,
+  userEmail: state.userEmail,
+});
+
+export default connect(mapStateToProps, { setUserType, setUserEmail })(Profile);

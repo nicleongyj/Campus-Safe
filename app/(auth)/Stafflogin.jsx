@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { Button, TextInput, Checkbox } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
 import { connect } from "react-redux";
 import { setUserType } from "../../redux/store";
+import { setUserEmail } from "../../redux/store";
 
 import background from "../../assets/background.png";
 import toolIcon from "../../assets/tools.png";
 
-function StaffLogin({ setUserType }) {
+function StaffLogin({ setUserType, setUserEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [code, setCode] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showCode, setShowCode] = useState(false);
 
   const STAFFCODE = "0000";
 
@@ -45,13 +48,21 @@ function StaffLogin({ setUserType }) {
     });
 
     setLoading(false);
-    setUserType("staff");
+    setUserType("Staff");
+    setUserEmail(email);
 
     if (error) {
       setErrMsg(error.message);
     }
     console.log("pass");
     return;
+  };
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const handleCode = () => {
+    setShowCode(!showCode);
   };
 
   return (
@@ -94,7 +105,7 @@ function StaffLogin({ setUserType }) {
             <Text style={styles.text}>Password:</Text>
             <TextInput
               autoCapitalize="none"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               mode="flat"
               style={styles.textBox}
               textColor="black"
@@ -107,13 +118,52 @@ function StaffLogin({ setUserType }) {
             <Text style={styles.text}>Staff Code</Text>
             <TextInput
               autoCapitalize="none"
-              secureTextEntry
+              secureTextEntry={!showCode}
               mode="flat"
               style={styles.textBox}
               textColor="black"
               value={code}
               onChangeText={setCode}
             ></TextInput>
+          </View>
+
+          <View style={{ flexDirection: "column", alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                onPress={handlePassword}
+                textColor="black"
+                style={{ marginRight: -15 }}
+              >
+                Show password
+              </Button>
+              <Checkbox.Android
+                status={showPassword ? "checked" : "unchecked"}
+                onPress={handlePassword}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                onPress={handleCode}
+                textColor="black"
+                style={{ marginRight: -15 }}
+              >
+                Show staff code
+              </Button>
+              <Checkbox.Android
+                status={showCode ? "checked" : "unchecked"}
+                onPress={handleCode}
+              />
+            </View>
           </View>
         </View>
 
@@ -185,4 +235,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { setUserType })(StaffLogin);
+export default connect(null, { setUserType, setUserEmail })(StaffLogin);

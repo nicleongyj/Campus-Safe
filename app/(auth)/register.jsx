@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { Button, TextInput, Checkbox } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [secondaryPassword, setSecondaryPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
     if (name == "") {
@@ -40,6 +41,10 @@ export default function RegisterPage() {
       return;
     }
   };
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
+  }
 
   return (
     <View style={styles.container}>
@@ -95,7 +100,7 @@ export default function RegisterPage() {
             <Text style={styles.text}>Password:</Text>
             <TextInput
               autoCapitalize="none"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               mode="flat"
               style={styles.textBox}
               textColor="black"
@@ -108,7 +113,7 @@ export default function RegisterPage() {
             <Text style={styles.text}>Confirm Password:</Text>
             <TextInput
               autoCapitalize="none"
-              secureTextEntry
+              secureTextEntry={!showPassword}
               mode="flat"
               style={styles.textBox}
               textColor="black"
@@ -116,6 +121,16 @@ export default function RegisterPage() {
               onChangeText={setSecondaryPassword}
             ></TextInput>
           </View>
+          <View style={{ flexDirection: "row", alignItems:'center',  }}>
+           
+           <Button onPress={handlePassword} textColor="black" style={{marginRight:-15,}}>
+             Show passwords
+           </Button>
+           <Checkbox.Android
+             status= {showPassword? "checked" : "unchecked"}
+             onPress={handlePassword}
+           />
+         </View>
         </View>
 
         {/*BUTTON CONTAINER*/}

@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { Button, TextInput, Checkbox } from "react-native-paper";
 import { useState } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
 
 import { connect } from "react-redux";
 import { setUserType } from "../../redux/store";
+import { setUserEmail } from "../../redux/store";
 
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
@@ -13,11 +14,12 @@ import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
 import toolIcon from "../../assets/tools.png";
 
-function Login({ setUserType }) {
+function Login({ setUserType, setUserEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -34,7 +36,8 @@ function Login({ setUserType }) {
       return;
     }
 
-    setUserType("student");
+    setUserType("Student");
+    setUserEmail(email);
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -45,6 +48,10 @@ function Login({ setUserType }) {
     if (error) {
       setErrMsg(error.message);
     }
+  };
+
+  const handlePassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -74,7 +81,7 @@ function Login({ setUserType }) {
               style={styles.textBox}
               value={email}
               onChangeText={setEmail}
-              placeholder="email"
+              placeholder="Email"
               placeholderTextColor={"gray"}
             />
           </View>
@@ -83,16 +90,35 @@ function Login({ setUserType }) {
           <View style={styles.inputContainer}>
             <Image source={keyIcon} style={styles.emailIcon} />
             <TextInput
-              secureTextEntry
+              secureTextEntry={!showPassword}
               autoCapitalize="none"
               mode="flat"
               color="azure"
               style={styles.textBox}
               value={password}
               onChangeText={setPassword}
-              placeholder="password"
+              placeholder="Password"
               placeholderTextColor={"grey"}
             ></TextInput>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 10,
+            }}
+          >
+            <Button
+              onPress={handlePassword}
+              textColor="black"
+              style={{ marginRight: -15 }}
+            >
+              Show password
+            </Button>
+            <Checkbox.Android
+              status={showPassword ? "checked" : "unchecked"}
+              onPress={handlePassword}
+            />
           </View>
           <Text style={styles.error}>
             {" "}
@@ -231,4 +257,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { setUserType })(Login);
+export default connect(null, { setUserType, setUserEmail })(Login);

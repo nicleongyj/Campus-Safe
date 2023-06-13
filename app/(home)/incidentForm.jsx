@@ -2,7 +2,6 @@ import { Text, View, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertData } from "../../lib/supabase";
 
@@ -39,14 +38,13 @@ export default function IncidentForm() {
   //Determine type of incident
   const handleIncidentType = () => {
     return others ? others : incident;
-  }
+  };
   const formData = {
     type: handleIncidentType(),
     urgent_level: urgency,
     location: location,
     details: details,
   };
-
 
   const handleSubmit = async () => {
     if (incident == "Select an item") {
@@ -76,15 +74,18 @@ export default function IncidentForm() {
         [{ text: "OK", onPress: () => console.log("OK Pressed") }]
       );
     } else {
-      Alert.alert(
-        "Error",
-        "Please try again!",
-        [{ text: "OK", onPress: () => console.log("Error, OK Pressed")}]
-        );
-        return;
-      }
-  }
-  
+      Alert.alert("Error", "Please try again!", [
+        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+      ]);
+      return;
+    }
+    setIncident("Select an item");
+    setOthers("");
+    setUrgency("Select an item");
+    setLocation("");
+    setDetails("");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -209,7 +210,6 @@ const styles = StyleSheet.create({
     flex: 9,
   },
   reportContainer: {
-    marginTop: 15,
     marginBottom: 10,
     zIndex: 3,
   },
