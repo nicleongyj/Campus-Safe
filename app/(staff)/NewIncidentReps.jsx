@@ -1,4 +1,4 @@
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, SafeAreaView, StyleSheet } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useState, useEffect} from 'react';
 import { supabase } from "../../lib/supabase";
