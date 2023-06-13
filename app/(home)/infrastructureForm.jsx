@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
+import { insertData } from "../../lib/supabase";
 
 export default function InfrastructureForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -27,7 +28,18 @@ export default function InfrastructureForm() {
   //additional details
   const [details, setDetails] = useState("");
 
-  const handleSubmit = () => {
+//Determine type of incident
+  const handleIncidentType = () => {
+    return others ? others : incident;
+  }
+
+  const formData = {
+    type: handleIncidentType(),
+    location: location,
+    details: details,
+  };
+
+  const handleSubmit = async () => {
     if (incident == "Select an item") {
       setErrMsg("Fill up incident type!");
       return;
@@ -41,15 +53,23 @@ export default function InfrastructureForm() {
       return;
     }
 
-    //
     // SUPABASE LOGIC
-    //
-
-    Alert.alert(
-      "Your report has been received!",
-      "View the status of your report in 'View your reports'",
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-    );
+    const error = await insertData(formData, "infrareps");
+    console.log(error);
+    if (!error) {
+      Alert.alert(
+        "Your report has been received!",
+        "View the status of your report in 'View your reports'",
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+      );
+    } else {
+      Alert.alert(
+        "Error",
+        "Please try again!",
+        [{ text: "OK", onPress: () => console.log("Error, OK Pressed")}]
+        );
+        return;
+      }
   };
 
   return (
