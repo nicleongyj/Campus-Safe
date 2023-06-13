@@ -28,10 +28,10 @@ export default function InfrastructureForm() {
   //additional details
   const [details, setDetails] = useState("");
 
-//Determine type of incident
+  //Determine type of incident
   const handleIncidentType = () => {
     return others ? others : incident;
-  }
+  };
 
   const formData = {
     type: handleIncidentType(),
@@ -63,13 +63,15 @@ export default function InfrastructureForm() {
         [{ text: "OK", onPress: () => console.log("OK Pressed") }]
       );
     } else {
-      Alert.alert(
-        "Error",
-        "Please try again!",
-        [{ text: "OK", onPress: () => console.log("Error, OK Pressed")}]
-        );
-        return;
-      }
+      Alert.alert("Error", "Please try again!", [
+        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+      ]);
+      return;
+    }
+    setIncident("Select an item");
+    setOthers("");
+    setLocation("");
+    setDetails("");
   };
 
   return (

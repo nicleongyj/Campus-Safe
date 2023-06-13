@@ -1,15 +1,19 @@
-import { View, Text, StyleSheet } from "react-native";
-// import { useState } from "react";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import "react-native-gesture-handler";
 import { Button } from "react-native-paper";
-// import { Link } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { connect } from "react-redux";
 import { Link } from "expo-router";
 
+import loginBackground from "../../assets/loginBackground.jpg";
+
 function Homepage() {
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <ImageBackground
+        source={loginBackground}
+        resizeMode="stretch"
+        style={{ flex: 1 }}
+      >
       <View style={styles.topContainer}>
         <Text style={styles.header}>Staff home</Text>
         {/* <Text style={styles.subheader}>What would you like to do today?</Text> */}
@@ -41,15 +45,14 @@ function Homepage() {
               textColor="black"
               labelStyle={styles.buttonContent}
               contentStyle={{ width: 350, height: 100 }}
-              onPress={() => console.log("pressed")}
             >
               <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
             </Button>
           </Link>
         </View>
       </View>
-
-    </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 }
 
@@ -62,14 +65,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     // alignItems: "stretch",
-    backgroundColor: "white",
   },
   topContainer: {
     flex: 1,
     padding: 10,
     marginLeft: 5,
-    backgroundColor: "white",
     justifyContent: "center",
+    marginTop: 50,
   },
   bottomContainer: {
     flex: 5,
