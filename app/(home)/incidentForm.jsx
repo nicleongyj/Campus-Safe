@@ -1,35 +1,34 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-// import { ScrollView } from "react-native-gesture-handler";
-
-import DropDownPicker from "react-native-dropdown-picker";
+import { Link } from "expo-router";
 import { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
+import DropDownPicker from "react-native-dropdown-picker";
 
-export default function ReportForm() {
+export default function IncidentForm() {
   const [errMsg, setErrMsg] = useState("");
+  const [enableSecondQuestion, setEnableSecondQuestion] = useState(false);
   //incident data
-  const [incident, setIncident] = useState(null);
+  const [incident, setIncident] = useState("Select an item");
   const [open, setOpen] = useState(false);
   const [incidentItems, setIncidentItems] = useState([
-    { label: "fire", value: "fire" },
-    { label: "fallen tree", value: "fallen tree" },
-    { label: "motor accident", value: "motor accident" },
-    { label: "suspicious activity", value: "suspicious activity" },
-    { label: "others", value: "others" },
+    { label: "Fire", value: "Fire" },
+    { label: "Fallen tree", value: "Fallen tree" },
+    { label: "Motor accident", value: "Motor accident" },
+    { label: "Suspicious activity", value: "Suspicious activity" },
+    { label: "Others", value: "Others" },
+    { label: "Select an item", value: "Select an item" },
   ]);
   //others data
   const [others, setOthers] = useState("");
   //urgency data
-  const [urgency, setUrgency] = useState(null);
+  const [urgency, setUrgency] = useState("Select an item");
   const [open2, setOpen2] = useState(false);
   const [urgencyItems, setUrgencyItems] = useState([
     { label: "1", value: "1" },
     { label: "2", value: "2" },
     { label: "3", value: "3" },
-    { label: "4", value: "4" },
-    { label: "5", value: "5" },
+    { label: "Select an item", value: "Select an item" },
   ]);
   //location
   const [location, setLocation] = useState("");
@@ -37,22 +36,32 @@ export default function ReportForm() {
   const [details, setDetails] = useState("");
 
   const handleSubmit = () => {
-    if (incident == null) {
+    if (incident == "Select an item") {
       setErrMsg("Fill up incident type!");
       return;
     }
-    if (incident == "other" && others == "") {
+    if (incident == "Others" && others == "") {
       setErrMsg("Fill up incident details!");
       return;
     }
-    if (urgency == null) {
+    if (urgency == "Select an item") {
       setErrMsg("Fill up level of emergency!");
       return;
     }
     if (location == "") {
-      setErrMsg("Fill up location!")
+      setErrMsg("Fill up location!");
       return;
     }
+
+    //SUPABASE LOGIC
+    //
+    //
+
+    Alert.alert(
+      "Your report has been received!",
+      "View the status of your report in 'View your reports'",
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
   };
   return (
     <ScrollView style={styles.container}>
@@ -62,12 +71,7 @@ export default function ReportForm() {
             mode="outlined"
             buttonColor="powderblue"
             textColor="black"
-            style={{
-              borderColor: "black",
-              borderWidth: 1,
-              width: 100,
-              fontWeight: "bold",
-            }}
+            style={styles.homeButton}
           >
             Home
           </Button>
@@ -75,7 +79,7 @@ export default function ReportForm() {
       </View>
 
       <View style={styles.middleContainer}>
-        <View style={styles.questionContainer}>
+        <View style={styles.reportContainer}>
           <Text style={styles.question}>1. What are you reporting?</Text>
           <DropDownPicker
             open={open}
@@ -84,10 +88,14 @@ export default function ReportForm() {
             setOpen={setOpen}
             setValue={setIncident}
             setItems={setIncidentItems}
+            listMode="SCROLLVIEW"
+            onChangeValue={(value) =>
+              setEnableSecondQuestion(value == "Others")
+            }
           />
         </View>
 
-        <View style={styles.normalQuestion}>
+        <View style={styles.normalContainer}>
           <Text style={styles.question}>2. If you chose others, specify:</Text>
           <TextInput
             style={styles.textInput}
@@ -98,10 +106,11 @@ export default function ReportForm() {
             mode="flat"
             textColor="black"
             multiline={true}
+            disabled={!enableSecondQuestion}
           ></TextInput>
         </View>
 
-        <View style={styles.normalQuestion}>
+        <View style={styles.urgencyContainer}>
           <Text style={styles.question}>3. Level of urgency:</Text>
           <DropDownPicker
             open={open2}
@@ -113,7 +122,7 @@ export default function ReportForm() {
           />
         </View>
 
-        <View style={styles.normalQuestion}>
+        <View style={styles.normalContainer}>
           <Text style={styles.question}>4. Location of incident:</Text>
           <TextInput
             style={styles.textInput}
@@ -127,7 +136,7 @@ export default function ReportForm() {
           ></TextInput>
         </View>
 
-        <View style={styles.normalQuestion}>
+        <View style={styles.normalContainer}>
           <Text style={styles.question}>5. Additional details:</Text>
           <TextInput
             style={styles.textInput}
@@ -143,7 +152,7 @@ export default function ReportForm() {
         </View>
 
         <View style={{ alignItems: "center" }}>
-        <Text style={styles.error}>
+          <Text style={styles.error}>
             {" "}
             {errMsg !== "" && <Text>{errMsg}</Text>}
           </Text>
@@ -177,21 +186,26 @@ const styles = StyleSheet.create({
   middleContainer: {
     flex: 9,
   },
-  questionContainer: {
+  reportContainer: {
     marginTop: 15,
-    marginBottom: 20,
+    marginBottom: 10,
     zIndex: 3,
   },
-  normalQuestion: {
-    marginTop: 10,
+  urgencyContainer: {
+    marginTop: 15,
     marginBottom: 20,
+    zIndex: 2,
+  },
+  normalContainer: {
+    marginTop: 10,
+    marginBottom: 10,
     zIndex: 1,
   },
   error: {
     fontSize: 15,
     fontWeight: "bold",
     color: "red",
-    marginBottom:5,
+    marginBottom: 10,
   },
   question: {
     fontSize: 20,
@@ -206,6 +220,12 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: 200,
+    fontWeight: "bold",
+  },
+  homeButton: {
+    borderColor: "black",
+    borderWidth: 1,
+    width: 100,
     fontWeight: "bold",
   },
 });

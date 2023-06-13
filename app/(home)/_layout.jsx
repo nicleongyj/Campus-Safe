@@ -71,15 +71,40 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
-        name="reportForm"
-        options={{ href: null,
-          headerTitle:"Report an accident",
+        name="incidentForm"
+        options={{
+          href: null,
+          headerTitle: "Report an accident",
           headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 25,
-            color:'orangered',
-          },}}
-        
+            color: "orangered",
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="infrastructureForm"
+        options={{
+          href: null,
+          headerTitle: "Report an infrastructure issue",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 25,
+            color: "orangered",
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="map"
+        options={{
+          href: null,
+          headerTitle: "Incident Map",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 25,
+            color: "black",
+          },
+        }}
       />
     </Tabs>
   );
