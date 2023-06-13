@@ -5,6 +5,7 @@ import { Button } from "react-native-paper";
 // import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { connect } from "react-redux";
+import { Link } from "expo-router";
 
 function Homepage() {
   return (
@@ -15,30 +16,39 @@ function Homepage() {
       </View>
 
       <View style={styles.bottomContainer}>
-        <Button
-          mode="elevated"
-          style={styles.button}
-          buttonColor="powderblue"
-          textColor="black"
-          labelStyle={styles.buttonContent}
-          contentStyle={{ width: 350, height: 100 }}
-          onPress={() => console.log("pressed")}
-        >
-          <Text style={{ fontSize: 20 }}>Manage ongoing incidents</Text>
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Link href="/Staffhome" style={styles.link}>
+            <Button
+              mode="elevated"
+              style={styles.button}
+              buttonColor="powderblue"
+              textColor="black"
+              labelStyle={styles.buttonContent}
+              contentStyle={{ width: 350, height: 100 }}
+              onPress={() => console.log("pressed")}
+            >
+              <Text style={{ fontSize: 20 }}>Manage ongoing incidents</Text>
+            </Button>
+          </Link>
+        </View>
 
-        <Button
-          mode="elevated"
-          style={styles.button}
-          buttonColor="#D6E7FF"
-          textColor="black"
-          labelStyle={styles.buttonContent}
-          contentStyle={{ width: 350, height: 100 }}
-          onPress={() => console.log("pressed")}
-        >
-          <Text style={{ fontSize: 18 }}>View/Approve incident reports</Text>
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Link href="/StaffView" style={styles.link}>
+            <Button
+              mode="elevated"
+              style={styles.button}
+              buttonColor="#D6E7FF"
+              textColor="black"
+              labelStyle={styles.buttonContent}
+              contentStyle={{ width: 350, height: 100 }}
+              onPress={() => console.log("pressed")}
+            >
+              <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
+            </Button>
+          </Link>
+        </View>
       </View>
+
     </SafeAreaView>
   );
 }
@@ -83,6 +93,14 @@ const styles = StyleSheet.create({
   buttonContent: {
     fontWeight: "bold",
     fontSize: 25,
+    },
+  link: {
+    width: 350,
+    height: 100,
+    zIndex: 2,
+  },
+  buttonContainer: {
+    marginBottom: 35,
   },
 });
 
