@@ -1,7 +1,9 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
+import { insertData } from "../../lib/supabase";
+import { useRouter } from "expo-router";
 
 export default function VerifyForm() {
   const params = useLocalSearchParams();
@@ -13,7 +15,16 @@ export default function VerifyForm() {
   const lat = latitude == 103.77 ? "null" : latitude;
   const long = longitude == 1.29 ? "null" : longitude;
 
-  const handleSubmit = () => {
+  const router = useRouter();
+
+  const formData = {
+    type: incidentType,
+    details: incidentDetails,
+    latitude: lat,
+    longitude: long,
+  };
+
+  const handleSubmit = async () => {
     if (lat == "null" || long == "null") {
         setErrMsg("Select incident location on map!");
         return;
@@ -28,7 +39,23 @@ export default function VerifyForm() {
     }
 
     //SUPABASE LOGIC
-
+  const error = await insertData(formData, "verifiedincidents");
+    console.log(error);
+    if (!error) {
+      Alert.alert(
+        "Incident verified",
+        "View verified reports in 'Manage ongoing incidents'",
+        [{ text: "OK", onPress: () => {
+          console.log("OK Pressed");
+          router.replace("/NewIncidentReps")
+        }}]
+      );
+    } else {
+      Alert.alert("Error", "Please try again!", [
+        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+      ]);
+      return;
+    }
   };
 
   return (
