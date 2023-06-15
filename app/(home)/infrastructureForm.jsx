@@ -2,9 +2,9 @@ import { Text, View, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertData } from "../../lib/supabase";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function InfrastructureForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -75,7 +75,12 @@ export default function InfrastructureForm() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+<KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.topContainer}>
         <Link href="/">
           <Button
@@ -116,7 +121,6 @@ export default function InfrastructureForm() {
             autoCapitalize="none"
             mode="flat"
             textColor="black"
-            multiline={true}
             disabled={!enableSecondQuestion}
           ></TextInput>
         </View>
@@ -126,7 +130,14 @@ export default function InfrastructureForm() {
           <TextInput
             style={styles.textInput}
             value={location}
-            onChangeText={setLocation}
+            onChangeText={(text) => {
+              if (text.trim() === "") {
+                // Empty input, set others to an empty string
+                setLocation("");
+              } else {
+                setLocation(text);
+              }
+            }}
             placeholder="Exact location (building name, floor number ...)"
             autoCapitalize="none"
             mode="flat"
@@ -140,7 +151,14 @@ export default function InfrastructureForm() {
           <TextInput
             style={styles.textInput}
             value={details}
-            onChangeText={setDetails}
+            onChangeText={(text) => {
+              if (text.trim() === "") {
+                // Empty input, set others to an empty string
+                setDetails("");
+              } else {
+                setDetails(text);
+              }
+            }}
             placeholder="Details that staff should be aware about (optional)"
             autoCapitalize="none"
             mode="flat"
@@ -166,7 +184,7 @@ export default function InfrastructureForm() {
           </Button>
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 }
 
