@@ -4,10 +4,6 @@ import { Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const mapStateToProps = (state) => ({
-  userType: state.userType,
-});
-
 export default function StaffView() {
 	return (
 		<SafeAreaView style={styles.container}>
