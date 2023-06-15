@@ -60,7 +60,7 @@ export default function NewIncidentReps() {
                 Delete
               </Button>
 
-            <Link href="/Staffhome">
+            <Link href="/selectMap">
               <Button
                 mode="outlined"
                 buttonColor="powderblue"

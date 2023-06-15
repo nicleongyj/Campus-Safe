@@ -4,6 +4,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertData } from "../../lib/supabase";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function IncidentForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -87,7 +88,12 @@ export default function IncidentForm() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      contentContainerStyle={styles.container}
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={true}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.topContainer}>
         <Link href="/">
           <Button
@@ -123,7 +129,14 @@ export default function IncidentForm() {
           <TextInput
             style={styles.textInput}
             value={others}
-            onChangeText={setOthers}
+            onChangeText={(text) => {
+              if (text.trim() === "") {
+                // Empty input, set others to an empty string
+                setOthers("");
+              } else {
+                setOthers(text);
+              }
+            }}
             placeholder="Brief description"
             autoCapitalize="none"
             mode="flat"
@@ -150,12 +163,18 @@ export default function IncidentForm() {
           <TextInput
             style={styles.textInput}
             value={location}
-            onChangeText={setLocation}
+            onChangeText={(text) => {
+              if (text.trim() === "") {
+                // Empty input, set others to an empty string
+                setLocation("");
+              } else {
+                setLocation(text);
+              }
+            }}
             placeholder="Exact location (building name, floor number ...)"
             autoCapitalize="none"
             mode="flat"
             textColor="black"
-            multiline={true}
           ></TextInput>
         </View>
 
@@ -164,13 +183,20 @@ export default function IncidentForm() {
           <TextInput
             style={styles.textInput}
             value={details}
-            onChangeText={setDetails}
+            onChangeText={(text) => {
+              if (text.trim() === "") {
+                // Empty input, set others to an empty string
+                setDetails("");
+              } else {
+                setDetails(text);
+              }
+            }}
             placeholder="Details that staff should be aware about (optional)"
             autoCapitalize="none"
             mode="flat"
             textColor="black"
-            multiline={true}
             contentStyle={styles.content}
+            multiline={true}
           ></TextInput>
         </View>
 
@@ -190,7 +216,7 @@ export default function IncidentForm() {
           </Button>
         </View>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 

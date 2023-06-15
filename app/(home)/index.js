@@ -89,6 +89,8 @@ function Homepage() {
                 <Text style={{ fontSize: 20 }}>Track your reports</Text>
               </Button>
             </Link>
+
+            <Link href= "/selectMap" style= {styles.link}></Link>
           </View>
         </View>
       </ImageBackground>
