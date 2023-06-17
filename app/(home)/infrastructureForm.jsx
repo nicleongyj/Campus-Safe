@@ -3,7 +3,7 @@ import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { insertData } from "../../lib/supabase";
+import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function InfrastructureForm() {
@@ -54,7 +54,7 @@ export default function InfrastructureForm() {
     }
 
     // SUPABASE LOGIC
-    const error = await insertData(formData, "infrareps");
+    const error = await insertReportData(formData, 'infrareps');
     console.log(error);
     if (!error) {
       Alert.alert(

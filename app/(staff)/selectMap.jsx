@@ -3,8 +3,11 @@ import { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { Button } from "react-native-paper";
 import { Link } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 export default function SelectMap() {
+  const params = useLocalSearchParams();
+  const { reportType, id } = params;
   const [region, setRegion] = useState({
     latitude: 1.2966,
     longitude: 103.7764,
@@ -38,7 +41,7 @@ export default function SelectMap() {
       <View style={styles.submit}>
         <Link href={{
           pathname:"/verifyForm",
-          params: {latitude: lat, longitude: long,}
+          params: {latitude: lat, longitude: long, reportType: reportType, id: id}
         }} style={styles.link} >
           <Button mode="contained" style={styles.button} buttonColor="black">
             Next

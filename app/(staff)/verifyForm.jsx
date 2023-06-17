@@ -2,12 +2,13 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { insertData } from "../../lib/supabase";
+import { insertVerifiedReport, verifyReport } from "../../lib/supabase";
 import { useRouter } from "expo-router";
+import NewInfraReps from "./NewInfraReps";
 
 export default function VerifyForm() {
   const params = useLocalSearchParams();
-  const { latitude, longitude } = params;
+  const { latitude, longitude, reportType, id } = params;
   const [incidentType, setIncidentType] = useState("");
   const [incidentDetails, setIncidentDetails] = useState("");
   const [errMsg, setErrMsg] = useState("");
@@ -16,8 +17,11 @@ export default function VerifyForm() {
   const long = longitude == 1.29 ? "null" : longitude;
 
   const router = useRouter();
+  const tableName = reportType == "incident" ? "incidentreps" : "infrareps";
+  const verifiedTableName = reportType == "incident" ? "verifiedincidents" : "verifiedinfras";
 
   const formData = {
+    id: id,
     type: incidentType,
     details: incidentDetails,
     latitude: lat,
@@ -39,15 +43,19 @@ export default function VerifyForm() {
     }
 
     //SUPABASE LOGIC
-  const error = await insertData(formData, "verifiedincidents");
-    console.log(error);
-    if (!error) {
+  const error1 = await insertVerifiedReport(formData, verifiedTableName);
+  const error2 = await verifyReport(tableName, id);
+    if (!error1 && !error2) {
       Alert.alert(
         "Incident verified",
-        "View verified reports in 'Manage ongoing incidents'",
+        "View verified reports in 'Manage verified reports'",
         [{ text: "OK", onPress: () => {
           console.log("OK Pressed");
-          router.replace("/NewIncidentReps")
+          if (reportType == "incident") {
+            router.replace("NewIncidentReps");
+          } else {
+            router.replace("NewInfraReps");
+          }
         }}]
       );
     } else {

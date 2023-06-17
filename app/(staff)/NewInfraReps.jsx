@@ -4,12 +4,12 @@ import { useState, useEffect} from 'react';
 import { viewNewReports, rejectReport } from "../../lib/supabase";
 import { Link } from "expo-router";
 
-export default function NewIncidentReps() {
+export default function NewInfraReps() {
   const [reports, setReports] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   async function fetchReports() {
-    let data = await viewNewReports('incidentreps');
+    let data = await viewNewReports('infrareps');
     setReports(data);
     setRefresh(false);
     console.log("fetched data");
@@ -30,7 +30,7 @@ export default function NewIncidentReps() {
       "Confirm reject",
       "Action cannot be changed",
       [{ text: "OK", onPress: async () => {
-        await rejectReport('incidentreps', id);
+        await rejectReport('infrareps', id);
         setRefresh(true);
       }},
         { text: "Cancel"}
@@ -40,11 +40,11 @@ export default function NewIncidentReps() {
   }
 
   function RenderReport(report) {
-    const {type, urgent_level, location, details, id} = report;
+    const {type, location, details, id} = report;
 
     return (
         <Card mode='outlined' style={styles.reportContainer}>
-          <Card.Title title={`Type: ${type}`} subtitle={`Urgency: ${urgent_level}`} />
+          <Card.Title title={`Type: ${type}`} />
           <Card.Content>
             <Text>{`Location: ${location}`}</Text>
             <Text>{`Details: ${details}`}</Text>
@@ -62,7 +62,7 @@ export default function NewIncidentReps() {
 
             <Link href={{
               pathname: "/selectMap",
-              params: {reportType: "incident", id: id}
+              params: {reportType: "infrastructure", id: id}
             }}>
               <Button
                 mode="outlined"

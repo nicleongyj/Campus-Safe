@@ -2,14 +2,13 @@ import { FlatList, View, StyleSheet, Alert } from 'react-native';
 import { Text , Card, Button } from 'react-native-paper';
 import { useState, useEffect} from 'react';
 import { viewNewReports, rejectReport } from "../../lib/supabase";
-import { Link } from "expo-router";
 
 export default function NewIncidentReps() {
   const [reports, setReports] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
   async function fetchReports() {
-    let data = await viewNewReports('incidentreps');
+    let data = await viewVerifiedReports('verifiedincidents');
     setReports(data);
     setRefresh(false);
     console.log("fetched data");
@@ -25,12 +24,12 @@ export default function NewIncidentReps() {
     }
   }, [refresh]);
 
-  function HandleReject(id) {
+  function HandleResolve(id) {
     Alert.alert(
-      "Confirm reject",
+      "Confirm resolve",
       "Action cannot be changed",
       [{ text: "OK", onPress: async () => {
-        await rejectReport('incidentreps', id);
+        await resolveReport('incidentreps', id);
         setRefresh(true);
       }},
         { text: "Cancel"}
@@ -40,13 +39,12 @@ export default function NewIncidentReps() {
   }
 
   function RenderReport(report) {
-    const {type, urgent_level, location, details, id} = report;
+    const {type, details, id} = report;
 
     return (
         <Card mode='outlined' style={styles.reportContainer}>
-          <Card.Title title={`Type: ${type}`} subtitle={`Urgency: ${urgent_level}`} />
+          <Card.Title title={`Type: ${type}`}/>
           <Card.Content>
-            <Text>{`Location: ${location}`}</Text>
             <Text>{`Details: ${details}`}</Text>
           </Card.Content>
           <Card.Actions>
@@ -55,24 +53,10 @@ export default function NewIncidentReps() {
                 buttonColor="powderblue"
                 textColor="black"
                 style={styles.Button}
-                onPress={() => HandleReject(id)}
+                onPress={() => HandleResolve(id)}
               >
-                Reject
+                Resolve
               </Button>
-
-            <Link href={{
-              pathname: "/selectMap",
-              params: {reportType: "incident", id: id}
-            }}>
-              <Button
-                mode="outlined"
-                buttonColor="powderblue"
-                textColor="black"
-                style={styles.Button}
-              >
-                Verify
-              </Button>
-            </Link>
           </Card.Actions>
         </Card>
     );

@@ -3,7 +3,7 @@ import { Button, TextInput } from "react-native-paper";
 import { Link } from "expo-router";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { insertData } from "../../lib/supabase";
+import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 export default function IncidentForm() {
@@ -66,7 +66,7 @@ export default function IncidentForm() {
     }
 
     //SUPABASE LOGIC
-    const error = await insertData(formData, "incidentreps");
+    const error = await insertReportData(formData, 'incidentreps');
     console.log(error);
     if (!error) {
       Alert.alert(

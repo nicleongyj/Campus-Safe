@@ -21,7 +21,7 @@ function Homepage() {
 
       <View style={styles.bottomContainer}>
         <View style={styles.buttonContainer}>
-          <Link href="/Staffhome" style={styles.link}>
+          <Link href="/StaffVerifiedView" style={styles.link}>
             <Button
               mode="elevated"
               style={styles.button}
@@ -31,7 +31,7 @@ function Homepage() {
               contentStyle={{ width: 350, height: 100 }}
               onPress={() => console.log("pressed")}
             >
-              <Text style={{ fontSize: 20 }}>Manage ongoing incidents</Text>
+              <Text style={{ fontSize: 20 }}>Manage verified reports</Text>
             </Button>
           </Link>
         </View>

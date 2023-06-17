@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function StaffView() {
+export default function StaffVerifiedView() {
 	return (
 		<SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
@@ -20,7 +20,7 @@ export default function StaffView() {
 
 			<View style={styles.bottomContainer}>
 				<View style={styles.buttonContainer}>
-					<Link href="/NewIncidentReps" style={styles.link}>
+					<Link href="/VerifiedIncidents" style={styles.link}>
 						<Button
 								mode="elevated"
 								style={styles.button}
@@ -30,13 +30,13 @@ export default function StaffView() {
 								contentStyle={{ width: 350, height: 100 }}
 								//icon={reports} //get reports image
 						>
-						  <Text style={{ fontSize: 20 }}>View new incident reports</Text>
+						  <Text style={{ fontSize: 20 }}>Manage verified incidents</Text>
 						</Button>
 					</Link>
 				</View>
 
         <View style={styles.buttonContainer}>
-					<Link href="/NewInfraReps" style={styles.link}>
+					<Link href="/VerifiedInfras" style={styles.link}>
 						<Button
 								mode="elevated"
 								style={styles.button}
@@ -46,7 +46,7 @@ export default function StaffView() {
 								contentStyle={{ width: 350, height: 100 }}
 								//icon={reports} //get reports image
 						>
-						  <Text style={{ fontSize: 20 }}>View new infrastructure reports</Text>
+						  <Text style={{ fontSize: 20 }}>Manage verified infrastructure</Text>
 						</Button>
 					</Link>
 				</View>
