@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
@@ -12,43 +11,45 @@ export default function Map() {
     longitudeDelta: 0.015,
   });
 
-  const [ markers, setMarkers ] = useState([]);
-  const [ refresh, setRefresh ] = useState(false);
+  const [markers, setMarkers] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
 
   const fetchMarkers = async () => {
-    let data = await viewMarkers('verifiedincidents');
-    setMarkers(data);
-    setRefresh(false);
-    console.log("fetched data");
-  }
-  
-    useEffect(() => {
+    try {
+      const data = await viewMarkers('verifiedincidents');
+      setMarkers(data);
+      setRefresh(false);
+      console.log("Fetched data");
+    } catch (error) {
+      console.error("Error fetching markers:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (refresh) {
       fetchMarkers();
-    }, []);
-  
-    useEffect(() => {
-      if (refresh) {
-        fetchMarkers();
-      }
-    }, [refresh]);
+    }
+  }, [refresh]);
+
+  useEffect(() => {
+    fetchMarkers();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
-        region={region}
-        onRegionChange={setRegion}
-      >
+      <MapView style={styles.map} region={region} onRegionChange={setRegion}>
         {markers.map((marker) => (
           <Marker
-          key={marker.id}
-          coordinate={{
-            latitude: marker.latitude,
-            longitude: marker.longitude,
-          }}
-          title={marker.type}
-          description={marker.details}
-          />
+            key={marker.id}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude,
+            }}
+            title={marker.type}
+            description={marker.details}
+          >
+          </Marker>
         ))}
       </MapView>
     </View>
