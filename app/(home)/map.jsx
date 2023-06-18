@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { viewMarkers } from "../../lib/supabase";
 
 export default function Map() {
   const [region, setRegion] = useState({
@@ -10,6 +12,26 @@ export default function Map() {
     longitudeDelta: 0.015,
   });
 
+  const [ markers, setMarkers ] = useState([]);
+  const [ refresh, setRefresh ] = useState(false);
+
+  const fetchMarkers = async () => {
+    let data = await viewMarkers('verifiedincidents');
+    setMarkers(data);
+    setRefresh(false);
+    console.log("fetched data");
+  }
+  
+    useEffect(() => {
+      fetchMarkers();
+    }, []);
+  
+    useEffect(() => {
+      if (refresh) {
+        fetchMarkers();
+      }
+    }, [refresh]);
+
   return (
     <View style={styles.container}>
       <MapView
@@ -17,21 +39,17 @@ export default function Map() {
         region={region}
         onRegionChange={setRegion}
       >
-        <Marker
-          coordinate={{ latitude: 1.299086, longitude: 103.774476 }}
-          title="Car crash"
-          description="Beside Yusof Ishak House. Avoid this area!"
-        />
-        <Marker
-          coordinate={{ latitude: 1.297788, longitude: 103.777567 }}
-          title="Fallen tree"
-          description="Beside RVRC. Road blocked!"
-        />
-        <Marker
-          coordinate={{ latitude: 1.295268, longitude: 103.771125 }}
-          title="Faulty lift"
-          description="AS3 lift. Use lift at AS4."
-        />
+        {markers.map((marker) => (
+          <Marker
+          key={marker.id}
+          coordinate={{
+            latitude: marker.latitude,
+            longitude: marker.longitude,
+          }}
+          title={marker.type}
+          description={marker.details}
+          />
+        ))}
       </MapView>
     </View>
   );

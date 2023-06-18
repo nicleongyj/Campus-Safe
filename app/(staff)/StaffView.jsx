@@ -5,56 +5,53 @@ import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function StaffView() {
-	return (
-		<SafeAreaView style={styles.container}>
+  return (
+    <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
         <Link href="/Staffhome" style={styles.link}>
-          <Button style ={styles.button}
-          textColor="black"
-          >
+          <Button style={styles.button} textColor="black">
             <Text style={{ fontSize: 20 }}>Staff Home</Text>
           </Button>
         </Link>
       </View>
 
-
-			<View style={styles.bottomContainer}>
-				<View style={styles.buttonContainer}>
-					<Link href="/NewIncidentReps" style={styles.link}>
-						<Button
-								mode="elevated"
-								style={styles.button}
-								buttonColor="powderblue"
-								textColor="black"
-								labelStyle={styles.buttonContent}
-								contentStyle={{ width: 350, height: 100 }}
-								//icon={reports} //get reports image
-						>
-						  <Text style={{ fontSize: 20 }}>View new incident reports</Text>
-						</Button>
-					</Link>
-				</View>
+      <View style={styles.bottomContainer}>
+        <View style={styles.buttonContainer}>
+          <Link href="/NewIncidentReps" style={styles.link}>
+            <Button
+              mode="elevated"
+              style={styles.button}
+              buttonColor="powderblue"
+              textColor="black"
+              labelStyle={styles.buttonContent}
+              contentStyle={{ width: 350, height: 100 }}
+              //icon={reports} //get reports image
+            >
+              <Text style={{ fontSize: 20 }}>View new incident reports</Text>
+            </Button>
+          </Link>
+        </View>
 
         <View style={styles.buttonContainer}>
-					<Link href="/NewInfraReps" style={styles.link}>
-						<Button
-								mode="elevated"
-								style={styles.button}
-								buttonColor="orange"
-								textColor="black"
-								labelStyle={styles.buttonContent}
-								contentStyle={{ width: 350, height: 100 }}
-								//icon={reports} //get reports image
-						>
-						  <Text style={{ fontSize: 20 }}>View new infrastructure reports</Text>
-						</Button>
-					</Link>
-				</View>
-
-			</View>
-
-		</SafeAreaView>
-	);
+          <Link href="/NewInfraReps" style={styles.link}>
+            <Button
+              mode="elevated"
+              style={styles.button}
+              buttonColor="orange"
+              textColor="black"
+              labelStyle={styles.buttonContent}
+              contentStyle={{ width: 350, height: 100 }}
+              //icon={reports} //get reports image
+            >
+              <Text style={{ fontSize: 20 }}>
+                View new infrastructure reports
+              </Text>
+            </Button>
+          </Link>
+        </View>
+      </View>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
