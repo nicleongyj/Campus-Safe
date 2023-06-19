@@ -14,43 +14,41 @@ function Homepage() {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-      <View style={styles.topContainer}>
-        <Text style={styles.header}>Staff home</Text>
-        {/* <Text style={styles.subheader}>What would you like to do today?</Text> */}
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <View style={styles.buttonContainer}>
-          <Link href="/StaffVerifiedView" style={styles.link}>
-            <Button
-              mode="elevated"
-              style={styles.button}
-              buttonColor="powderblue"
-              textColor="black"
-              labelStyle={styles.buttonContent}
-              contentStyle={{ width: 350, height: 100 }}
-              onPress={() => console.log("pressed")}
-            >
-              <Text style={{ fontSize: 20 }}>Manage verified reports</Text>
-            </Button>
-          </Link>
+        <View style={styles.topContainer}>
+          <Text style={styles.header}>Staff home</Text>
         </View>
 
-        <View style={styles.buttonContainer}>
-          <Link href="/StaffView" style={styles.link}>
-            <Button
-              mode="elevated"
-              style={styles.button}
-              buttonColor="#D6E7FF"
-              textColor="black"
-              labelStyle={styles.buttonContent}
-              contentStyle={{ width: 350, height: 100 }}
-            >
-              <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
-            </Button>
-          </Link>
+        <View style={styles.bottomContainer}>
+          <View style={styles.buttonContainer}>
+            <Link href="/ViewVerifiedReports" style={styles.link}>
+              <Button
+                mode="elevated"
+                style={styles.button}
+                buttonColor="powderblue"
+                textColor="black"
+                labelStyle={styles.buttonContent}
+                contentStyle={{ width: 350, height: 100 }}
+              >
+                <Text style={{ fontSize: 20 }}>Manage verified reports</Text>
+              </Button>
+            </Link>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Link href="/ViewReports" style={styles.link}>
+              <Button
+                mode="elevated"
+                style={styles.button}
+                buttonColor="#D6E7FF"
+                textColor="black"
+                labelStyle={styles.buttonContent}
+                contentStyle={{ width: 350, height: 100 }}
+              >
+                <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
+              </Button>
+            </Link>
+          </View>
         </View>
-      </View>
       </ImageBackground>
     </View>
   );
@@ -72,6 +70,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     justifyContent: "center",
     marginTop: 50,
+    alignItems: "center",
   },
   bottomContainer: {
     flex: 5,
@@ -91,11 +90,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "black",
   },
   buttonContent: {
     fontWeight: "bold",
     fontSize: 25,
-    },
+  },
   link: {
     width: 350,
     height: 100,

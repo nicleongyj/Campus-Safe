@@ -3,8 +3,9 @@ import { useState } from "react";
 import { View, Text, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { insertVerifiedReport, verifyReport } from "../../lib/supabase";
-import { useRouter } from "expo-router";
-import NewInfraReps from "./NewInfraReps";
+// import NewInfraReps from "./NewInfraReps";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function VerifyForm() {
   const params = useLocalSearchParams();
@@ -16,9 +17,11 @@ export default function VerifyForm() {
   const lat = latitude == 103.77 ? "null" : latitude;
   const long = longitude == 1.29 ? "null" : longitude;
 
-  const router = useRouter();
   const tableName = reportType == "incident" ? "incidentreps" : "infrareps";
-  const verifiedTableName = reportType == "incident" ? "verifiedincidents" : "verifiedinfras";
+  const verifiedTableName =
+    reportType == "incident" ? "verifiedincidents" : "verifiedinfras";
+
+  const navigation = useNavigation();
 
   const formData = {
     id: id,
@@ -30,33 +33,36 @@ export default function VerifyForm() {
 
   const handleSubmit = async () => {
     if (lat == "null" || long == "null") {
-        setErrMsg("Select incident location on map!");
-        return;
+      setErrMsg("Select incident location on map!");
+      return;
     }
     if (incidentType == "") {
-        setErrMsg("Fill in incident type!");
-        return;
+      setErrMsg("Fill in incident type!");
+      return;
     }
     if (incidentDetails == "") {
-        setErrMsg("Fill in incident details!");
-        return;
+      setErrMsg("Fill in incident details!");
+      return;
     }
 
     //SUPABASE LOGIC
-  const error1 = await insertVerifiedReport(formData, verifiedTableName);
-  const error2 = await verifyReport(tableName, id);
+    const error1 = await insertVerifiedReport(formData, verifiedTableName);
+    const error2 = await verifyReport(tableName, id);
     if (!error1 && !error2) {
       Alert.alert(
         "Incident verified",
         "View verified reports in 'Manage verified reports'",
-        [{ text: "OK", onPress: () => {
-          console.log("OK Pressed");
-          if (reportType == "incident") {
-            router.replace("NewIncidentReps");
-          } else {
-            router.replace("NewInfraReps");
-          }
-        }}]
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "StaffView" }],
+              });
+            },
+          },
+        ]
       );
     } else {
       Alert.alert("Error", "Please try again!", [
@@ -68,63 +74,63 @@ export default function VerifyForm() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Fill up incident details</Text>
-      </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Fill up incident details</Text>
+        </View>
 
-      <View style={styles.body}>
-        <View style={styles.questionContainer}>
-          <Text style={styles.question}>Latitude:</Text>
-          <TextInput mode="flat" disabled={true} style={styles.textInput}>
-            {lat}
-          </TextInput>
+        <View style={styles.body}>
+          <View style={styles.questionContainer}>
+            <Text style={styles.question}>Latitude:</Text>
+            <TextInput mode="flat" disabled={true} style={styles.textInput}>
+              {lat}
+            </TextInput>
+          </View>
+          <View style={styles.questionContainer}>
+            <Text style={styles.question}>Longitude:</Text>
+            <TextInput mode="flat" disabled={true} style={styles.textInput}>
+              {long}
+            </TextInput>
+          </View>
+          <View style={styles.questionContainer}>
+            <Text style={styles.question}>Type of incident:</Text>
+            <TextInput
+              mode="flat"
+              style={styles.textInput}
+              placeholder="Enter incident type"
+              placeholderTextColor="grey"
+              textColor="black"
+              value={incidentType}
+              onChangeText={setIncidentType}
+            />
+          </View>
+          <View style={styles.questionContainer}>
+            <Text style={styles.question}>Incident description:</Text>
+            <TextInput
+              mode="flat"
+              style={{ backgroundColor: "whitesmoke" }}
+              placeholder="Details of incident"
+              placeholderTextColor="grey"
+              textColor="black"
+              value={incidentDetails}
+              onChangeText={setIncidentDetails}
+            />
+          </View>
         </View>
-        <View style={styles.questionContainer}>
-          <Text style={styles.question}>Longitude:</Text>
-          <TextInput mode="flat" disabled={true} style={styles.textInput}>
-            {long}
-          </TextInput>
+        <View style={styles.buttonContainer}>
+          <Text style={styles.error}>
+            {" "}
+            {errMsg !== "" && <Text>{errMsg}</Text>}
+          </Text>
+          <Button
+            mode="elevated"
+            style={styles.button}
+            buttonColor="black"
+            textColor="white"
+            onPress={handleSubmit}
+          >
+            Submit
+          </Button>
         </View>
-        <View style={styles.questionContainer}>
-          <Text style={styles.question}>Type of incident:</Text>
-          <TextInput
-            mode="flat"
-            style={styles.textInput}
-            placeholder="Enter incident type"
-            placeholderTextColor="grey"
-            textColor="black"
-            value={incidentType}
-            onChangeText={setIncidentType}
-          />
-        </View>
-        <View style={styles.questionContainer}>
-          <Text style={styles.question}>Incident description:</Text>
-          <TextInput
-            mode="flat"
-            style={{ backgroundColor: "whitesmoke" }}
-            placeholder="Details of incident"
-            placeholderTextColor="grey"
-            textColor="black"
-            value={incidentDetails}
-            onChangeText={setIncidentDetails}
-          />
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Text style={styles.error}>
-          {" "}
-          {errMsg !== "" && <Text>{errMsg}</Text>}
-        </Text>
-        <Button
-          mode="elevated"
-          style={styles.button}
-          buttonColor="black"
-          textColor="white"
-          onPress={handleSubmit}
-        >
-          Submit
-        </Button>
-      </View>
     </View>
   );
 }

@@ -4,13 +4,13 @@ export default function StaffLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="StaffView"
+        name="ViewReports"
         options={{ title: "View/Approve new reports" }}
       />
 
       <Stack.Screen
-        name="NewIncidentReps"
-        options={{ title: "New incident reports" }}
+        name="ViewVerifiedReports"
+        options={{ title: "Manage verified reports" }}
       />
 
       <Stack.Screen
@@ -21,6 +21,7 @@ export default function StaffLayout() {
         name="verifyForm"
         options={{ title: "Verify an incident" }}
       />
+
       {/* //     headerStyle: {
         //       backgroundColor: "blue",
         //     },
