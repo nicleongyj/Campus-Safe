@@ -6,6 +6,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import BackButton from "../../assets/backButton.png"
+
 export default function InfrastructureForm() {
   const [errMsg, setErrMsg] = useState("");
   const [enableSecondQuestion, setEnableSecondQuestion] = useState(false);
@@ -82,14 +84,15 @@ export default function InfrastructureForm() {
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.topContainer}>
-        <Link href="/">
+      <Link href="/" style={styles.backLink}>
           <Button
-            mode="outlined"
-            buttonColor="powderblue"
-            textColor="black"
-            style={styles.homeButton}
+            mode="contained"
+            style={{ width: 100 }}
+            buttonColor="black"
+            icon={BackButton}
+            labelStyle={{ fontWeight: "bold" }}
           >
-            Home
+            Back
           </Button>
         </Link>
       </View>
@@ -198,10 +201,10 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     padding: 10,
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   middleContainer: {
-    flex: 9,
+    flex: 12,
   },
   reportContainer: {
     marginTop: 15,

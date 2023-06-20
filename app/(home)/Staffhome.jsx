@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { Link } from "expo-router";
 
 import loginBackground from "../../assets/loginBackground.jpg";
+import tickIcon from "../../assets/tick.png";
+import recordIcon from "../../assets/manageRecord.png";
 
 function Homepage() {
   return (
@@ -28,6 +30,7 @@ function Homepage() {
                 textColor="black"
                 labelStyle={styles.buttonContent}
                 contentStyle={{ width: 350, height: 100 }}
+                icon={recordIcon}
               >
                 <Text style={{ fontSize: 20 }}>Manage verified reports</Text>
               </Button>
@@ -43,6 +46,7 @@ function Homepage() {
                 textColor="black"
                 labelStyle={styles.buttonContent}
                 contentStyle={{ width: 350, height: 100 }}
+                icon={tickIcon}
               >
                 <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
               </Button>
