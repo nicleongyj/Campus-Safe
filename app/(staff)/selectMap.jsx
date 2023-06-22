@@ -40,7 +40,7 @@ export default function SelectMap() {
 
       <View style={styles.submit}>
         <Link href={{
-          pathname:"/verifyForm",
+          pathname:"/VerifyForm",
           params: {latitude: lat, longitude: long, reportType: reportType, id: id}
         }} style={styles.link} >
           <Button mode="contained" style={styles.button} buttonColor="black">

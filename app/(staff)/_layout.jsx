@@ -14,11 +14,11 @@ export default function StaffLayout() {
       />
 
       <Stack.Screen
-        name="selectMap"
+        name="SelectMap"
         options={{ title: "Select location of incident" }}
       />
       <Stack.Screen
-        name="verifyForm"
+        name="VerifyForm"
         options={{ title: "Verify an incident" }}
       />
 

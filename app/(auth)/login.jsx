@@ -161,7 +161,7 @@ function Login({ setUserType, setUserEmail }) {
               Don&#39;t have an account?{" "}
             </Text>
             <Link
-              href="/register"
+              href="/Register"
               style={{
                 color: "orangered",
                 fontWeight: "bold",

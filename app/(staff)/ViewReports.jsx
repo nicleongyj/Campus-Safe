@@ -41,7 +41,7 @@ const ReportCard = ({
 
         <Link
           href={{
-            pathname: "/selectMap",
+            pathname: "/SelectMap",
             params: { reportType, id },
           }}
         >
