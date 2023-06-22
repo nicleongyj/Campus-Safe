@@ -28,7 +28,7 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="Profile"
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: () => <Text>👤</Text>,
@@ -71,7 +71,7 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
-        name="incidentForm"
+        name="IncidentForm"
         options={{
           href: null,
           headerTitle: "Report an accident",
@@ -83,7 +83,7 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
-        name="infrastructureForm"
+        name="InfrastructureForm"
         options={{
           href: null,
           headerTitle: "Report an infrastructure issue",
@@ -95,7 +95,7 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
-        name="map"
+        name="Map"
         options={{
           href: null,
           headerTitle: "Incident Map",

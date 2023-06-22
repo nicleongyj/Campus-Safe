@@ -116,7 +116,7 @@ export default function TrackReports() {
               options={filterOptions}
               onPress={(value) => setFilter(value)}
               hasPadding
-              buttonColor="slategray"
+              buttonColor="darkcyan"
               borderColor="black"
             />
           </View>

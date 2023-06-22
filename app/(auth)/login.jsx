@@ -161,7 +161,7 @@ function Login({ setUserType, setUserEmail }) {
               Don&#39;t have an account?{" "}
             </Text>
             <Link
-              href="/register"
+              href="/Register"
               style={{
                 color: "orangered",
                 fontWeight: "bold",
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    alignItems: "stretch",
     backgroundColor: "azure",
   },
   logoContainer: {
@@ -189,7 +188,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    paddingTop: "25%",
+    marginTop: "15%",
+    marginBottom: "5%",
     paddingRight: "5%",
   },
   textContainer: {

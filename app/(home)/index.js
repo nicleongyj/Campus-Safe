@@ -25,7 +25,7 @@ function Homepage() {
 
         <View style={styles.bottomContainer}>
           <View style={styles.buttonContainer}>
-            <Link href="/incidentForm" style={styles.link}>
+            <Link href="/IncidentForm" style={styles.link}>
               <Button
                 mode="elevated"
                 style={styles.button}
@@ -41,7 +41,7 @@ function Homepage() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Link href="/infrastructureForm" style={styles.link}>
+            <Link href="/InfrastructureForm" style={styles.link}>
               <Button
                 mode="elevated"
                 style={styles.button}
@@ -59,7 +59,7 @@ function Homepage() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Link href="/map" style={styles.link}>
+            <Link href="/Map" style={styles.link}>
               <Button
                 mode="elevated"
                 style={styles.button}

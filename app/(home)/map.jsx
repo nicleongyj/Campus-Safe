@@ -48,7 +48,9 @@ export default function Map() {
     <View style={styles.container}>
       <View style={styles.legendContainer}>
         <View style={styles.header}>
-          <Text style={{fontWeight:'bold', color:'orangered'}}>Legend:</Text>
+          <Text style={{ fontWeight: "bold", color: "orangered" }}>
+            Legend:
+          </Text>
         </View>
         <View style={styles.iconContainer}>
           <View style={styles.subLegendContainer}>
@@ -73,7 +75,11 @@ export default function Map() {
           </View>
         </View>
       </View>
-      <MapView style={styles.map} region={region} onRegionChangeComplete={setRegion}>
+      <MapView
+        style={styles.map}
+        region={region}
+        onRegionChangeComplete={setRegion}
+      >
         {incidentMarkers.map((marker) => (
           <Marker
             key={marker.id}
@@ -83,15 +89,19 @@ export default function Map() {
             }}
             title={marker.type}
             description={marker.details}
-            image={
-              marker.type === "Fire"
-                ? flameIcon
-                : marker.type === "Motor accident"
-                ? accidentIcon
-                : warningIcon
-            }
             tracksViewChanges={false}
-          ></Marker>
+          >
+            <Image
+              source={
+                marker.type === "Fire"
+                  ? flameIcon
+                  : marker.type === "Motor accident"
+                  ? accidentIcon
+                  : warningIcon
+              }
+              style={{ width: 50, height: 50 }}
+            />
+          </Marker>
         ))}
         {infraMarkers.map((marker) => (
           <Marker
@@ -102,13 +112,17 @@ export default function Map() {
             }}
             title={marker.type}
             description={marker.details}
-            image={
-              marker.type === "Construction"
-                ? constructionIcon
-                : maintenanceIcon
-            }
             tracksViewChanges={false}
-          ></Marker>
+          >
+            <Image
+              source={
+                marker.type === "Construction"
+                  ? constructionIcon
+                  : maintenanceIcon
+              }
+              style={{ width: 40, height: 40 }}
+            />
+          </Marker>
         ))}
       </MapView>
     </View>
@@ -136,27 +150,27 @@ const styles = StyleSheet.create({
   iconContainer: {
     flex: 2,
     flexDirection: "row",
-    alignContent:'center',
+    alignContent: "center",
   },
   subLegendContainer: {
-    flex:1,
+    flex: 1,
     flexDirection: "column",
     alignItems: "center",
   },
   incident: {
-    marginTop:1,
+    marginTop: 1,
     fontSize: 13,
   },
   infra: {
-    marginTop:4,
+    marginTop: 4,
     fontSize: 13,
   },
   incidentIcon: {
     height: 30,
     width: 30,
   },
-  infraIcon:{
-    height:27,
-    width:27,
-  }
+  infraIcon: {
+    height: 27,
+    width: 27,
+  },
 });
