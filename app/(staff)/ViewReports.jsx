@@ -3,9 +3,8 @@ import { StyleSheet, View, Text, Alert, ImageBackground } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
-import SwitchSelector from "react-native-switch-selector";
-
 import { viewNewReports, rejectReport } from "../../lib/supabase";
+import SwitchSelector from "react-native-switch-selector";
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 
@@ -41,7 +40,7 @@ const ReportCard = ({
 
         <Link
           href={{
-            pathname: "/selectMap",
+            pathname: "/SelectMap",
             params: { reportType, id },
           }}
         >

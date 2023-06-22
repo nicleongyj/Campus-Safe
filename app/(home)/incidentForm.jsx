@@ -233,19 +233,18 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    padding: 10,
     alignItems: "flex-start",
+    justifyContent:'center',
   },
   middleContainer: {
-    flex: 9,
+    flex: 11,
   },
   reportContainer: {
-    marginBottom: 10,
+    marginBottom: "2%",
     zIndex: 3,
   },
   urgencyContainer: {
-    marginTop: 15,
-    marginBottom: 20,
+    marginBottom: "5%",
     zIndex: 2,
   },
   normalContainer: {
