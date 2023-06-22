@@ -75,7 +75,7 @@ function Homepage() {
           </View>
 
           <View style={styles.buttonContainer}>
-            <Link href="/" style={styles.link}>
+            <Link href="/TrackReports" style={styles.link}>
               <Button
                 mode="elevated"
                 style={styles.button}
@@ -89,8 +89,6 @@ function Homepage() {
                 <Text style={{ fontSize: 20 }}>Track your reports</Text>
               </Button>
             </Link>
-
-            <Link href= "/selectMap" style= {styles.link}></Link>
           </View>
         </View>
       </ImageBackground>

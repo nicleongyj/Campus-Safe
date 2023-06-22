@@ -106,6 +106,18 @@ function HomeLayout({ userType }) {
           },
         }}
       />
+      <Tabs.Screen
+        name="TrackReports"
+        options={{
+          href: null,
+          headerTitle: "Report tracker",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 25,
+            color: "black",
+          },
+        }}
+      />
     </Tabs>
   );
 }
