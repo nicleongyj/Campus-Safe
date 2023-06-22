@@ -83,7 +83,6 @@ function Homepage() {
                 textColor="black"
                 labelStyle={styles.buttonContent}
                 contentStyle={{ width: 350, height: 100 }}
-                onPress={() => console.log("pressed")}
                 icon={trackRecord}
               >
                 <Text style={{ fontSize: 20 }}>Track your reports</Text>
