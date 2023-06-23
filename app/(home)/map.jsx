@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import { View, StyleSheet, Text, Image, Platform } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
 
@@ -90,17 +90,28 @@ export default function Map() {
             title={marker.type}
             description={marker.details}
             tracksViewChanges={false}
-          >
-            <Image
-              source={
-                marker.type === "Fire"
+            image={
+              Platform.OS === "android"
+                ? marker.type === "Fire"
                   ? flameIcon
                   : marker.type === "Motor accident"
                   ? accidentIcon
                   : warningIcon
-              }
-              style={{ width: 50, height: 50 }}
-            />
+                : undefined
+            }
+          >
+            {Platform.OS === "ios" && (
+              <Image
+                source={
+                  marker.type === "Fire"
+                    ? flameIcon
+                    : marker.type === "Motor accident"
+                    ? accidentIcon
+                    : warningIcon
+                }
+                style={{ width: 50, height: 50 }}
+              />
+            )}
           </Marker>
         ))}
         {infraMarkers.map((marker) => (
@@ -134,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    flex: 9,
+    flex: 7,
     width: "100%",
     height: "100%",
   },
@@ -158,19 +169,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   incident: {
-    marginTop: 1,
-    fontSize: 13,
+    marginTop: "1%",
+    fontSize: 9,
   },
   infra: {
     marginTop: 4,
-    fontSize: 13,
+    fontSize: 9,
   },
   incidentIcon: {
-    height: 30,
-    width: 30,
+    height: "50%",
+    width: "40%",
   },
   infraIcon: {
-    height: 27,
-    width: 27,
+    // height: 27,
+    // width: 27,
+    height: "50%",
+    width: "40%",
   },
 });

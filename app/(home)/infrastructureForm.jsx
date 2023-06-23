@@ -1,12 +1,12 @@
 import { Text, View, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { Link } from "expo-router";
+import { useNavigation } from "expo-router";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import BackButton from "../../assets/backButton.png"
+import BackButton from "../../assets/backButton.png";
 
 export default function InfrastructureForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -56,7 +56,7 @@ export default function InfrastructureForm() {
     }
 
     // SUPABASE LOGIC
-    const error = await insertReportData(formData, 'infrareps');
+    const error = await insertReportData(formData, "infrareps");
     console.log(error);
     if (!error) {
       Alert.alert(
@@ -76,25 +76,52 @@ export default function InfrastructureForm() {
     setDetails("");
   };
 
+  const navigation = useNavigation();
+
+  const handleBack = () => {
+    if (
+      incident == "Select an item" &&
+      others == "" &&
+      location == "" &&
+      details == ""
+    ) {
+      navigation.navigate("index");
+      return;
+    }
+    Alert.alert("Leave reporting form?", "Data will be lost", [
+      {
+        text: "OK",
+        onPress: () => {
+          navigation.navigate("index");
+          setIncident("Select an item");
+          setOthers("");
+          setLocation("");
+          setDetails("");
+        },
+      },
+      { text: "Cancel" },
+    ]);
+    return;
+  };
+
   return (
-<KeyboardAwareScrollView
+    <KeyboardAwareScrollView
       contentContainerStyle={styles.container}
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.topContainer}>
-      <Link href="/" style={styles.backLink}>
-          <Button
-            mode="contained"
-            style={{ width: 100 }}
-            buttonColor="black"
-            icon={BackButton}
-            labelStyle={{ fontWeight: "bold" }}
-          >
-            Back
-          </Button>
-        </Link>
+        <Button
+          mode="contained"
+          style={{ width: 100 }}
+          buttonColor="black"
+          icon={BackButton}
+          labelStyle={{ fontWeight: "bold" }}
+          onPress={handleBack}
+        >
+          Back
+        </Button>
       </View>
 
       <View style={styles.middleContainer}>

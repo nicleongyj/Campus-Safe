@@ -1,12 +1,13 @@
 import { Text, View, StyleSheet, Alert } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { Link } from "expo-router";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import BackButton from "../../assets/backButton.png";
+
+import { useNavigation } from "@react-navigation/native";
 
 export default function IncidentForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -49,6 +50,8 @@ export default function IncidentForm() {
     details: details,
   };
 
+  const navigation = useNavigation();
+
   const handleSubmit = async () => {
     if (incident == "Select an item") {
       setErrMsg("Fill up incident type!");
@@ -89,138 +92,170 @@ export default function IncidentForm() {
     setDetails("");
   };
 
+  const handleBack = () => {
+    if (
+      incident == "Select an item" &&
+      others == "" &&
+      urgency == "Select an item" &&
+      location == "" &&
+      details == ""
+    ) {
+      navigation.navigate("index");
+      return;
+    }
+    Alert.alert("Leave reporting form?", "Data will be lost", [
+      {
+        text: "OK",
+        onPress: () => {
+          navigation.navigate("index");
+          setIncident("Select an item");
+          setOthers("");
+          setUrgency("Select an item");
+          setLocation("");
+          setDetails("");
+        },
+      },
+      { text: "Cancel" },
+    ]);
+    return;
+  };
+
   return (
-    <KeyboardAwareScrollView
-      contentContainerStyle={styles.container}
-      resetScrollToCoords={{ x: 0, y: 0 }}
-      scrollEnabled={true}
-      keyboardShouldPersistTaps="handled"
-    >
-      <View style={styles.topContainer}>
-        <Link href="/" style={styles.backLink}>
+    <View style={styles.container}>
+      <KeyboardAwareScrollView
+        // contentContainerStyle={styles.container}
+        scrollEnabled={true}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
+        extraScrollHeight={20}
+      >
+        <View style={styles.topContainer}>
           <Button
             mode="contained"
             style={{ width: 100 }}
             buttonColor="black"
             icon={BackButton}
             labelStyle={{ fontWeight: "bold" }}
+            onPress={handleBack}
           >
             Back
           </Button>
-        </Link>
-      </View>
-
-      <View style={styles.middleContainer}>
-        <View style={styles.reportContainer}>
-          <Text style={styles.question}>1. What are you reporting?</Text>
-          <DropDownPicker
-            open={open}
-            value={incident}
-            items={incidentItems}
-            setOpen={setOpen}
-            setValue={setIncident}
-            setItems={setIncidentItems}
-            listMode="SCROLLVIEW"
-            onChangeValue={(value) =>
-              setEnableSecondQuestion(value == "Others")
-            }
-          />
         </View>
 
-        <View style={styles.normalContainer}>
-          <Text style={styles.question}>2. If you chose others, specify:</Text>
-          <TextInput
-            style={styles.textInput}
-            value={others}
-            onChangeText={(text) => {
-              if (text.trim() === "") {
-                // Empty input, set others to an empty string
-                setOthers("");
-              } else {
-                setOthers(text);
+        <View style={styles.middleContainer}>
+          <View style={styles.reportContainer}>
+            <Text style={styles.question}>1. What are you reporting?</Text>
+            <DropDownPicker
+              open={open}
+              value={incident}
+              items={incidentItems}
+              setOpen={setOpen}
+              setValue={setIncident}
+              setItems={setIncidentItems}
+              listMode="SCROLLVIEW"
+              onChangeValue={(value) =>
+                setEnableSecondQuestion(value == "Others")
               }
-            }}
-            placeholder="Brief description"
-            autoCapitalize="none"
-            mode="flat"
-            textColor="black"
-            multiline={true}
-            disabled={!enableSecondQuestion}
-          ></TextInput>
-        </View>
+            />
+          </View>
 
-        <View style={styles.urgencyContainer}>
-          <Text style={styles.question}>3. Level of urgency:</Text>
-          <DropDownPicker
-            open={open2}
-            value={urgency}
-            items={urgencyItems}
-            setOpen={setOpen2}
-            setValue={setUrgency}
-            setItems={setUrgencyItems}
-            listMode="SCROLLVIEW"
-          />
-        </View>
+          <View style={styles.normalContainer}>
+            <Text style={styles.question}>
+              2. If you chose others, specify:
+            </Text>
+            <TextInput
+              style={styles.textInput}
+              value={others}
+              onChangeText={(text) => {
+                if (text.trim() === "") {
+                  // Empty input, set others to an empty string
+                  setOthers("");
+                } else {
+                  setOthers(text);
+                }
+              }}
+              placeholder="Brief description"
+              autoCapitalize="none"
+              mode="flat"
+              textColor="black"
+              multiline={true}
+              disabled={!enableSecondQuestion}
+            ></TextInput>
+          </View>
 
-        <View style={styles.normalContainer}>
-          <Text style={styles.question}>4. Location of incident:</Text>
-          <TextInput
-            style={styles.textInput}
-            value={location}
-            onChangeText={(text) => {
-              if (text.trim() === "") {
-                // Empty input, set others to an empty string
-                setLocation("");
-              } else {
-                setLocation(text);
-              }
-            }}
-            placeholder="Exact location (building name, floor number ...)"
-            autoCapitalize="none"
-            mode="flat"
-            textColor="black"
-          ></TextInput>
-        </View>
+          <View style={styles.urgencyContainer}>
+            <Text style={styles.question}>3. Level of urgency:</Text>
+            <DropDownPicker
+              open={open2}
+              value={urgency}
+              items={urgencyItems}
+              setOpen={setOpen2}
+              setValue={setUrgency}
+              setItems={setUrgencyItems}
+              listMode="SCROLLVIEW"
+            />
+          </View>
 
-        <View style={styles.normalContainer}>
-          <Text style={styles.question}>5. Additional details:</Text>
-          <TextInput
-            style={styles.textInput}
-            value={details}
-            onChangeText={(text) => {
-              if (text.trim() === "") {
-                // Empty input, set others to an empty string
-                setDetails("");
-              } else {
-                setDetails(text);
-              }
-            }}
-            placeholder="Details that staff should be aware about (optional)"
-            autoCapitalize="none"
-            mode="flat"
-            textColor="black"
-            contentStyle={styles.content}
-            multiline={true}
-          ></TextInput>
-        </View>
+          <View style={styles.normalContainer}>
+            <Text style={styles.question}>4. Location of incident:</Text>
+            <TextInput
+              style={styles.textInput}
+              value={location}
+              onChangeText={(text) => {
+                if (text.trim() === "") {
+                  // Empty input, set others to an empty string
+                  setLocation("");
+                } else {
+                  setLocation(text);
+                }
+              }}
+              placeholder="Exact location (building name, floor number ...)"
+              autoCapitalize="none"
+              mode="flat"
+              textColor="black"
+            ></TextInput>
+          </View>
 
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.error}>
-            {" "}
-            {errMsg !== "" && <Text>{errMsg}</Text>}
-          </Text>
-          <Button
-            mode="elevated"
-            style={styles.button}
-            buttonColor="black"
-            textColor="white"
-            onPress={handleSubmit}
-          >
-            Submit
-          </Button>
+          <View style={styles.normalContainer}>
+            <Text style={styles.question}>5. Additional details:</Text>
+            <TextInput
+              style={styles.textInput}
+              value={details}
+              onChangeText={(text) => {
+                if (text.trim() === "") {
+                  // Empty input, set others to an empty string
+                  setDetails("");
+                } else {
+                  setDetails(text);
+                }
+              }}
+              placeholder="Details that staff should be aware about (optional)"
+              autoCapitalize="none"
+              mode="flat"
+              textColor="black"
+              contentStyle={styles.content}
+              multiline={true}
+            ></TextInput>
+          </View>
+
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.error}>
+              {" "}
+              {errMsg !== "" && <Text>{errMsg}</Text>}
+            </Text>
+            <Button
+              mode="elevated"
+              style={styles.button}
+              buttonColor="black"
+              textColor="white"
+              onPress={handleSubmit}
+            >
+              Submit
+            </Button>
+          </View>
         </View>
-      </View>
-    </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView>
+    </View>
   );
 }
 
@@ -234,13 +269,15 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     alignItems: "flex-start",
-    justifyContent:'center',
+    justifyContent: "center",
+    marginTop: "3%",
+    marginBottom: "3%",
   },
   middleContainer: {
     flex: 11,
   },
   reportContainer: {
-    marginBottom: "2%",
+    marginBottom: "5%",
     zIndex: 3,
   },
   urgencyContainer: {
@@ -248,8 +285,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   normalContainer: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginBottom: "5%",
     zIndex: 1,
   },
   error: {
