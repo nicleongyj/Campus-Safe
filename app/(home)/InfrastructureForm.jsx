@@ -6,7 +6,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-import BackButton from "../../assets/backButton.png"
+import BackButton from "../../assets/backButton.png";
 
 export default function InfrastructureForm() {
   const [errMsg, setErrMsg] = useState("");
@@ -29,6 +29,8 @@ export default function InfrastructureForm() {
   const [location, setLocation] = useState("");
   //additional details
   const [details, setDetails] = useState("");
+  //disable button
+  const [disableButton, setDisableButton] = useState(false);
 
   //Determine type of incident
   const handleIncidentType = () => {
@@ -55,8 +57,10 @@ export default function InfrastructureForm() {
       return;
     }
 
+    setDisableButton(true);
+
     // SUPABASE LOGIC
-    const error = await insertReportData(formData, 'infrareps');
+    const error = await insertReportData(formData, "infrareps");
     console.log(error);
     if (!error) {
       Alert.alert(
@@ -74,17 +78,19 @@ export default function InfrastructureForm() {
     setOthers("");
     setLocation("");
     setDetails("");
+    setDisableButton(false);
   };
 
   return (
-<KeyboardAwareScrollView
-      contentContainerStyle={styles.container}
+    <View style={styles.container}>
+    <KeyboardAwareScrollView
+      // contentContainerStyle={{flex:1}}
       resetScrollToCoords={{ x: 0, y: 0 }}
       scrollEnabled={true}
       keyboardShouldPersistTaps="handled"
     >
       <View style={styles.topContainer}>
-      <Link href="/" style={styles.backLink}>
+        <Link href="/" style={styles.backLink}>
           <Button
             mode="contained"
             style={{ width: 100 }}
@@ -181,6 +187,7 @@ export default function InfrastructureForm() {
             style={styles.button}
             buttonColor="black"
             textColor="white"
+            disabled={disableButton}
             onPress={handleSubmit}
           >
             Submit
@@ -188,6 +195,7 @@ export default function InfrastructureForm() {
         </View>
       </View>
     </KeyboardAwareScrollView>
+    </View>
   );
 }
 

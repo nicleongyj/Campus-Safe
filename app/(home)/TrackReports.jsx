@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, ImageBackground } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
@@ -17,8 +17,8 @@ const reportTypeOptions = [
 const filterOptions = [
   { label: "Unverified", value: "unverified" },
   { label: "Verified", value: "verified"},
-  { label: "Rejected", value: "rejected" },
   { label: "Resolved", value: "resolved" },
+  { label: "Rejected", value: "rejected" },
 ];
 
 const ReportCard = ({

@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonContainer: {
-    marginBottom: 35,
+    marginBottom:'5%',
   },
   header: {
     fontSize: 35,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   button: {
     width: 350,
     height: 100,
-    marginTop: 20,
+    marginTop:'2%',
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

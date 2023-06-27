@@ -61,7 +61,8 @@ export default function RegisterPage() {
               fontSize: 15,
               fontWeight: "bold",
               color: "red",
-              marginBottom: 10,
+              position:'absolute',
+              bottom:10,
             }}
           >
             {" "}
@@ -121,7 +122,7 @@ export default function RegisterPage() {
               onChangeText={setSecondaryPassword}
             ></TextInput>
           </View>
-          <View style={{ flexDirection: "row", alignItems:'center',  }}>
+          <View style={{ flexDirection: "row", alignItems:'center'}}>
            
            <Button onPress={handlePassword} textColor="black" style={{marginRight:-15,}}>
              Show passwords
@@ -158,31 +159,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
+    flex: 2,
+    justifyContent: "center",
     alignItems: "center",
   },
   inputContainer: {
-    flex: 1,
+    flex: 3,
     padding: "5%",
     alignItems: "center",
+    justifyContent:'center',
   },
-
   textContainer: {
-    marginBottom: 10,
+    marginBottom:"2%",
   },
   buttonContainer: {
     alignItems: 'center',
-    flex: 1,
+    flex: 2,
   },
   header: {
     justifyContent: "center",
     alignContent: "center",
-    marginBottom: 50,
-    fontSize: 40,
+    fontSize: 35,
     fontWeight: "bold",
   },
-
+  error: {
+    position:'absolute',
+    bottom:10,
+  },
   text: {
     fontSize: 15,
     fontWeight: "bold",
@@ -194,7 +197,6 @@ const styles = StyleSheet.create({
     width: "70%",
     fontWeight: "bold",
   },
-
   textBox: {
     backgroundColor: "rgba(0,0,0,0)",
     height: 30,

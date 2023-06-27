@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  ImageBackground,
+  Modal,
+  Image,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
@@ -15,8 +23,16 @@ const ReportCard = ({
   details,
   id,
   reportType,
+  image_url,
+  inserted_at,
   onReject,
 }) => {
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+
+  const toggleImageModal = () => {
+    setImageModalVisible(!imageModalVisible);
+  };
+
   return (
     <Card mode="outlined" style={styles.reportContainer}>
       <Card.Title
@@ -25,9 +41,25 @@ const ReportCard = ({
       />
       <Card.Content>
         <Text>{`Location: ${location}`}</Text>
-        <Text>{`Details: ${details}`}</Text>
+        <Text>{details =="" ? "Details : Nil" : `Details: ${details}`}</Text>
+        <Text></Text>
+        <Text>{`Time reported: ${inserted_at.split("T")[1].slice(0, 8)}`}</Text>
+        <Text>{`Date reported: ${inserted_at.split("T")[0]}`}</Text>
       </Card.Content>
+      <Card.Cover
+        source={{ uri: image_url }}
+        style={{ width: 130, height: 130, alignSelf: "center" }}
+      />
       <Card.Actions>
+        <Button
+          mode="outlined"
+          buttonColor="dimgray"
+          textColor="white"
+          style={styles.button}
+          onPress={toggleImageModal}
+        >
+          View image
+        </Button>
         <Button
           mode="outlined"
           buttonColor="crimson"
@@ -54,6 +86,24 @@ const ReportCard = ({
           </Button>
         </Link>
       </Card.Actions>
+      <Modal visible={imageModalVisible} transparent={true}>
+        <View style={styles.imageModalContainer}>
+          <Button
+            mode="outlined"
+            buttonColor="mediumaquamarine"
+            textColor="black"
+            style={styles.button}
+            onPress={toggleImageModal}
+          >
+            Close
+          </Button>
+          <Image
+            source={{ uri: image_url }}
+            style={styles.enlargedImage}
+            resizeMode="contain"
+          />
+        </View>
+      </Modal>
     </Card>
   );
 };
@@ -101,7 +151,7 @@ export default function ViewReports() {
   }
 
   function renderReport(report, reportType) {
-    const { type, urgent_level, location, details, id } = report;
+    const { type, urgent_level, location, details, id, image_url, inserted_at } = report;
 
     return (
       <ReportCard
@@ -110,7 +160,9 @@ export default function ViewReports() {
         location={location}
         details={details}
         id={id}
+        image_url={image_url}
         reportType={reportType}
+        inserted_at={inserted_at}
         onReject={(id) => handleReject(id, reportType)}
       />
     );
@@ -166,7 +218,9 @@ export default function ViewReports() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontWeight: "bold", color: "brown", fontSize:20 }}>
+              <Text
+                style={{ fontWeight: "bold", color: "brown", fontSize: 20 }}
+              >
                 No new reports currently
               </Text>
             </View>
@@ -204,8 +258,8 @@ const styles = StyleSheet.create({
   },
   reportContainer: {
     backgroundColor: "aliceblue",
-    borderRadius:15,
-    borderColor:'black',
+    borderRadius: 15,
+    borderColor: "black",
     margin: 10,
   },
   topContainer: {
@@ -223,5 +277,20 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     fontWeight: "bold",
+  },
+  imageModalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  enlargedImage: {
+    width: "80%",
+    height: "80%",
   },
 });

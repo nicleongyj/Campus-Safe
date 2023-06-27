@@ -189,8 +189,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     marginTop: "15%",
-    marginBottom: "5%",
+    marginBottom: "10%",
     paddingRight: "5%",
+    // backgroundColor:"black"
   },
   textContainer: {
     flex: 3,
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 110,
     height: 110,
+    resizeMode:'contain',
   },
   error: {
     fontSize: 15,

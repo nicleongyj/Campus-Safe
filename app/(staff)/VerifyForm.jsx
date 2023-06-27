@@ -37,6 +37,9 @@ export default function VerifyForm() {
     { label: "Select an item", value: "Select an item" },
   ]);
 
+  //disable button
+  const [disableButton, setDisableButton] = useState(false);
+
   const lat = latitude == 103.77 ? "null" : latitude;
   const long = longitude == 1.29 ? "null" : longitude;
 
@@ -68,6 +71,8 @@ export default function VerifyForm() {
       return;
     }
 
+    setDisableButton(true);
+
     //SUPABASE LOGIC
     const error1 = await insertVerifiedReport(formData, verifiedTableName);
     const error2 = await verifyReport(tableName, id);
@@ -93,6 +98,7 @@ export default function VerifyForm() {
       ]);
       return;
     }
+    setDisableButton(false);
   };
 
   return (
@@ -176,6 +182,7 @@ export default function VerifyForm() {
           style={styles.button}
           buttonColor="black"
           textColor="white"
+          disabled={disableButton}
           onPress={handleSubmit}
         >
           Submit
