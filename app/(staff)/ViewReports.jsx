@@ -188,7 +188,7 @@ export default function ViewReports() {
             </Button>
           </Link>
 
-          <View style={{ marginTop: 10 }}>
+          <View style={{ marginTop:'2%' }}>
             <SwitchSelector
               initial={0}
               options={[
@@ -265,6 +265,8 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     padding: 15,
+    justifyContent:'center'
+    
   },
   bottomContainer: {
     flex: 8,

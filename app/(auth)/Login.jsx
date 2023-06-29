@@ -191,7 +191,6 @@ const styles = StyleSheet.create({
     marginTop: "15%",
     marginBottom: "10%",
     paddingRight: "5%",
-    // backgroundColor:"black"
   },
   textContainer: {
     flex: 3,

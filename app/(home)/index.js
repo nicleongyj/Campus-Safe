@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   button: {
     width: 350,
     height: 100,
-    marginTop:'2%',
+    // marginTop:'2%',
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

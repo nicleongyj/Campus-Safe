@@ -1,14 +1,7 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import {Text, View, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link, useNavigation } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -18,8 +11,6 @@ import FlashButton from "../../assets/flash.png";
 import CameraButton from "../../assets/camera.png";
 import BackButton from "../../assets/backButton.png";
 import { Camera } from "expo-camera";
-import { useRef } from "react";
-import { useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 
 export default function IncidentForm() {
@@ -142,14 +133,6 @@ export default function IncidentForm() {
     }
   };
 
-  const retakePhoto = () => {
-    setImage(null);
-  };
-
-  const toggleFlash = () => {
-    setFlash(!flash);
-  };
-
   //Determine type of incident
   const handleIncidentType = () => {
     return others ? others : incident;
@@ -186,9 +169,7 @@ export default function IncidentForm() {
     }
 
     setDisableButton(true);
-
-    console.log(formData);
-
+    
     //SUPABASE LOGIC
     const error = await insertReportData(formData, "incidentreps");
     console.log(error);
@@ -263,7 +244,7 @@ export default function IncidentForm() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onPress={toggleFlash}
+              onPress={() =>  setFlash(!flash)}
               textColor="black"
             >
               <Image
@@ -295,7 +276,7 @@ export default function IncidentForm() {
                 }}
                 buttonColor="navajowhite"
                 labelStyle={{ fontWeight: "bold" }}
-                onPress={retakePhoto}
+                onPress={() => setImage(null)}
                 textColor="black"
               >
                 Retake
