@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { insertVerifiedReport, verifyReport } from "../../lib/supabase";
+import { getImageURL, insertImage, insertVerifiedReport, verifyReport } from "../../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -24,6 +24,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 export default function VerifyForm() {
   const params = useLocalSearchParams();
   const { latitude, longitude, reportType, id } = params;
+  const [loading, setLoading] = useState(false);
   const [incidentDetails, setIncidentDetails] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [open, setOpen] = useState(false);
@@ -121,13 +122,27 @@ export default function VerifyForm() {
     }
   };
 
-  const formData = {
-    id: id,
-    type: incident != "Others" ? incident : others,
-    details: incidentDetails,
-    latitude: lat,
-    longitude: long,
-    image_url: image,
+  const getImageLink = async () => {
+    try {
+      var formData = new FormData();
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\/]/, "");
+      formData.append("files", {
+        uri: image,
+        name: fileName,
+        type: `image/${ext}`,
+      });
+
+      const { error } = await insertImage(reportType === "incidents" ? "verifiedIncidentImages" : "verifiedInfraImages", fileName, formData);
+      const { data, error2 } = await getImageURL(reportType === "incidents" ? "verifiedIncidentImages" : "verifiedInfraImages", fileName);
+
+      if (error) throw new Error(error.message);
+      if (error2) throw new Error(error.message);
+
+      return data.publicUrl;
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSubmit = async () => {
@@ -145,6 +160,18 @@ export default function VerifyForm() {
     }
 
     setDisableButton(true);
+    setLoading(true);
+
+    const link = await getImageLink();
+
+    const formData = {
+      id: id,
+      type: incident != "Others" ? incident : others,
+      details: incidentDetails,
+      latitude: lat,
+      longitude: long,
+      image_url: link,
+    };
 
     //SUPABASE LOGIC
     const error1 = await insertVerifiedReport(formData, verifiedTableName);
@@ -172,6 +199,7 @@ export default function VerifyForm() {
       return;
     }
     setDisableButton(false);
+    setLoading(false);
   };
 
   return (
@@ -400,6 +428,7 @@ export default function VerifyForm() {
                 buttonColor="black"
                 textColor="white"
                 disabled={disableButton}
+                loading={loading}
                 onPress={handleSubmit}
               >
                 Submit

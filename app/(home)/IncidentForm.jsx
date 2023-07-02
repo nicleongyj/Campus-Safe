@@ -1,9 +1,16 @@
-import {Text, View, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link, useNavigation } from "expo-router";
 import { useState, useEffect, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { insertReportData } from "../../lib/supabase";
+import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import DisableFlashButton from "../../assets/disableFlash.png";
@@ -14,6 +21,7 @@ import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
 export default function IncidentForm() {
+  const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [enableSecondQuestion, setEnableSecondQuestion] = useState(false);
   //incident data
@@ -33,9 +41,9 @@ export default function IncidentForm() {
   const [urgency, setUrgency] = useState("Select an item");
   const [open2, setOpen2] = useState(false);
   const [urgencyItems, setUrgencyItems] = useState([
-    { label: "1", value: "1" },
+    { label: "1 (Least)", value: "1" },
     { label: "2", value: "2" },
-    { label: "3", value: "3" },
+    { label: "3 (Most)", value: "3" },
     { label: "Select an item", value: "Select an item" },
   ]);
   //location
@@ -108,23 +116,24 @@ export default function IncidentForm() {
 
   if (!permissions) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems:'center'}}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ alignSelf: "center" }}>No access to camera</Text>
-        <Text style={{ alignSelf: "center" }}>Allow Expo to access your camera in your settings</Text>
+        <Text style={{ alignSelf: "center" }}>
+          Allow Expo to access your camera in your settings
+        </Text>
       </View>
     );
   }
 
   const enableCamera = () => {
     setStartCamera(true);
-    console.log("true");
   };
 
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log("pass");
+        console.log("picture taken");
         console.log(data);
         setImage(data.uri);
       } catch (error) {
@@ -133,16 +142,32 @@ export default function IncidentForm() {
     }
   };
 
+  const getImageLink = async () => {
+    try {
+      var formData = new FormData();
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\/]/, "");
+      formData.append("files", {
+        uri: image,
+        name: fileName,
+        type: `image/${ext}`,
+      });
+
+      const { error } = await insertImage("incidentImages", fileName, formData);
+      const { data, error2 } = await getImageURL("incidentImages", fileName);
+
+      if (error) throw new Error(error.message);
+      if (error2) throw new Error(error.message);
+
+      return data.publicUrl;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   //Determine type of incident
   const handleIncidentType = () => {
     return others ? others : incident;
-  };
-  const formData = {
-    type: handleIncidentType(),
-    urgent_level: urgency,
-    location: location,
-    details: details,
-    image_url: image,
   };
 
   const handleSubmit = async () => {
@@ -168,8 +193,19 @@ export default function IncidentForm() {
       return;
     }
 
+    setLoading(true);
     setDisableButton(true);
-    
+
+    const link = await getImageLink();
+
+    const formData = {
+      type: handleIncidentType(),
+      urgent_level: urgency,
+      location: location,
+      details: details,
+      image_url: link,
+    };
+
     //SUPABASE LOGIC
     const error = await insertReportData(formData, "incidentreps");
     console.log(error);
@@ -191,7 +227,9 @@ export default function IncidentForm() {
     setLocation("");
     setDetails("");
     setImage(null);
+    setErrMsg("");
     setDisableButton(false);
+    setLoading(false);
   };
 
   return (
@@ -244,7 +282,7 @@ export default function IncidentForm() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onPress={() =>  setFlash(!flash)}
+              onPress={() => setFlash(!flash)}
               textColor="black"
             >
               <Image
@@ -459,6 +497,7 @@ export default function IncidentForm() {
                   textColor="white"
                   disabled={disableButton}
                   onPress={handleSubmit}
+                  loading={loading}
                 >
                   Submit
                 </Button>

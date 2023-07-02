@@ -35,21 +35,31 @@ const ReportCard = ({
 
   return (
     <Card mode="outlined" style={styles.reportContainer}>
-      <Card.Title
-        title={`Type: ${type}`}
-        subtitle={reportType === "incidents" ? `Urgency: ${urgentLevel}` : null}
-      />
       <Card.Content>
-        <Text>{`Location: ${location}`}</Text>
-        <Text>{details =="" ? "Details : Nil" : `Details: ${details}`}</Text>
-        <Text></Text>
-        <Text>{`Time reported: ${inserted_at.split("T")[1].slice(0, 8)}`}</Text>
-        <Text>{`Date reported: ${inserted_at.split("T")[0]}`}</Text>
+        <View style={styles.cardContainer}>
+          <View style={styles.cardTextContainer}>
+            <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
+            <Text style={{fontSize:13, fontWeight:'bold'}}>
+              {reportType === "incidents" ? `Urgency: ${urgentLevel}` : null}
+            </Text>
+            <Text></Text>
+            <Text style={styles.cardSubheader}>{`Location: ${location}`}</Text>
+            <Text style={styles.cardSubheader}>
+              {details == "" ? "Details : Nil" : `Details: ${details}`}
+            </Text>
+            <Text></Text>
+            <Text style={styles.cardSubheader}>{`Time reported: ${inserted_at
+              .split("T")[1]
+              .slice(0, 8)}`}</Text>
+            <Text style={styles.cardSubheader}>{`Date reported: ${
+              inserted_at.split("T")[0]
+            }`}</Text>
+          </View>
+          <View style={styles.cardImageContainer}>
+            <Image source={{ uri: image_url }} style={styles.image} />
+          </View>
+        </View>
       </Card.Content>
-      <Card.Cover
-        source={{ uri: image_url }}
-        style={{ width: 130, height: 130, alignSelf: "center" }}
-      />
       <Card.Actions>
         <Button
           mode="outlined"
@@ -151,7 +161,15 @@ export default function ViewReports() {
   }
 
   function renderReport(report, reportType) {
-    const { type, urgent_level, location, details, id, image_url, inserted_at } = report;
+    const {
+      type,
+      urgent_level,
+      location,
+      details,
+      id,
+      image_url,
+      inserted_at,
+    } = report;
 
     return (
       <ReportCard
@@ -188,7 +206,7 @@ export default function ViewReports() {
             </Button>
           </Link>
 
-          <View style={{ marginTop:'2%' }}>
+          <View style={{ marginTop: "2%" }}>
             <SwitchSelector
               initial={0}
               options={[
@@ -265,8 +283,7 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     padding: 15,
-    justifyContent:'center'
-    
+    justifyContent: "center",
   },
   bottomContainer: {
     flex: 8,
@@ -294,5 +311,27 @@ const styles = StyleSheet.create({
   enlargedImage: {
     width: "80%",
     height: "80%",
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  cardTextContainer: {
+    flex: 2,
+  },
+  cardImageContainer: {
+    flex: 1,
+  },
+  image: {
+    height: 120,
+    width: 120,
+    borderRadius:10,
+  },
+  cardHeader:{
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  cardSubheader:{
+    fontSize:13
   },
 });
