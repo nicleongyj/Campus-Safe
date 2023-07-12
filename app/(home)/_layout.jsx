@@ -53,7 +53,7 @@ function HomeLayout({ userType }) {
         options={{
           tabBarLabel: "Staff Home",
           tabBarIcon: () => <Text>🛠️</Text>,
-          href: userType == "Student" ? null : "/Staffhome",
+          href: userType == "regular" ? null : "/Staffhome",
           headerTitle: "CampusSafe",
           headerStyle: {
             backgroundColor: "black",

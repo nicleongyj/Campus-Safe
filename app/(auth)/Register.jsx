@@ -5,8 +5,7 @@ import { supabase } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
 
-export default function RegisterPage() {
-  const [name, setName] = useState("");
+export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secondaryPassword, setSecondaryPassword] = useState("");
@@ -15,12 +14,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async () => {
-    if (name == "") {
-      setErrMsg("Please fill up your name");
-      return;
-    }
     if (email == "") {
-      setErrMsg("Please fill up username");
+      setErrMsg("Please fill up email");
       return;
     }
     if (password == "") {
@@ -33,7 +28,6 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    console.log({ email });
     const { error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
     if (error) {
@@ -73,18 +67,6 @@ export default function RegisterPage() {
 
         {/*INPUT CONTAINER*/}
         <View style={styles.inputContainer}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Name:</Text>
-            <TextInput
-              autoCapitalize="none"
-              mode="flat"
-              style={styles.textBox}
-              textColor="black"
-              value={name}
-              onChangeText={setName}
-            ></TextInput>
-          </View>
-
           <View style={styles.textContainer}>
             <Text style={styles.text}>Email:</Text>
             <TextInput

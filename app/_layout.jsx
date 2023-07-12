@@ -1,16 +1,19 @@
 import { Slot } from "expo-router";
-import { AuthProvider } from "../contexts/auth";
+import { AuthenticateProvider } from "../contexts/auth";
 import { Provider } from "react-redux";
 import store from "../redux/store";
+import { ToastProvider } from 'react-native-toast-notifications';
+
 
 export default function Root() {
 
   return (
-      <AuthProvider>
-        <Provider store={store}>
+    <ToastProvider>
+      <Provider store={store}>
+        <AuthenticateProvider>
           <Slot />
-        </Provider>
-      </AuthProvider>
-
+        </AuthenticateProvider>
+      </Provider>
+    </ToastProvider>
   );
 }

@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import { supabase } from "../../lib/supabase";
-
-import { connect } from "react-redux";
-import { setUserType } from "../../redux/store";
-import { setUserEmail } from "../../redux/store";
+import { supabase, upgradeUserRole } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
-import toolIcon from "../../assets/tools.png";
 
-function StaffLogin({ setUserType, setUserEmail }) {
+export default function StaffRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [secondaryPassword, setSecondaryPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [code, setCode] = useState("");
@@ -22,39 +18,42 @@ function StaffLogin({ setUserType, setUserEmail }) {
   const STAFFCODE = "0000";
 
   const handleSubmit = async () => {
-    setLoading(true);
-
     // Handle login errors
     if (email === "") {
       setErrMsg("Email cannot be empty!");
-      setLoading(false);
       return;
     }
     if (password === "") {
       setErrMsg("Please input a password!");
-      setLoading(false);
+      return;
+    }
+    if (password !== secondaryPassword) {
+      setErrMsg("Passwords do not match");
+      return;
+    }
+    if (code === "" ) {
+      setErrMsg("Staff code cannot be empty!");
+      return;
+    }
+    if (code !== STAFFCODE) {
+      setErrMsg("Invalid Staff code!");
       return;
     }
 
-    if (code === "" || code !== STAFFCODE) {
-      setErrMsg("Invalid staff code!");
-      setLoading(false);
-      return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({ email, password });
     setLoading(false);
-    setUserType("Staff");
-    setUserEmail(email);
 
     if (error) {
       setErrMsg(error.message);
+      return;
     }
-    console.log("pass");
+
+    const roleUpdateError = await upgradeUserRole();
+
+    if (roleUpdateError) {
+      setErrMsg(roleUpdateError.message);
+    }
     return;
   };
 
@@ -73,7 +72,7 @@ function StaffLogin({ setUserType, setUserEmail }) {
         style={{ flex: 1 }}
       >
         <View style={styles.headerContainer}>
-          <Text style={styles.header}>Log in as staff</Text>
+          <Text style={styles.header}>Register as staff</Text>
           <Text
             style={{
               fontSize: 15,
@@ -111,6 +110,19 @@ function StaffLogin({ setUserType, setUserEmail }) {
               textColor="black"
               value={password}
               onChangeText={setPassword}
+            ></TextInput>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>Confirm Password:</Text>
+            <TextInput
+              autoCapitalize="none"
+              secureTextEntry={!showPassword}
+              mode="flat"
+              style={styles.textBox}
+              textColor="black"
+              value={secondaryPassword}
+              onChangeText={setSecondaryPassword}
             ></TextInput>
           </View>
 
@@ -175,9 +187,8 @@ function StaffLogin({ setUserType, setUserEmail }) {
             buttonColor="black"
             loading={loading}
             textColor="white"
-            icon={toolIcon}
           >
-            Log in
+            Register
           </Button>
         </View>
       </ImageBackground>
@@ -235,5 +246,3 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
-
-export default connect(null, { setUserType, setUserEmail })(StaffLogin);

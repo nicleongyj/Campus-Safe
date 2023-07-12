@@ -3,6 +3,9 @@ import "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { connect } from "react-redux";
+import { useEffect } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { useToast } from "react-native-toast-notifications";
 
 import map from "../../assets/map.png";
 import lightbulb from "../../assets/lightbulb.png";
@@ -11,6 +14,14 @@ import trackRecord from "../../assets/trackRecord.png";
 import loginBackground from "../../assets/loginBackground.jpg";
 
 function Homepage() {
+  console.log("homepage called");
+  const { newRegister } = useLocalSearchParams();
+  const toast = useToast();
+  useEffect(() => {
+    if (newRegister == 'true') {
+      toast.show("Account Registered");
+    }
+  }, []);
   return (
     <View style={styles.container}>
       <ImageBackground

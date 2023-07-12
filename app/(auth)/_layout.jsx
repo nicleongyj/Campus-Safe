@@ -5,7 +5,7 @@ export default function AuthLayout() {
     <Stack>
       <Stack.Screen name="Login" options={{ title: "Welcome to CampusSafe" }} />
       <Stack.Screen name="Register" options={{ title: "Register your account" }}/>
-      <Stack.Screen name="Stafflogin" options={{ title: "Staff Login" }}/>
+      <Stack.Screen name="StaffRegister" options={{ title: "Staff Registration" }}/>
     </Stack>
   );
 }

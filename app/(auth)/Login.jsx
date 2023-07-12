@@ -1,27 +1,38 @@
 import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
+import { useToast } from "react-native-toast-notifications";
+
 
 import { connect } from "react-redux";
-import { setUserType } from "../../redux/store";
 import { setUserEmail } from "../../redux/store";
 
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
 import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
-import toolIcon from "../../assets/tools.png";
 
-function Login({ setUserType, setUserEmail }) {
+function Login({ setUserEmail }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginMsg, setLoginMsg] = useState(false);
+
+  const toast = useToast();
+
+  useEffect(() => {
+    if (loginMsg) {
+      toast.show("Logged in.");
+      setLoginMsg(false);
+    }
+  }, [loginMsg]);
 
   const handleSubmit = async () => {
+    //const toast = useToast();
     setLoading(true);
 
     // Handle login errors
@@ -36,7 +47,6 @@ function Login({ setUserType, setUserEmail }) {
       return;
     }
 
-    setUserType("Student");
     setUserEmail(email);
 
     const { error } = await supabase.auth.signInWithPassword({
@@ -48,7 +58,10 @@ function Login({ setUserType, setUserEmail }) {
     if (error) {
       setErrMsg(error.message);
     }
+
+    setLoginMsg(true);
   };
+
 
   const handlePassword = () => {
     setShowPassword(!showPassword);
@@ -138,7 +151,7 @@ function Login({ setUserType, setUserEmail }) {
           >
             Sign In
           </Button>
-          <Link
+          {/* <Link
             href="/Stafflogin"
             style={{
               marginTop: 10,
@@ -153,23 +166,36 @@ function Login({ setUserType, setUserEmail }) {
             >
               Log in as staff
             </Button>
-          </Link>
+          </Link> */}
 
           {/*REGISTER CONTAINER*/}
-          <View style={{ marginTop: 30, flexDirection: "row" }}>
+          <View style={{ marginTop: 30}}>
             <Text style={{ color: "dimgrey", fontWeight: "bold" }}>
-              Don&#39;t have an account?{" "}
+              Don&#39;t have an account? {" "}
+              <Link
+                href="/Register"
+                style={{
+                  color: "orangered",
+                  fontWeight: "bold",
+                  textDecorationLine: "underline",
+                }}
+              >
+                Register an account
+              </Link>
             </Text>
-            <Link
-              href="/Register"
-              style={{
-                color: "orangered",
-                fontWeight: "bold",
-                textDecorationLine: "underline",
-              }}
-            >
-              Register an account
-            </Link>
+            <Text style={{ marginTop: 10, color: "dimgrey", fontWeight: "bold" }}>
+              New staff member? {" "}
+              <Link 
+                href="StaffRegister"
+                style={{
+                  color: "orangered",
+                  fontWeight: "bold",
+                  textDecorationLine: "underline",
+                }}  
+              >
+                Register as staff
+              </Link>
+            </Text>
           </View>
         </View>
       </ImageBackground>
@@ -211,7 +237,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: "red",
-    marginTop: "3%",
+    marginTop: "2%",
+    marginBottom: "2%",
   },
   cs: {
     fontSize: 35,
@@ -258,4 +285,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { setUserType, setUserEmail })(Login);
+export default connect(null, { setUserEmail })(Login);
