@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, ImageBackground, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
@@ -11,14 +11,14 @@ import blueBackground from "../../assets/blueBackground.png";
 
 const reportTypeOptions = [
   { label: "Incidents", value: "incidents" },
-  { label: "Infrastructure issues", value: "infrastructures"},
+  { label: "Infrastructure issues", value: "infrastructures" },
 ];
 
 const filterOptions = [
   { label: "Unverified", value: "unverified" },
-  { label: "Verified", value: "verified"},
-  { label: "Rejected", value: "rejected" },
+  { label: "Verified", value: "verified" },
   { label: "Resolved", value: "resolved" },
+  { label: "Rejected", value: "rejected" },
 ];
 
 const ReportCard = ({
@@ -27,16 +27,22 @@ const ReportCard = ({
   location,
   details,
   reportType,
+  image_url,
 }) => {
   return (
     <Card mode="outlined" style={styles.reportContainer}>
-      <Card.Title
-        title={`Type: ${type}`}
-        subtitle={reportType === "incidents" ? `Urgency: ${urgentLevel}` : null}
-      />
       <Card.Content>
-        <Text>{`Location: ${location}`}</Text>
-        <Text>{`Details: ${details}`}</Text>
+        <View style={styles.cardContainer}>
+          <View style={styles.cardTextContainer}>
+            <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
+            <Text style={styles.cardSubheader}>{reportType === "incidents" ? `Urgency: ${urgentLevel}` : null}</Text>
+            <Text style={styles.cardSubheader}>{`Location: ${location}`}</Text>
+            <Text style={styles.cardSubheader}>{`Details: ${details}`}</Text>
+          </View>
+          <View style={styles.cardImageContainer}>
+            <Image source={{ uri: image_url }} style={styles.image} />
+          </View>
+        </View>
       </Card.Content>
     </Card>
   );
@@ -50,7 +56,7 @@ export default function TrackReports() {
 
   async function fetchReports() {
     let filteredReport = await viewFilteredReport(viewMode, filter);
-    setReports(filteredReport)
+    setReports(filteredReport);
     setRefresh(false);
     console.log("fetched data");
   }
@@ -66,7 +72,7 @@ export default function TrackReports() {
   }, [refresh]);
 
   function renderReport(report, reportType) {
-    const { type, urgent_level, location, details } = report;
+    const { type, urgent_level, location, details, image_url } = report;
 
     return (
       <ReportCard
@@ -75,6 +81,7 @@ export default function TrackReports() {
         location={location}
         details={details}
         reportType={reportType}
+        image_url={image_url}
       />
     );
   }
@@ -110,7 +117,7 @@ export default function TrackReports() {
             />
           </View>
 
-          <View style={{ marginTop: 10}}>
+          <View style={{ marginTop: 10 }}>
             <SwitchSelector
               initial={0}
               options={filterOptions}
@@ -132,7 +139,9 @@ export default function TrackReports() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontWeight: "bold", color: "brown", fontSize:20 }}>
+              <Text
+                style={{ fontWeight: "bold", color: "brown", fontSize: 20 }}
+              >
                 No reports to show
               </Text>
             </View>
@@ -170,8 +179,8 @@ const styles = StyleSheet.create({
   },
   reportContainer: {
     backgroundColor: "aliceblue",
-    borderRadius:15,
-    borderColor:'black',
+    borderRadius: 15,
+    borderColor: "black",
     margin: 10,
   },
   topContainer: {
@@ -188,5 +197,28 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     fontWeight: "bold",
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  cardTextContainer: {
+    flex: 3,
+  },
+  cardImageContainer: {
+    flex: 1,
+    justifyContent:'flex-end',
+  },
+  image: {
+    height: 100,
+    width: 100,
+    borderRadius:10,
+  },
+  cardHeader:{
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  cardSubheader:{
+    fontSize:13
   },
 });

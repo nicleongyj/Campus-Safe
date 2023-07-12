@@ -192,21 +192,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: "flex-end",
     alignItems: "center",
   },
   inputContainer: {
-    flex: 1,
+    flex: 3,
     padding: "5%",
     alignItems: "center",
+    justifyContent:'center',
   },
   textContainer: {
-    marginBottom: 10,
+    marginBottom: "2%",
   },
   buttonContainer: {
+    flex: 2,
     alignItems: "center",
-    flex: 1,
+
   },
   header: {
     justifyContent: "center",
@@ -231,7 +233,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 300,
     fontSize: 15,
-    // fontFamily: "Arial",
   },
 });
 

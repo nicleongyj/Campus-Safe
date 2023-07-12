@@ -40,6 +40,17 @@
     },
     "updates": {
       "url": "https://u.expo.dev/3bdb4588-6ab3-431e-bb4c-ca7e78cea575"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow CampusSafe to access your camera.",
+          "photosPermission": "Allow CampusSafe to access your photos.",
+          "savePhotosPermission": "Allow CampusSafe to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ]
   }
 }

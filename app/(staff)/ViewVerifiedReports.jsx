@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Alert, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  ImageBackground,
+  Image,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
@@ -8,19 +15,20 @@ import SwitchSelector from "react-native-switch-selector";
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 
-const ReportCard = ({
-  type,
-  details,
-  id,
-  onResolve,
-}) => {
+const ReportCard = ({ type, details, id, onResolve, image_url }) => {
   return (
     <Card mode="outlined" style={styles.reportContainer}>
-      <Card.Title
-        title={`Type: ${type}`}
-      />
       <Card.Content>
-        <Text>{`Details: ${details}`}</Text>
+        <View style={styles.cardContainer}>
+          <View style={styles.cardTextContainer}>
+            <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
+            <Text></Text>
+            <Text style={styles.cardSubheader}>{`Details: ${details}`}</Text>
+          </View>
+          <View style={styles.cardImageContainer}>
+            <Image source={{ uri: image_url }} style={styles.image} />
+          </View>
+        </View>
       </Card.Content>
       <Card.Actions>
         <Button
@@ -67,14 +75,14 @@ export default function ViewVerifiedReports() {
       {
         text: "OK",
         onPress: async () => {
-            if (reportType === 'incidents') {
-                console.log('resolve incident');
-                await resolveReport(id, "incident");
-            } else {
-                await resolveReport(id, "infra");
-            }
-            setRefresh(true);
-        }
+          if (reportType === "incidents") {
+            console.log("resolve incident");
+            await resolveReport(id, "incident");
+          } else {
+            await resolveReport(id, "infra");
+          }
+          setRefresh(true);
+        },
       },
       { text: "Cancel" },
     ]);
@@ -82,7 +90,7 @@ export default function ViewVerifiedReports() {
   }
 
   function renderReport(report, reportType) {
-    const { type, details, id } = report;
+    const { type, details, id, image_url } = report;
 
     return (
       <ReportCard
@@ -90,6 +98,7 @@ export default function ViewVerifiedReports() {
         details={details}
         id={id}
         reportType={reportType}
+        image_url={image_url}
         onResolve={(id) => handleResolve(id, reportType)}
       />
     );
@@ -145,7 +154,9 @@ export default function ViewVerifiedReports() {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontWeight: "bold", color: "brown", fontSize:20 }}>
+              <Text
+                style={{ fontWeight: "bold", color: "brown", fontSize: 20 }}
+              >
                 No reports to show
               </Text>
             </View>
@@ -183,8 +194,8 @@ const styles = StyleSheet.create({
   },
   reportContainer: {
     backgroundColor: "aliceblue",
-    borderRadius:15,
-    borderColor:'black',
+    borderRadius: 15,
+    borderColor: "black",
     margin: 10,
   },
   topContainer: {
@@ -202,5 +213,29 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     fontWeight: "bold",
+    marginRight: "5%"
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  cardTextContainer: {
+    flex: 2,
+  },
+  cardImageContainer: {
+    flex: 1,
+    justifyContent:'flex-end'
+  },
+  image: {
+    height: 120,
+    width: 120,
+    borderRadius:10,
+  },
+  cardHeader:{
+    fontSize:15,
+    fontWeight:'bold',
+  },
+  cardSubheader:{
+    fontSize:13
   },
 });
