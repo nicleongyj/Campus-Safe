@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     fontWeight: "bold",
-    marginRight: "5%"
+    marginRight: "5%",
   },
   cardContainer: {
     flex: 1,
@@ -224,18 +224,18 @@ const styles = StyleSheet.create({
   },
   cardImageContainer: {
     flex: 1,
-    justifyContent:'flex-end'
+    justifyContent: "flex-end",
   },
   image: {
     height: 120,
     width: 120,
-    borderRadius:10,
+    borderRadius: 10,
   },
-  cardHeader:{
-    fontSize:15,
-    fontWeight:'bold',
+  cardHeader: {
+    fontSize: 15,
+    fontWeight: "bold",
   },
-  cardSubheader:{
-    fontSize:13
+  cardSubheader: {
+    fontSize: 13,
   },
 });

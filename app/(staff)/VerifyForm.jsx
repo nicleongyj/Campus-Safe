@@ -9,7 +9,12 @@ import {
   Image,
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { insertVerifiedReport, verifyReport } from "../../lib/supabase";
+import {
+  getImageURL,
+  insertImage,
+  insertVerifiedReport,
+  verifyReport,
+} from "../../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -24,6 +29,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 export default function VerifyForm() {
   const params = useLocalSearchParams();
   const { latitude, longitude, reportType, id } = params;
+  const [loading, setLoading] = useState(false);
   const [incidentDetails, setIncidentDetails] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const [open, setOpen] = useState(false);
@@ -62,7 +68,11 @@ export default function VerifyForm() {
 
   const tableName = reportType == "incidents" ? "incidentreps" : "infrareps";
   const verifiedTableName =
-    reportType == "incidents" ? "verifiedincidents" :  reportType == 'event' ? "events" :"verifiedinfras";
+    reportType == "incidents"
+      ? "verifiedincidents"
+      : reportType == "event"
+      ? "events"
+      : "verifiedinfras";
 
   const navigation = useNavigation();
 
@@ -123,17 +133,39 @@ export default function VerifyForm() {
     }
   };
 
-  const formData = {
-    type: incident != "Others" ? incident : others,
-    details: incidentDetails,
-    latitude: lat,
-    longitude: long,
-    image_url: image,
-  };
+  const getImageLink = async () => {
+    try {
+      var formData = new FormData();
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\/]/, "");
+      formData.append("files", {
+        uri: image,
+        name: fileName,
+        type: `image/${ext}`,
+      });
 
-  if (reportType != 'event') {
-    formData.id = id;
-  }
+      const { error } = await insertImage(
+        reportType === "incidents"
+          ? "verifiedIncidentImages"
+          : "verifiedInfraImages",
+        fileName,
+        formData
+      );
+      const { data, error2 } = await getImageURL(
+        reportType === "incidents"
+          ? "verifiedIncidentImages"
+          : "verifiedInfraImages",
+        fileName
+      );
+
+      if (error) throw new Error(error.message);
+      if (error2) throw new Error(error.message);
+
+      return data.publicUrl;
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleSubmit = async () => {
     if (lat == "null" || long == "null") {
@@ -154,12 +186,27 @@ export default function VerifyForm() {
     }
 
     setDisableButton(true);
+    setLoading(true);
+
+    const link = await getImageLink();
+
+    const formData = {
+      type: incident != "Others" ? incident : others,
+      details: incidentDetails,
+      latitude: lat,
+      longitude: long,
+      image_url: link,
+    };
+
+    if (reportType != "event") {
+      formData.id = id;
+    }
 
     if (reportType == "event") {
       console.log(formData);
-      console.log(verifiedTableName)
-      const error = await insertVerifiedReport(formData, verifiedTableName); 
-      console.log('pass')
+      console.log(verifiedTableName);
+      const error = await insertVerifiedReport(formData, verifiedTableName);
+      console.log("pass");
       if (!error) {
         Alert.alert(
           "Event submitted",
@@ -176,7 +223,7 @@ export default function VerifyForm() {
             },
           ]
         );
-        console.log('pass2')
+        console.log("pass2");
       } else {
         Alert.alert("Error", "Please try again!", [
           { text: "OK", onPress: () => console.log("Error, OK Pressed") },
@@ -213,6 +260,7 @@ export default function VerifyForm() {
         return;
       }
       setDisableButton(false);
+      setLoading(false);
     }
   };
 
@@ -322,7 +370,7 @@ export default function VerifyForm() {
             </View>
           </View>
         </View>
-      ) : (reportType == "incidents") || (reportType == "infrastructures") ? (
+      ) : reportType == "incidents" || reportType == "infrastructures" ? (
         <View style={styles.container}>
           <KeyboardAwareScrollView
             // contentContainerStyle={{flex:1}}
@@ -442,6 +490,7 @@ export default function VerifyForm() {
                 buttonColor="black"
                 textColor="white"
                 disabled={disableButton}
+                loading={loading}
                 onPress={handleSubmit}
               >
                 Submit

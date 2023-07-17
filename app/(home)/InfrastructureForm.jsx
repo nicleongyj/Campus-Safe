@@ -3,7 +3,7 @@ import { Button, TextInput } from "react-native-paper";
 import { Link, useNavigation } from "expo-router";
 import { useState, useEffect, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { insertReportData } from "../../lib/supabase";
+import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import DisableFlashButton from "../../assets/disableFlash.png";
@@ -14,6 +14,7 @@ import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 
 export default function InfrastructureForm() {
+  const [loading, setLoading] = useState(false);
   const [errMsg, setErrMsg] = useState("");
   const [enableSecondQuestion, setEnableSecondQuestion] = useState(false);
 
@@ -129,12 +130,28 @@ export default function InfrastructureForm() {
     }
   };
 
-  const formData = {
-    type: handleIncidentType(),
-    location: location,
-    details: details,
-    image_url: image,
-  };
+  const getImageLink = async () => {
+    try {
+      var formData = new FormData();
+      const ext = image.substring(image.lastIndexOf(".") + 1);
+      const fileName = image.replace(/^.*[\\/]/, "");
+      formData.append("files", {
+        uri: image,
+        name: fileName,
+        type: `image/${ext}`,
+      });
+
+      const { error } = await insertImage("infraImages", fileName, formData);
+      const { data, error2 } = await getImageURL("infraImages", fileName);
+
+      if (error) throw new Error(error.message);
+      if (error2) throw new Error(error.message);
+
+      return data.publicUrl;
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   const handleSubmit = async () => {
     if (incident == "Select an item") {
@@ -155,7 +172,17 @@ export default function InfrastructureForm() {
       return;
     }
 
+    setLoading(true);
     setDisableButton(true);
+
+    const link = await getImageLink();
+
+    const formData = {
+      type: handleIncidentType(),
+      location: location,
+      details: details,
+      image_url: link,
+    };
 
     // SUPABASE LOGIC
     const error = await insertReportData(formData, "infrareps");
@@ -177,7 +204,9 @@ export default function InfrastructureForm() {
     setLocation("");
     setDetails("");
     setImage(null);
+    setErrMsg("");
     setDisableButton(false);
+    setLoading(false);
   };
 
   return (
@@ -424,6 +453,7 @@ export default function InfrastructureForm() {
                   buttonColor="black"
                   textColor="white"
                   disabled={disableButton}
+                  loading={loading}
                   onPress={handleSubmit}
                 >
                   Submit
