@@ -28,6 +28,18 @@ function HomeLayout({ userType }) {
         }}
       />
       <Tabs.Screen
+        name="Contacts"
+        options={{
+          title: "Call",
+          tabBarIcon: () => <Text>🆘</Text>,
+          tabBarActiveTintColor: "dodgerblue",
+          tabBarLabelStyle: {
+            fontWeight: "bold",
+          },
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
         name="Profile"
         options={{
           tabBarLabel: "Profile",
@@ -79,6 +91,18 @@ function HomeLayout({ userType }) {
             fontWeight: "bold",
             fontSize: 25,
             color: "orangered",
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="EventMap"
+        options={{
+          href: null,
+          headerTitle: "NUS Events",
+          headerTitleStyle: {
+            fontWeight: "bold",
+            fontSize: 25,
+            color: "black",
           },
         }}
       />

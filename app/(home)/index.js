@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
 
+import event from "../../assets/event.png";
 import map from "../../assets/map.png";
 import lightbulb from "../../assets/lightbulb.png";
 import carCrash from "../../assets/carCrash.png";
@@ -18,7 +19,7 @@ function Homepage() {
   const { newRegister } = useLocalSearchParams();
   const toast = useToast();
   useEffect(() => {
-    if (newRegister == 'true') {
+    if (newRegister == "true") {
       toast.show("Account Registered");
     }
   }, []);
@@ -56,7 +57,8 @@ function Homepage() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="#D6E7FF"
+                // buttonColor="#D6E7FF"
+                buttonColor="powderblue"
                 textColor="black"
                 labelStyle={styles.buttonContent}
                 contentStyle={{ width: 350, height: 100 }}
@@ -74,13 +76,30 @@ function Homepage() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="#B0EFD1"
+                // buttonColor="#B0EFD1"
+                buttonColor="#FFDAB9"
                 textColor="black"
                 labelStyle={styles.buttonContent}
                 contentStyle={{ width: 350, height: 100 }}
                 icon={map}
               >
-                <Text style={{ fontSize: 20 }}>Live Map</Text>
+                <Text style={{ fontSize: 20 }}>Live Incidents Map</Text>
+              </Button>
+            </Link>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Link href="/EventMap" style={styles.link}>
+              <Button
+                mode="elevated"
+                style={styles.button}
+                buttonColor="#FFDAB9"
+                textColor="black"
+                labelStyle={styles.buttonContent}
+                contentStyle={{ width: 350, height: 100 }}
+                icon={event}
+              >
+                <Text style={{ fontSize: 20 }}>NUS Events Map</Text>
               </Button>
             </Link>
           </View>
@@ -128,7 +147,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonContainer: {
-    marginBottom:'5%',
+    marginBottom: "5%",
   },
   header: {
     fontSize: 35,

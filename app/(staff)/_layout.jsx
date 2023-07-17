@@ -7,7 +7,6 @@ export default function StaffLayout() {
         name="ViewReports"
         options={{ title: "View/Approve new reports" }}
       />
-
       <Stack.Screen
         name="ViewVerifiedReports"
         options={{ title: "Manage verified reports" }}
@@ -19,17 +18,12 @@ export default function StaffLayout() {
       />
       <Stack.Screen
         name="VerifyForm"
-        options={{ title: "Verify an incident" }}
+        options={{ title: "" }}
       />
-
-      {/* //     headerStyle: {
-        //       backgroundColor: "blue",
-        //     },
-        //     headerTintColor: "white",
-        //     headerTitleStyle: {
-        //       fontWeight: "bold",
-        //     },
-        //   }} */}
+      <Stack.Screen
+        name="ViewEvents"
+        options={{ title: "View all NUS events" }}
+      />
     </Stack>
   );
 }

@@ -4,6 +4,7 @@ import { Button } from "react-native-paper";
 import { connect } from "react-redux";
 import { Link } from "expo-router";
 
+import manageEvent from "../../assets/manageEvent.png";
 import loginBackground from "../../assets/loginBackground.jpg";
 import tickIcon from "../../assets/tick.png";
 import recordIcon from "../../assets/manageRecord.png";
@@ -49,6 +50,22 @@ function Homepage() {
                 icon={tickIcon}
               >
                 <Text style={{ fontSize: 18 }}>View/Approve new reports</Text>
+              </Button>
+            </Link>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <Link href="/ViewEvents" style={styles.link}>
+              <Button
+                mode="elevated"
+                style={styles.button}
+                buttonColor="#BDFCC9"
+                textColor="black"
+                labelStyle={styles.buttonContent}
+                contentStyle={{ width: 350, height: 100 }}
+                icon={manageEvent}
+              >
+                <Text style={{ fontSize: 18 }}>Manage NUS Events</Text>
               </Button>
             </Link>
           </View>
