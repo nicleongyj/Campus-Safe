@@ -13,6 +13,7 @@ import lightbulb from "../../assets/lightbulb.png";
 import carCrash from "../../assets/carCrash.png";
 import trackRecord from "../../assets/trackRecord.png";
 import loginBackground from "../../assets/loginBackground.jpg";
+import { ScrollView } from "react-native-gesture-handler";
 
 function Homepage() {
   console.log("homepage called");
@@ -30,96 +31,100 @@ function Homepage() {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-        <View style={styles.topContainer}>
-          <Text style={styles.header}>Welcome!</Text>
-          <Text style={styles.subheader}>What would you like to do today?</Text>
-        </View>
-
-        <View style={styles.bottomContainer}>
-          <View style={styles.buttonContainer}>
-            <Link href="/IncidentForm" style={styles.link}>
-              <Button
-                mode="elevated"
-                style={styles.button}
-                buttonColor="powderblue"
-                textColor="black"
-                labelStyle={styles.buttonContent}
-                contentStyle={{ width: 350, height: 100 }}
-                icon={carCrash}
-              >
-                <Text style={{ fontSize: 20 }}>Report an accident</Text>
-              </Button>
-            </Link>
+        <ScrollView style={{flex:1}}>
+          <View style={styles.topContainer}>
+            <Text style={styles.header}>Welcome!</Text>
+            <Text style={styles.subheader}>
+              What would you like to do today?  
+            </Text>
           </View>
 
-          <View style={styles.buttonContainer}>
-            <Link href="/InfrastructureForm" style={styles.link}>
-              <Button
-                mode="elevated"
-                style={styles.button}
-                // buttonColor="#D6E7FF"
-                buttonColor="powderblue"
-                textColor="black"
-                labelStyle={styles.buttonContent}
-                contentStyle={{ width: 350, height: 100 }}
-                icon={lightbulb}
-              >
-                <Text style={{ fontSize: 20 }}>
-                  Report infrastructure issues{" "}
-                </Text>
-              </Button>
-            </Link>
-          </View>
+          <View style={styles.bottomContainer}>
+            <View style={styles.buttonContainer}>
+              <Link href="/IncidentForm" style={styles.link}>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  buttonColor="powderblue"
+                  textColor="black"
+                  labelStyle={styles.buttonContent}
+                  contentStyle={{ width: 350, height: 100 }}
+                  icon={carCrash}
+                >
+                  <Text style={{ fontSize: 20 }}>Report an accident</Text>
+                </Button>
+              </Link>
+            </View>
 
-          <View style={styles.buttonContainer}>
-            <Link href="/Map" style={styles.link}>
-              <Button
-                mode="elevated"
-                style={styles.button}
-                // buttonColor="#B0EFD1"
-                buttonColor="#FFDAB9"
-                textColor="black"
-                labelStyle={styles.buttonContent}
-                contentStyle={{ width: 350, height: 100 }}
-                icon={map}
-              >
-                <Text style={{ fontSize: 20 }}>Live Incidents Map</Text>
-              </Button>
-            </Link>
-          </View>
+            <View style={styles.buttonContainer}>
+              <Link href="/InfrastructureForm" style={styles.link}>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  // buttonColor="#D6E7FF"
+                  buttonColor="powderblue"
+                  textColor="black"
+                  labelStyle={styles.buttonContent}
+                  contentStyle={{ width: 350, height: 100 }}
+                  icon={lightbulb}
+                >
+                  <Text style={{ fontSize: 20 }}>
+                    Report infrastructure issues{" "}
+                  </Text>
+                </Button>
+              </Link>
+            </View>
 
-          <View style={styles.buttonContainer}>
-            <Link href="/EventMap" style={styles.link}>
-              <Button
-                mode="elevated"
-                style={styles.button}
-                buttonColor="#FFDAB9"
-                textColor="black"
-                labelStyle={styles.buttonContent}
-                contentStyle={{ width: 350, height: 100 }}
-                icon={event}
-              >
-                <Text style={{ fontSize: 20 }}>NUS Events Map</Text>
-              </Button>
-            </Link>
-          </View>
+            <View style={styles.buttonContainer}>
+              <Link href="/Map" style={styles.link}>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  // buttonColor="#B0EFD1"
+                  buttonColor="#FFDAB9"
+                  textColor="black"
+                  labelStyle={styles.buttonContent}
+                  contentStyle={{ width: 350, height: 100 }}
+                  icon={map}
+                >
+                  <Text style={{ fontSize: 20 }}>Live Incidents Map</Text>
+                </Button>
+              </Link>
+            </View>
 
-          <View style={styles.buttonContainer}>
-            <Link href="/TrackReports" style={styles.link}>
-              <Button
-                mode="elevated"
-                style={styles.button}
-                buttonColor="#D8B4FF"
-                textColor="black"
-                labelStyle={styles.buttonContent}
-                contentStyle={{ width: 350, height: 100 }}
-                icon={trackRecord}
-              >
-                <Text style={{ fontSize: 20 }}>Track your reports</Text>
-              </Button>
-            </Link>
+            <View style={styles.buttonContainer}>
+              <Link href="/EventMap" style={styles.link}>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  buttonColor="#FFDAB9"
+                  textColor="black"
+                  labelStyle={styles.buttonContent}
+                  contentStyle={{ width: 350, height: 100 }}
+                  icon={event}
+                >
+                  <Text style={{ fontSize: 20 }}>NUS Events Map</Text>
+                </Button>
+              </Link>
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <Link href="/TrackReports" style={styles.link}>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  buttonColor="#D8B4FF"
+                  textColor="black"
+                  labelStyle={styles.buttonContent}
+                  contentStyle={{ width: 350, height: 100 }}
+                  icon={trackRecord}
+                >
+                  <Text style={{ fontSize: 20 }}>Track your reports</Text>
+                </Button>
+              </Link>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </ImageBackground>
     </View>
   );
@@ -136,7 +141,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   topContainer: {
-    marginTop: 50,
+    marginTop: "20%",
+    marginBottom:"10%",
     flex: 1,
     padding: 10,
     marginLeft: 5,

@@ -14,7 +14,7 @@ export default function StaffLayout() {
 
       <Stack.Screen
         name="SelectMap"
-        options={{ title: "Select location of incident" }}
+        options={{ title: "Select location" }}
       />
       <Stack.Screen
         name="VerifyForm"

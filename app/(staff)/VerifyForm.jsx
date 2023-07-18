@@ -147,6 +147,8 @@ export default function VerifyForm() {
       const { error } = await insertImage(
         reportType === "incidents"
           ? "verifiedIncidentImages"
+          : reportType === "event"
+          ? "eventImages"
           : "verifiedInfraImages",
         fileName,
         formData
@@ -154,6 +156,8 @@ export default function VerifyForm() {
       const { data, error2 } = await getImageURL(
         reportType === "incidents"
           ? "verifiedIncidentImages"
+          : reportType === "event" 
+          ? "eventImages"
           : "verifiedInfraImages",
         fileName
       );
@@ -161,6 +165,7 @@ export default function VerifyForm() {
       if (error) throw new Error(error.message);
       if (error2) throw new Error(error.message);
 
+      console.log(data.publicUrl);
       return data.publicUrl;
     } catch (e) {
       console.log(e);
