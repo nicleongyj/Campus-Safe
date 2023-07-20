@@ -196,6 +196,7 @@ export default function VerifyForm() {
     const link = await getImageLink();
 
     const formData = {
+      id: id,
       type: incident != "Others" ? incident : others,
       details: incidentDetails,
       latitude: lat,
@@ -597,6 +598,7 @@ export default function VerifyForm() {
                 buttonColor="black"
                 textColor="white"
                 disabled={disableButton}
+                loading={loading}
                 onPress={handleSubmit}
               >
                 Submit

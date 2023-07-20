@@ -151,7 +151,8 @@ export default function InfrastructureForm() {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
+
 
   const handleSubmit = async () => {
     if (incident == "Select an item") {
@@ -174,7 +175,7 @@ export default function InfrastructureForm() {
 
     setLoading(true);
     setDisableButton(true);
-
+    
     const link = await getImageLink();
 
     const formData = {

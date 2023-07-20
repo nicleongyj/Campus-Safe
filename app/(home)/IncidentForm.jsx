@@ -1,4 +1,11 @@
-import {Text, View, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { Link, useNavigation } from "expo-router";
 import { useState, useEffect, useRef } from "react";
@@ -109,23 +116,24 @@ export default function IncidentForm() {
 
   if (!permissions) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems:'center'}}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text style={{ alignSelf: "center" }}>No access to camera</Text>
-        <Text style={{ alignSelf: "center" }}>Allow Expo to access your camera in your settings</Text>
+        <Text style={{ alignSelf: "center" }}>
+          Allow Expo to access your camera in your settings
+        </Text>
       </View>
     );
   }
 
   const enableCamera = () => {
     setStartCamera(true);
-    console.log("true");
   };
 
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log("pass");
+        console.log("picture taken");
         console.log(data);
         setImage(data.uri);
       } catch (error) {

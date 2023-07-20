@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal } from "react-native";
+
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
 

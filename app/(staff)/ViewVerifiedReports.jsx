@@ -237,5 +237,6 @@ const styles = StyleSheet.create({
   },
   cardSubheader: {
     fontSize: 13,
+
   },
 });

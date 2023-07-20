@@ -35,7 +35,7 @@ const ReportCard = ({
 
   return (
     <Card mode="outlined" style={styles.reportContainer}>
-    <Card.Content>
+      <Card.Content>
         <View style={styles.cardContainer}>
           <View style={styles.cardTextContainer}>
             <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
@@ -161,7 +161,15 @@ export default function ViewReports() {
   }
 
   function renderReport(report, reportType) {
-    const { type, urgent_level, location, details, id, image_url, inserted_at } = report;
+    const {
+      type,
+      urgent_level,
+      location,
+      details,
+      id,
+      image_url,
+      inserted_at,
+    } = report;
 
     return (
       <ReportCard
@@ -198,7 +206,7 @@ export default function ViewReports() {
             </Button>
           </Link>
 
-          <View style={{ marginTop:'2%' }}>
+          <View style={{ marginTop: "2%" }}>
             <SwitchSelector
               initial={0}
               options={[
@@ -276,7 +284,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     justifyContent:'center',
-    
   },
   bottomContainer: {
     flex: 8,
