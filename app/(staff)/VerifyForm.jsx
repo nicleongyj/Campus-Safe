@@ -9,7 +9,12 @@ import {
   Image,
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { getImageURL, insertImage, insertVerifiedReport, verifyReport } from "../../lib/supabase";
+import {
+  getImageURL,
+  insertImage,
+  insertVerifiedReport,
+  verifyReport,
+} from "../../lib/supabase";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -31,7 +36,9 @@ export default function VerifyForm() {
   const [enableSecondQuestion, setEnableSecondQuestion] = useState(false);
 
   //Incident details
-  const [incident, setIncident] = useState("Select an item");
+  const [incident, setIncident] = useState(
+    reportType == "event" ? "" : "Select an item"
+  );
   const [incidentItems, setIncidentItems] = useState([
     { label: "Fire", value: "Fire" },
     { label: "Fallen tree", value: "Fallen tree" },
@@ -61,7 +68,11 @@ export default function VerifyForm() {
 
   const tableName = reportType == "incidents" ? "incidentreps" : "infrareps";
   const verifiedTableName =
-    reportType == "incidents" ? "verifiedincidents" : "verifiedinfras";
+    reportType == "incidents"
+      ? "verifiedincidents"
+      : reportType == "event"
+      ? "events"
+      : "verifiedinfras";
 
   const navigation = useNavigation();
 
@@ -133,12 +144,28 @@ export default function VerifyForm() {
         type: `image/${ext}`,
       });
 
-      const { error } = await insertImage(reportType === "incidents" ? "verifiedIncidentImages" : "verifiedInfraImages", fileName, formData);
-      const { data, error2 } = await getImageURL(reportType === "incidents" ? "verifiedIncidentImages" : "verifiedInfraImages", fileName);
+      const { error } = await insertImage(
+        reportType === "incidents"
+          ? "verifiedIncidentImages"
+          : reportType === "event"
+          ? "eventImages"
+          : "verifiedInfraImages",
+        fileName,
+        formData
+      );
+      const { data, error2 } = await getImageURL(
+        reportType === "incidents"
+          ? "verifiedIncidentImages"
+          : reportType === "event" 
+          ? "eventImages"
+          : "verifiedInfraImages",
+        fileName
+      );
 
       if (error) throw new Error(error.message);
       if (error2) throw new Error(error.message);
 
+      console.log(data.publicUrl);
       return data.publicUrl;
     } catch (e) {
       console.log(e);
@@ -158,6 +185,10 @@ export default function VerifyForm() {
       setErrMsg("Fill in incident details!");
       return;
     }
+    if (image == null) {
+      setErrMsg("Please attach a image!");
+      return;
+    }
 
     setDisableButton(true);
     setLoading(true);
@@ -173,33 +204,70 @@ export default function VerifyForm() {
       image_url: link,
     };
 
-    //SUPABASE LOGIC
-    const error1 = await insertVerifiedReport(formData, verifiedTableName);
-    const error2 = await verifyReport(tableName, id);
-    if (!error1 && !error2) {
-      Alert.alert(
-        "Incident verified",
-        "View verified reports in 'Manage verified reports'",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              navigation.reset({
-                index: 0,
-                routes: [{ name: "ViewReports" }],
-              });
-            },
-          },
-        ]
-      );
-    } else {
-      Alert.alert("Error", "Please try again!", [
-        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
-      ]);
-      return;
+    if (reportType != "event") {
+      formData.id = id;
     }
-    setDisableButton(false);
-    setLoading(false);
+
+    if (reportType == "event") {
+      console.log(formData);
+      console.log(verifiedTableName);
+      const error = await insertVerifiedReport(formData, verifiedTableName);
+      console.log("pass");
+      if (!error) {
+        Alert.alert(
+          "Event submitted",
+          "You can now view the event on the event map",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "ViewEvents" }],
+                });
+              },
+            },
+          ]
+        );
+        console.log("pass2");
+      } else {
+        Alert.alert("Error", "Please try again!", [
+          { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+        ]);
+        console.log(error);
+        return;
+      }
+      setDisableButton(false);
+    } else {
+      console.log(formData);
+      //SUPABASE LOGIC
+      const error1 = await insertVerifiedReport(formData, verifiedTableName);
+      const error2 = await verifyReport(tableName, id);
+      if (!error1 && !error2) {
+        Alert.alert(
+          "Incident verified",
+          "View verified reports in 'Manage verified reports'",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "ViewReports" }],
+                });
+              },
+            },
+          ]
+        );
+      } else {
+        Alert.alert("Error", "Please try again!", [
+          { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+        ]);
+        return;
+      }
+      setDisableButton(false);
+      setLoading(false);
+    }
   };
 
   return (
@@ -308,7 +376,7 @@ export default function VerifyForm() {
             </View>
           </View>
         </View>
-      ) : (
+      ) : reportType == "incidents" || reportType == "infrastructures" ? (
         <View style={styles.container}>
           <KeyboardAwareScrollView
             // contentContainerStyle={{flex:1}}
@@ -391,7 +459,109 @@ export default function VerifyForm() {
 
               <View style={styles.questionContainer}>
                 <Text style={styles.question}>
-                  Attach a picture for students to view (optional):{" "}
+                  Attach a picture for students to view:{" "}
+                </Text>
+                <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    style={styles.cameraButton}
+                    onPress={enableCamera}
+                  >
+                    <Text style={styles.cameraText}>
+                      {image == null ? "Take a picture" : "View image"}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {image != null && (
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>Image: </Text>
+                      <Image
+                        source={{ uri: image }}
+                        style={{ height: 60, width: 60 }}
+                      />
+                    </View>
+                  )}
+                </View>
+              </View>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Text style={styles.error}>
+                {" "}
+                {errMsg !== "" && <Text>{errMsg}</Text>}
+              </Text>
+              <Button
+                mode="elevated"
+                style={styles.button}
+                buttonColor="black"
+                textColor="white"
+                disabled={disableButton}
+                loading={loading}
+                onPress={handleSubmit}
+              >
+                Submit
+              </Button>
+            </View>
+          </KeyboardAwareScrollView>
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <KeyboardAwareScrollView
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={true}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={styles.headerContainer}>
+              <Text style={styles.header}>Fill up event details</Text>
+            </View>
+
+            <View style={styles.bodyContainer}>
+              <View style={styles.questionContainer}>
+                <Text style={styles.question}>Latitude:</Text>
+                <TextInput mode="flat" disabled={true} style={styles.textInput}>
+                  {lat}
+                </TextInput>
+              </View>
+              <View style={styles.questionContainer}>
+                <Text style={styles.question}>Longitude:</Text>
+                <TextInput mode="flat" disabled={true} style={styles.textInput}>
+                  {long}
+                </TextInput>
+              </View>
+              <View style={styles.pickerContainer}>
+                <Text style={styles.question}>Event name:</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={incident}
+                  onChangeText={(text) => {
+                    if (text.trim() === "") {
+                      setIncident("");
+                    } else {
+                      setIncident(text);
+                    }
+                  }}
+                  autoCapitalize="none"
+                  mode="flat"
+                  textColor="black"
+                  multiline={true}
+                ></TextInput>
+              </View>
+              <View style={styles.questionContainer}>
+                <Text style={styles.question}>Event description:</Text>
+                <TextInput
+                  mode="flat"
+                  style={{ backgroundColor: "whitesmoke" }}
+                  placeholder="Location, event details..."
+                  placeholderTextColor="grey"
+                  textColor="black"
+                  value={incidentDetails}
+                  onChangeText={setIncidentDetails}
+                />
+              </View>
+
+              <View style={styles.questionContainer}>
+                <Text style={styles.question}>
+                  Attach a picture for students to view:{" "}
                 </Text>
                 <View style={{ alignItems: "center" }}>
                   <TouchableOpacity

@@ -11,7 +11,6 @@ import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { resolveReport, viewVerifiedReports } from "../../lib/supabase";
-import SwitchSelector from "react-native-switch-selector";
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 
@@ -21,7 +20,7 @@ const ReportCard = ({ type, details, id, onResolve, image_url }) => {
       <Card.Content>
         <View style={styles.cardContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
+            <Text style={styles.cardHeader}>{`Event name: ${type}`}</Text>
             <Text></Text>
             <Text style={styles.cardSubheader}>{`Details: ${details}`}</Text>
           </View>
@@ -38,27 +37,23 @@ const ReportCard = ({ type, details, id, onResolve, image_url }) => {
           style={styles.button}
           onPress={() => onResolve(id)}
         >
-          Resolve
+          Delete
         </Button>
       </Card.Actions>
     </Card>
   );
 };
 
-export default function ViewVerifiedReports() {
-  const [incidents, setIncidents] = useState([]);
-  const [infrastructures, setInfrastructures] = useState([]);
+export default function ViewEvents() {
+  const [events, setEvents] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [viewMode, setViewMode] = useState("incidents");
 
-  async function fetchReports() {
-    let incidentData = await viewVerifiedReports("verifiedincidents");
-    let infrastructureData = await viewVerifiedReports("verifiedinfras");
-    setIncidents(incidentData);
-    setInfrastructures(infrastructureData);
+  const fetchReports = async () => {
+    let eventData = await viewVerifiedReports("events");
+    setEvents(eventData);
     setRefresh(false);
     console.log("fetched data");
-  }
+  };
 
   useEffect(() => {
     fetchReports();
@@ -70,26 +65,21 @@ export default function ViewVerifiedReports() {
     }
   }, [refresh]);
 
-  function handleResolve(id, reportType) {
-    Alert.alert("Resolve incident?", "Action cannot be changed", [
+  const handleResolve = (id) => {
+    Alert.alert("Delete event?", "Action cannot be changed", [
       {
         text: "OK",
         onPress: async () => {
-          if (reportType === "incidents") {
-            console.log("resolve incident");
-            await resolveReport(id, "incident");
-          } else {
-            await resolveReport(id, "infra");
-          }
+          await resolveReport(id, "events");
           setRefresh(true);
         },
       },
       { text: "Cancel" },
     ]);
     return;
-  }
+  };
 
-  function renderReport(report, reportType) {
+  const renderReport = (report) => {
     const { type, details, id, image_url } = report;
 
     return (
@@ -97,12 +87,14 @@ export default function ViewVerifiedReports() {
         type={type}
         details={details}
         id={id}
-        reportType={reportType}
         image_url={image_url}
         onResolve={(id) => handleResolve(id, reportType)}
       />
     );
-  }
+  };
+
+  const reportType = "event";
+  const id = null;
 
   return (
     <View style={styles.container}>
@@ -123,30 +115,25 @@ export default function ViewVerifiedReports() {
               Back
             </Button>
           </Link>
-
-          <View style={{ marginTop: 10 }}>
-            <SwitchSelector
-              initial={0}
-              options={[
-                {
-                  label: `Incidents (${incidents.length})`,
-                  value: "incidents",
-                },
-                {
-                  label: `Infrastructure issues (${infrastructures.length})`,
-                  value: "infrastructures",
-                },
-              ]}
-              onPress={(value) => setViewMode(value)}
-              hasPadding
-              buttonColor="slategray"
-              borderColor="black"
-            />
-          </View>
+        </View>
+        <View style={styles.middleContainer}>
+          <Link
+            href={{
+              pathname: "/SelectMap",
+              params: { reportType, id },
+            }}
+          >
+            <Button
+              mode="contained"
+              buttonColor="#BDFCC9"
+              style={styles.newButton}
+            >
+              <Text style={styles.buttonText}>New event</Text>
+            </Button>
+          </Link>
         </View>
         <View style={styles.bottomContainer}>
-          {((viewMode === "infrastructures" && infrastructures.length == 0) ||
-            (viewMode === "incidents" && incidents.length == 0)) && (
+          {events.length == 0 && (
             <View
               style={{
                 flex: 1,
@@ -161,22 +148,12 @@ export default function ViewVerifiedReports() {
               </Text>
             </View>
           )}
-          {viewMode === "incidents" && (
-            <FlatList
-              data={incidents}
-              renderItem={({ item }) => renderReport(item, "incidents")}
-              refreshing={refresh}
-              onRefresh={() => setRefresh(true)}
-            ></FlatList>
-          )}
-          {viewMode === "infrastructures" && (
-            <FlatList
-              data={infrastructures}
-              renderItem={({ item }) => renderReport(item, "infrastructures")}
-              refreshing={refresh}
-              onRefresh={() => setRefresh(true)}
-            ></FlatList>
-          )}
+          <FlatList
+            data={events}
+            renderItem={({ item }) => renderReport(item)}
+            refreshing={refresh}
+            onRefresh={() => setRefresh(true)}
+          ></FlatList>
         </View>
       </ImageBackground>
     </View>
@@ -202,8 +179,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
   },
+  middleContainer: {
+    flex: 2,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "3%",
+  },
   bottomContainer: {
-    flex: 8,
+    flex: 15,
   },
   header: {
     fontWeight: "bold",
@@ -237,6 +220,16 @@ const styles = StyleSheet.create({
   },
   cardSubheader: {
     fontSize: 13,
-
+  },
+  newButton: {
+    backgroundColor: "#BDFCC9",
+    borderWidth: 1,
+    borderColor: "black",
+  },
+  buttonText: {
+    color: "black",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });

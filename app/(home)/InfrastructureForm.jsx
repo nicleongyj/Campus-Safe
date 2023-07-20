@@ -153,6 +153,7 @@ export default function InfrastructureForm() {
     }
   };
 
+
   const handleSubmit = async () => {
     if (incident == "Select an item") {
       setErrMsg("Fill up incident type!");
@@ -174,8 +175,7 @@ export default function InfrastructureForm() {
 
     setLoading(true);
     setDisableButton(true);
-
-    console.log('pass');
+    
     const link = await getImageLink();
 
     const formData = {
@@ -184,7 +184,7 @@ export default function InfrastructureForm() {
       details: details,
       image_url: link,
     };
-  
+
     // SUPABASE LOGIC
     const error = await insertReportData(formData, "infrareps");
     console.log(error);
@@ -205,6 +205,7 @@ export default function InfrastructureForm() {
     setLocation("");
     setDetails("");
     setImage(null);
+    setErrMsg("");
     setDisableButton(false);
     setLoading(false);
   };

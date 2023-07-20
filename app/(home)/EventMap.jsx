@@ -1,15 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal } from "react-native";
-
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
 
-import flameIcon from "../../assets/flame.png";
-import maintenanceIcon from "../../assets/maintenance.png";
-import accidentIcon from "../../assets/accident.png";
-import warningIcon from "../../assets/warning.png";
-import constructionIcon from "../../assets/construction.png";
-import SwitchSelector from "react-native-switch-selector";
+import colouredEvent from "../../assets/colouredEvent.png";
 import { Button, Card } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
@@ -17,13 +11,10 @@ const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = (height / 9) * 2 - 10;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
-export default function Map() {
-  const [incidentMarkers, setIncidentMarkers] = useState([]);
-  const [infraMarkers, setInfraMarkers] = useState([]);
+export default function EventMap() {
+  const [eventMarkers, setEventMarkers] = useState([]);
   const [refresh] = useState(false);
-  const [selectedIncidentCardIndex, setSelectedIncidentCardIndex] = useState(0);
-  const [selectedInfraCardIndex, setSelectedInfraCardIndex] = useState(0);
-  const [showMarkerType, setShowMarkerType] = useState("incidents");
+  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [disableScroll, setDisableScroll] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
@@ -36,10 +27,8 @@ export default function Map() {
   });
   const fetchMarkers = async () => {
     try {
-      const incidentData = await viewMarkers("verifiedincidents");
-      const infraData = await viewMarkers("verifiedinfras");
-      setInfraMarkers(infraData);
-      setIncidentMarkers(incidentData);
+      const eventData = await viewMarkers("events");
+      setEventMarkers(eventData);
       console.log("Fetched data");
     } catch (error) {
       console.error("Error fetching markers:", error);
@@ -60,18 +49,11 @@ export default function Map() {
     const offsetX = event.nativeEvent.contentOffset.x;
     const index = Math.round(offsetX / CARD_WIDTH);
 
-    if (showMarkerType === "incidents" && !disableScroll) {
-      if (index >= incidentMarkers.length || index < 0) {
+    if (!disableScroll) {
+      if (index >= eventMarkers.length || index < 0) {
         return;
       }
-      setSelectedIncidentCardIndex(index);
-    }
-
-    if (showMarkerType === "infrastructures" && !disableScroll) {
-      if (index >= infraMarkers.length || index < 0) {
-        return;
-      }
-      setSelectedInfraCardIndex(index);
+      setSelectedCardIndex(index);
     }
   };
 
@@ -79,15 +61,8 @@ export default function Map() {
 
   const handleMarkerPress = (index) => {
     setDisableScroll(true);
-    if (showMarkerType === "incidents") {
-      setSelectedIncidentCardIndex(index);
+      setSelectedCardIndex(index);
       handleExpand(index);
-    }
-
-    if (showMarkerType === "infrastructures") {
-      setSelectedInfraCardIndex(index);
-      handleExpand(index);
-    }
 
     scrollViewRef.current.scrollTo({
       x: index * CARD_WIDTH,
@@ -96,10 +71,6 @@ export default function Map() {
     setTimeout(() => {
       setDisableScroll(false);
     }, 500);
-  };
-
-  const handleSwitchPress = (value) => {
-    setShowMarkerType(value);
   };
 
   const toggleImageModal = () => {
@@ -114,90 +85,35 @@ export default function Map() {
 
   return (
     <View style={styles.container}>
-      <SwitchSelector
-        initial={0}
-        options={[
-          {
-            label: `Incidents  (${incidentMarkers.length})`,
-            value: "incidents",
-          },
-          {
-            label: `Infrastructure issues  (${infraMarkers.length})`,
-            value: "infrastructures",
-          },
-        ]}
-        onPress={handleSwitchPress}
-        hasPadding
-        buttonColor="darkslategrey"
-        borderColor="black"
-      />
+    
       <MapView
         style={styles.map}
         region={region}
         onRegionChangeComplete={setRegion}
       >
-        {showMarkerType === "incidents" &&
-          incidentMarkers.map((marker) => {
+        {eventMarkers.map((marker) => {
             return (
               <Marker
-                key={incidentMarkers.indexOf(marker)}
+                key={eventMarkers.indexOf(marker)}
                 coordinate={{
                   latitude: marker.latitude,
                   longitude: marker.longitude,
                 }}
                 tracksViewChanges={false}
                 onPress={() =>
-                  handleMarkerPress(incidentMarkers.indexOf(marker))
+                  handleMarkerPress(eventMarkers.indexOf(marker))
                 }
               >
                 <Image
-                  source={
-                    marker.type === "Fire"
-                      ? flameIcon
-                      : marker.type === "Motor accident"
-                      ? accidentIcon
-                      : warningIcon
-                  }
+                  source={colouredEvent}
                   style={[
-                    selectedIncidentCardIndex !==
-                      incidentMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
+                    selectedCardIndex !==
+                      eventMarkers.indexOf(marker) && {
+                      width: 35,
+                      height: 35,
                     },
-                    selectedIncidentCardIndex ===
-                      incidentMarkers.indexOf(marker) && {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                />
-              </Marker>
-            );
-          })}
-        {showMarkerType === "infrastructures" &&
-          infraMarkers.map((marker) => {
-            return (
-              <Marker
-                key={infraMarkers.indexOf(marker)}
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                tracksViewChanges={false}
-                onPress={() => handleMarkerPress(infraMarkers.indexOf(marker))}
-              >
-                <Image
-                  source={
-                    marker.type === "Construction"
-                      ? constructionIcon
-                      : maintenanceIcon
-                  }
-                  style={[
-                    selectedInfraCardIndex !== infraMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
-                    },
-                    selectedInfraCardIndex === infraMarkers.indexOf(marker) && {
+                    selectedCardIndex ===
+                      eventMarkers.indexOf(marker) && {
                       width: 70,
                       height: 70,
                     },
@@ -217,90 +133,13 @@ export default function Map() {
         onScroll={handleScroll}
         ref={scrollViewRef}
       >
-        {showMarkerType === "incidents" &&
-          incidentMarkers.map((marker) => {
+        {eventMarkers.map((marker) => {
             return (
               <View
-                key={incidentMarkers.indexOf(marker)}
+                key={eventMarkers.indexOf(marker)}
                 style={[
                   styles.card,
-                  selectedIncidentCardIndex ===
-                    incidentMarkers.indexOf(marker) && styles.selectedCard,
-                ]}
-              >
-                <Image
-                  source={{ uri: marker.image_url }}
-                  style={styles.cardImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.textContent}>
-                  <Text numberOfLines={1} style={styles.cardtitle}>
-                    {marker.type}
-                  </Text>
-                  <Text numberOfLines={1} style={styles.cardDescription}>
-                    {marker.details}
-                  </Text>
-                </View>
-                <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
-                >
-                  Expand
-                </Button>
-
-                <Modal visible={modalVisible} transparent={true}>
-                  <View style={styles.imageModalContainer}>
-                    {selectedMarkerIndex != null && (
-                      <Card mode="outlined" style={styles.reportContainer}>
-                        <Card.Content>
-                          <Card.Cover
-                            source={{
-                              uri: incidentMarkers[selectedMarkerIndex]
-                                .image_url,
-                            }}
-                            style={{
-                              width: "100%",
-                              height: "85%",
-                              alignSelf: "center",
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              fontWeight: "bold",
-                              marginTop: "2%",
-                            }}
-                          >
-                            {incidentMarkers[selectedMarkerIndex].type}
-                          </Text>
-                          <Text numberOfLines={3} style={{ fontSize: 15 }}>
-                            {incidentMarkers[selectedMarkerIndex].details}
-                          </Text>
-                        </Card.Content>
-                      </Card>
-                    )}
-                    <Button
-                      mode="outlined"
-                      buttonColor="white"
-                      textColor="black"
-                      onPress={toggleImageModal}
-                    >
-                      Close
-                    </Button>
-                  </View>
-                </Modal>
-              </View>
-            );
-          })}
-        {showMarkerType === "infrastructures" &&
-          infraMarkers.map((marker) => {
-            return (
-              <View
-                key={infraMarkers.indexOf(marker)}
-                style={[
-                  styles.card,
-                  selectedInfraCardIndex === infraMarkers.indexOf(marker) &&
+                  selectedCardIndex === eventMarkers.indexOf(marker) &&
                     styles.selectedCard,
                 ]}
               >
@@ -320,7 +159,7 @@ export default function Map() {
                 <Button
                   mode="contained"
                   style={styles.button}
-                  onPress={() => handleExpand(infraMarkers.indexOf(marker))}
+                  onPress={() => handleExpand(eventMarkers.indexOf(marker))}
                 >
                   Expand
                 </Button>
@@ -332,7 +171,7 @@ export default function Map() {
                         <Card.Content>
                           <Card.Cover
                             source={{
-                              uri: infraMarkers[selectedMarkerIndex].image_url,
+                              uri: eventMarkers[selectedMarkerIndex].image_url,
                             }}
                             style={{
                               width: "100%",
@@ -347,10 +186,10 @@ export default function Map() {
                               marginTop: "2%",
                             }}
                           >
-                            {infraMarkers[selectedMarkerIndex].type}
+                            {eventMarkers[selectedMarkerIndex].type}
                           </Text>
                           <Text numberOfLines={3} style={{ fontSize: 15 }}>
-                            {infraMarkers[selectedMarkerIndex].details}
+                            {eventMarkers[selectedMarkerIndex].details}
                           </Text>
                         </Card.Content>
                       </Card>

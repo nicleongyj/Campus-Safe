@@ -21,6 +21,7 @@ export default function SelectMap() {
     const { coordinate } = event.nativeEvent;
     setLat(coordinate.latitude);
     setLong(coordinate.longitude);
+    console.log(reportType);
   };
 
   return (

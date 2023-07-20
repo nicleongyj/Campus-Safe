@@ -205,7 +205,7 @@ export default function IncidentForm() {
       details: details,
       image_url: link,
     };
-
+    
     //SUPABASE LOGIC
     const error = await insertReportData(formData, "incidentreps");
     console.log(error);
