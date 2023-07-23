@@ -8,6 +8,8 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  Platform,
+  ImageBackground
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
@@ -111,19 +113,38 @@ export default function EventMap() {
               onPress={() => handleMarkerPress(eventMarkers.indexOf(marker))}
               testID="eventMarker"
             >
-              <Image
-                source={colouredEvent}
-                style={[
-                  selectedCardIndex !== eventMarkers.indexOf(marker) && {
-                    width: 35,
-                    height: 35,
-                  },
-                  selectedCardIndex === eventMarkers.indexOf(marker) && {
-                    width: 70,
-                    height: 70,
-                  },
-                ]}
-              />
+              {Platform.OS === "ios" && (
+                <Image
+                  source={colouredEvent}
+                  style={[
+                    selectedCardIndex !== eventMarkers.indexOf(marker) && {
+                      width: 35,
+                      height: 35,
+                    },
+                    selectedCardIndex === eventMarkers.indexOf(marker) && {
+                      width: 70,
+                      height: 70,
+                    },
+                  ]}
+                />
+              )}
+              {Platform.OS === "android" && (
+                <ImageBackground
+                  source={colouredEvent}
+                  style={[
+                    selectedCardIndex !== eventMarkers.indexOf(marker) && {
+                      width: 35,
+                      height: 35,
+                    },
+                    selectedCardIndex === eventMarkers.indexOf(marker) && {
+                      width: 70,
+                      height: 70,
+                    },
+                  ]}
+                >
+                  <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                </ImageBackground>
+              )}
             </Marker>
           );
         })}

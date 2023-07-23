@@ -8,6 +8,8 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  Platform,
+  ImageBackground,
 } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
@@ -162,27 +164,54 @@ export default function Map() {
                 }
                 testID="incidentMarker"
               >
-                <Image
-                  source={
-                    marker.type === "Fire"
-                      ? flameIcon
-                      : marker.type === "Motor accident"
-                      ? accidentIcon
-                      : warningIcon
-                  }
-                  style={[
-                    selectedIncidentCardIndex !==
-                      incidentMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
-                    },
-                    selectedIncidentCardIndex ===
-                      incidentMarkers.indexOf(marker) && {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                />
+                {Platform.OS === "ios" && (
+                  <Image
+                    source={
+                      marker.type === "Fire"
+                        ? flameIcon
+                        : marker.type === "Motor accident"
+                        ? accidentIcon
+                        : warningIcon
+                    }
+                    style={[
+                      selectedIncidentCardIndex !==
+                        incidentMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedIncidentCardIndex ===
+                        incidentMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  />
+                )}
+                {Platform.OS === "android" && (
+                  <ImageBackground
+                    source={
+                      marker.type === "Fire"
+                        ? flameIcon
+                        : marker.type === "Motor accident"
+                        ? accidentIcon
+                        : warningIcon
+                    }
+                    style={[
+                      selectedIncidentCardIndex !==
+                        incidentMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedIncidentCardIndex ===
+                        incidentMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  >
+                    <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                  </ImageBackground>
+                )}
               </Marker>
             );
           })}
@@ -199,23 +228,50 @@ export default function Map() {
                 onPress={() => handleMarkerPress(infraMarkers.indexOf(marker))}
                 testID="infraMarker"
               >
-                <Image
-                  source={
-                    marker.type === "Construction"
-                      ? constructionIcon
-                      : maintenanceIcon
-                  }
-                  style={[
-                    selectedInfraCardIndex !== infraMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
-                    },
-                    selectedInfraCardIndex === infraMarkers.indexOf(marker) && {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                />
+                {Platform.OS === "ios" && (
+                  <Image
+                    source={
+                      marker.type === "Construction"
+                        ? constructionIcon
+                        : maintenanceIcon
+                    }
+                    style={[
+                      selectedInfraCardIndex !==
+                        infraMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedInfraCardIndex ===
+                        infraMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  />
+                )}
+                {Platform.OS === "android" && (
+                  <ImageBackground
+                    source={
+                      marker.type === "Construction"
+                        ? constructionIcon
+                        : maintenanceIcon
+                    }
+                    style={[
+                      selectedInfraCardIndex !==
+                        infraMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedInfraCardIndex ===
+                        infraMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  >
+                    <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                  </ImageBackground>
+                )}
               </Marker>
             );
           })}
