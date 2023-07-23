@@ -41,7 +41,7 @@ export default function Register() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="hello">
       <ImageBackground
         source={background}
         resizeMode="stretch"
@@ -76,6 +76,7 @@ export default function Register() {
               textColor="black"
               value={email}
               onChangeText={setEmail}
+              testID="emailInput"
             ></TextInput>
           </View>
 
@@ -89,6 +90,7 @@ export default function Register() {
               textColor="black"
               value={password}
               onChangeText={setPassword}
+              testID="passwordInput"
             ></TextInput>
           </View>
 
@@ -102,6 +104,7 @@ export default function Register() {
               textColor="black"
               value={secondaryPassword}
               onChangeText={setSecondaryPassword}
+              testID="secondaryPasswordInput"
             ></TextInput>
           </View>
           <View style={{ flexDirection: "row", alignItems:'center'}}>
@@ -125,6 +128,7 @@ export default function Register() {
             buttonColor="black"
             loading={loading}
             textColor="white"
+            testID="submitRegister"
           >
             Register
           </Button>

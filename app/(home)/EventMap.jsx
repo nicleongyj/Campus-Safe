@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal } from "react-native";
+import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal, TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
 
@@ -8,7 +8,7 @@ import { Button, Card } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = (height / 9) * 2 - 10;
+const CARD_HEIGHT = (height / 4);
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default function EventMap() {
@@ -90,6 +90,7 @@ export default function EventMap() {
         style={styles.map}
         region={region}
         onRegionChangeComplete={setRegion}
+        testID="map"
       >
         {eventMarkers.map((marker) => {
             return (
@@ -103,6 +104,7 @@ export default function EventMap() {
                 onPress={() =>
                   handleMarkerPress(eventMarkers.indexOf(marker))
                 }
+                testID='eventMarker'
               >
                 <Image
                   source={colouredEvent}
@@ -132,6 +134,7 @@ export default function EventMap() {
         contentContainerStyle={styles.endPadding}
         onScroll={handleScroll}
         ref={scrollViewRef}
+        testID="scrollView"
       >
         {eventMarkers.map((marker) => {
             return (
@@ -142,6 +145,7 @@ export default function EventMap() {
                   selectedCardIndex === eventMarkers.indexOf(marker) &&
                     styles.selectedCard,
                 ]}
+                testID="eventCard"
               >
                 <Image
                   source={{ uri: marker.image_url }}
@@ -156,13 +160,16 @@ export default function EventMap() {
                     {marker.details}
                   </Text>
                 </View>
-                <Button
+                {/* <Button
                   mode="contained"
                   style={styles.button}
                   onPress={() => handleExpand(eventMarkers.indexOf(marker))}
                 >
                   Expand
-                </Button>
+                </Button> */}
+                <TouchableOpacity style={styles.button} onPress={() => handleExpand(eventMarkers.indexOf(marker))}>
+                  <Text style={{color:'white', alignSelf:'center'}}>Expand</Text>
+                </TouchableOpacity>
 
                 <Modal visible={modalVisible} transparent={true}>
                   <View style={styles.imageModalContainer}>
@@ -315,7 +322,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "black",
     width: "80%",
+    height:"15%",
     alignSelf: "center",
+    justifyContent:'center',
+    borderRadius:20,
   },
   cardImage: {
     flex: 3,

@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import "react-native-gesture-handler";
 import { Button } from "react-native-paper";
-import { Link } from "expo-router";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
+import { useNavigation } from "@react-navigation/native";
 
 import event from "../../assets/event.png";
 import map from "../../assets/map.png";
@@ -16,14 +16,17 @@ import loginBackground from "../../assets/loginBackground.jpg";
 import { ScrollView } from "react-native-gesture-handler";
 
 function Homepage() {
-  console.log("homepage called");
   const { newRegister } = useLocalSearchParams();
   const toast = useToast();
+  const navigation = useNavigation();
   useEffect(() => {
     if (newRegister == "true") {
       toast.show("Account Registered");
     }
   }, []);
+  const navigateTo = (destination) => {
+    navigation.navigate(destination);
+  }
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -41,7 +44,6 @@ function Homepage() {
 
           <View style={styles.bottomContainer}>
             <View style={styles.buttonContainer}>
-              <Link href="/IncidentForm" style={styles.link}>
                 <Button
                   mode="elevated"
                   style={styles.button}
@@ -50,33 +52,32 @@ function Homepage() {
                   labelStyle={styles.buttonContent}
                   contentStyle={{ width: 350, height: 100 }}
                   icon={carCrash}
+                  testID="incidentButton"
+                  onPress={() => navigateTo("IncidentForm")}
                 >
                   <Text style={{ fontSize: 20 }}>Report an accident</Text>
                 </Button>
-              </Link>
             </View>
 
             <View style={styles.buttonContainer}>
-              <Link href="/InfrastructureForm" style={styles.link}>
                 <Button
                   mode="elevated"
                   style={styles.button}
-                  // buttonColor="#D6E7FF"
                   buttonColor="powderblue"
                   textColor="black"
                   labelStyle={styles.buttonContent}
                   contentStyle={{ width: 350, height: 100 }}
                   icon={lightbulb}
+                  testID="infraButton"
+                  onPress={() => navigateTo("InfrastructureForm")}
                 >
                   <Text style={{ fontSize: 20 }}>
                     Report infrastructure issues{" "}
                   </Text>
                 </Button>
-              </Link>
             </View>
 
             <View style={styles.buttonContainer}>
-              <Link href="/Map" style={styles.link}>
                 <Button
                   mode="elevated"
                   style={styles.button}
@@ -86,14 +87,15 @@ function Homepage() {
                   labelStyle={styles.buttonContent}
                   contentStyle={{ width: 350, height: 100 }}
                   icon={map}
+                  testID="mapButton"
+                  onPress={() => navigateTo("Map")}
+
                 >
                   <Text style={{ fontSize: 20 }}>Live Incidents Map</Text>
                 </Button>
-              </Link>
             </View>
 
             <View style={styles.buttonContainer}>
-              <Link href="/EventMap" style={styles.link}>
                 <Button
                   mode="elevated"
                   style={styles.button}
@@ -102,14 +104,15 @@ function Homepage() {
                   labelStyle={styles.buttonContent}
                   contentStyle={{ width: 350, height: 100 }}
                   icon={event}
+                  testID="eventMapButton"
+                  onPress={() => navigateTo("EventMap")}
+
                 >
                   <Text style={{ fontSize: 20 }}>NUS Events Map</Text>
                 </Button>
-              </Link>
             </View>
 
             <View style={styles.buttonContainer}>
-              <Link href="/TrackReports" style={styles.link}>
                 <Button
                   mode="elevated"
                   style={styles.button}
@@ -118,10 +121,12 @@ function Homepage() {
                   labelStyle={styles.buttonContent}
                   contentStyle={{ width: 350, height: 100 }}
                   icon={trackRecord}
+                  testID="trackButton"
+                  onPress={() => navigateTo("TrackReports")}
+
                 >
                   <Text style={{ fontSize: 20 }}>Track your reports</Text>
                 </Button>
-              </Link>
             </View>
           </View>
         </ScrollView>
@@ -162,11 +167,6 @@ const styles = StyleSheet.create({
   subheader: {
     fontSize: 20,
     fontWeight: "bold",
-  },
-  link: {
-    width: 350,
-    height: 100,
-    zIndex: 2,
   },
   button: {
     width: 350,

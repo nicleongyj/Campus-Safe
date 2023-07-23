@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal } from "react-native";
+import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal, TouchableOpacity } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
@@ -14,7 +14,7 @@ import { Button, Card } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = (height / 9) * 2 - 10;
+const CARD_HEIGHT = (height / 4);
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default function Map() {
@@ -40,7 +40,6 @@ export default function Map() {
       const infraData = await viewMarkers("verifiedinfras");
       setInfraMarkers(infraData);
       setIncidentMarkers(incidentData);
-      console.log("Fetched data");
     } catch (error) {
       console.error("Error fetching markers:", error);
     }
@@ -124,17 +123,20 @@ export default function Map() {
           {
             label: `Infrastructure issues  (${infraMarkers.length})`,
             value: "infrastructures",
+            testID: "infraButton"
           },
         ]}
         onPress={handleSwitchPress}
         hasPadding
         buttonColor="darkslategrey"
         borderColor="black"
+        testID="switchSelector"
       />
       <MapView
         style={styles.map}
         region={region}
         onRegionChangeComplete={setRegion}
+        testID="map"
       >
         {showMarkerType === "incidents" &&
           incidentMarkers.map((marker) => {
@@ -149,6 +151,7 @@ export default function Map() {
                 onPress={() =>
                   handleMarkerPress(incidentMarkers.indexOf(marker))
                 }
+                testID="incidentMarker"
               >
                 <Image
                   source={
@@ -158,6 +161,7 @@ export default function Map() {
                       ? accidentIcon
                       : warningIcon
                   }
+              
                   style={[
                     selectedIncidentCardIndex !==
                       incidentMarkers.indexOf(marker) && {
@@ -185,6 +189,7 @@ export default function Map() {
                 }}
                 tracksViewChanges={false}
                 onPress={() => handleMarkerPress(infraMarkers.indexOf(marker))}
+                testID="infraMarker"
               >
                 <Image
                   source={
@@ -216,6 +221,7 @@ export default function Map() {
         contentContainerStyle={styles.endPadding}
         onScroll={handleScroll}
         ref={scrollViewRef}
+        testID="incidentScrollView"
       >
         {showMarkerType === "incidents" &&
           incidentMarkers.map((marker) => {
@@ -227,6 +233,7 @@ export default function Map() {
                   selectedIncidentCardIndex ===
                     incidentMarkers.indexOf(marker) && styles.selectedCard,
                 ]}
+                testID='incidentCard'
               >
                 <Image
                   source={{ uri: marker.image_url }}
@@ -241,13 +248,18 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                <Button
+                {/* <Button
                   mode="contained"
                   style={styles.button}
                   onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
                 >
                   Expand
-                </Button>
+                </Button> */}
+
+                <TouchableOpacity style={styles.button} onPress={() => handleExpand(eventMarkers.indexOf(marker))}>
+                  <Text style={{color:'white', alignSelf:'center'}}>Expand</Text>
+                </TouchableOpacity>
+
 
                 <Modal visible={modalVisible} transparent={true}>
                   <View style={styles.imageModalContainer}>
@@ -303,6 +315,7 @@ export default function Map() {
                   selectedInfraCardIndex === infraMarkers.indexOf(marker) &&
                     styles.selectedCard,
                 ]}
+                testID="infraCard"
               >
                 <Image
                   source={{ uri: marker.image_url }}
@@ -476,7 +489,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "black",
     width: "80%",
+    height:"15%",
     alignSelf: "center",
+    justifyContent:'center',
+    borderRadius:20,
   },
   cardImage: {
     flex: 3,
