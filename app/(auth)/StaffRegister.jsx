@@ -82,7 +82,7 @@ export default function StaffRegister() {
             }}
           >
             {" "}
-            {errMsg !== "" && <Text>{errMsg}</Text>}
+            {errMsg !== "" && <Text testID="ErrMsg">{errMsg}</Text>}
             {/* {loading && <ActivityIndicator />} */}
           </Text>
         </View>

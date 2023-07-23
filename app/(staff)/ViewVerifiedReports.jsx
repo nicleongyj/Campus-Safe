@@ -57,7 +57,6 @@ export default function ViewVerifiedReports() {
     setIncidents(incidentData);
     setInfrastructures(infrastructureData);
     setRefresh(false);
-    console.log("fetched data");
   }
 
   useEffect(() => {

@@ -101,4 +101,22 @@ describe("Register screen", () => {
     const errorMessage = getByText("Passwords do not match");
     expect(errorMessage).toBeTruthy();
   });
+
+  it("Does show error message register fields are filled up", async () => {
+    const { getByTestId, queryByTestId } = renderWithProviders(<Register />, store);
+    const emailInput = getByTestId("emailInput");
+    const password = getByTestId("passwordInput");
+    const secPassword = getByTestId("secondaryPasswordInput");
+    const register = getByTestId("submitRegister");
+
+    fireEvent.changeText(emailInput, "test@gmail.com");
+    fireEvent.changeText(password, "000000");
+    fireEvent.changeText(secPassword, "000000");
+    
+    await waitFor(async () => {
+      fireEvent.press(register);
+    });
+    const errMsg = queryByTestId("ErrMsg");
+    expect(errMsg).toBeFalsy();
+  });
 });

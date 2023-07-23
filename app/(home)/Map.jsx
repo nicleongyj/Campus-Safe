@@ -1,5 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Animated,
+  Dimensions,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
@@ -14,7 +23,7 @@ import { Button, Card } from "react-native-paper";
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = (height / 4);
+const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default function Map() {
@@ -123,7 +132,7 @@ export default function Map() {
           {
             label: `Infrastructure issues  (${infraMarkers.length})`,
             value: "infrastructures",
-            testID: "infraButton"
+            testID: "infraButton",
           },
         ]}
         onPress={handleSwitchPress}
@@ -161,7 +170,6 @@ export default function Map() {
                       ? accidentIcon
                       : warningIcon
                   }
-              
                   style={[
                     selectedIncidentCardIndex !==
                       incidentMarkers.indexOf(marker) && {
@@ -233,7 +241,7 @@ export default function Map() {
                   selectedIncidentCardIndex ===
                     incidentMarkers.indexOf(marker) && styles.selectedCard,
                 ]}
-                testID='incidentCard'
+                testID="incidentCard"
               >
                 <Image
                   source={{ uri: marker.image_url }}
@@ -256,12 +264,21 @@ export default function Map() {
                   Expand
                 </Button> */}
 
-                <TouchableOpacity style={styles.button} onPress={() => handleExpand(eventMarkers.indexOf(marker))}>
-                  <Text style={{color:'white', alignSelf:'center'}}>Expand</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
+                  testID={`expandButton-${incidentMarkers.indexOf(marker)}`}
+                >
+                  <Text style={{ color: "white", alignSelf: "center" }}>
+                    Expand
+                  </Text>
                 </TouchableOpacity>
 
-
-                <Modal visible={modalVisible} transparent={true}>
+                <Modal
+                  visible={modalVisible}
+                  transparent={true}
+                  testID={`modal-${incidentMarkers.indexOf(marker)}`}
+                >
                   <View style={styles.imageModalContainer}>
                     {selectedMarkerIndex != null && (
                       <Card mode="outlined" style={styles.reportContainer}>
@@ -330,15 +347,30 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                <Button
+                {/* <Button
                   mode="contained"
                   style={styles.button}
                   onPress={() => handleExpand(infraMarkers.indexOf(marker))}
+                  testID={`expandButton-${infraMarkers.indexOf(marker)}`}
                 >
                   Expand
-                </Button>
+                </Button> */}
 
-                <Modal visible={modalVisible} transparent={true}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleExpand(infraMarkers.indexOf(marker))}
+                  testID={`expandButton-${infraMarkers.indexOf(marker)}`}
+                >
+                  <Text style={{ color: "white", alignSelf: "center" }}>
+                    Expand
+                  </Text>
+                </TouchableOpacity>
+
+                <Modal
+                  visible={modalVisible}
+                  transparent={true}
+                  testID={`modal-${infraMarkers.indexOf(marker)}`}
+                >
                   <View style={styles.imageModalContainer}>
                     {selectedMarkerIndex != null && (
                       <Card mode="outlined" style={styles.reportContainer}>
@@ -489,10 +521,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "black",
     width: "80%",
-    height:"15%",
+    height: "15%",
     alignSelf: "center",
-    justifyContent:'center',
-    borderRadius:20,
+    justifyContent: "center",
+    borderRadius: 20,
   },
   cardImage: {
     flex: 3,

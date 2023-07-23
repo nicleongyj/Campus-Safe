@@ -60,7 +60,7 @@ export default function Register() {
             }}
           >
             {" "}
-            {errMsg !== "" && <Text>{errMsg}</Text>}
+            {errMsg !== "" && <Text testID="ErrMsg">{errMsg}</Text>}
             {/* {loading && <ActivityIndicator />} */}
           </Text>
         </View>

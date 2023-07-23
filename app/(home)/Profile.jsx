@@ -8,10 +8,9 @@ import { TextInput } from "react-native-paper";
 
 import loginBackground from '../../assets/loginBackground.jpg'
 
-function Profile({ setUserType, userType, userEmail }) {
+function Profile({ setUserType, userType }) {
   const handleLogOut = () => {
     setUserType("");
-    setUserEmail("");
     supabase.auth.signOut();
   };
 
@@ -38,21 +37,6 @@ function Profile({ setUserType, userType, userEmail }) {
           >
             {userType}
           </TextInput>
-        </View>
-
-        <View style={styles.infoContainer}>
-          <Text style={styles.text}>Account email:</Text>
-          <TextInput
-            mode="flat"
-            style={styles.textInput}
-            disabled={true}
-            placeholder="Account email"
-            textColor="black"
-          >
-            {userEmail}
-          </TextInput>
-
-          {/* <Button mode='elevated' onPress={() => console.log(userType)}>Check usertype</Button> */}
         </View>
 
       </View>
@@ -125,7 +109,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
   userType: state.userType,
-  userEmail: state.userEmail,
 });
 
-export default connect(mapStateToProps, { setUserType, setUserEmail })(Profile);
+export default connect(mapStateToProps, { setUserType })(Profile);

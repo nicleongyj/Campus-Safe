@@ -46,8 +46,6 @@ export default function Login() {
       return;
     }
 
-    // setUserEmail(email);
-
     console.log("1");
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -133,7 +131,7 @@ export default function Login() {
           </View>
           <Text style={styles.error}>
             {" "}
-            {errMsg != "" && <Text>{errMsg}</Text>}
+            {errMsg != "" && <Text testID="errMsg">{errMsg}</Text>}
           </Text>
         </View>
 

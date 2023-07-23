@@ -116,6 +116,7 @@ describe("Map screen", () => {
       const cards = await waitFor(() => findAllByTestId("incidentCard"));
       expect(markers).toHaveLength(2);
       expect(cards).toHaveLength(2);
+      const expand = getByTestId("expandButton-1");
     });
   });
 
@@ -125,12 +126,50 @@ describe("Map screen", () => {
         <Map />,
         store
       );
-    const infraButton = getByTestId("infraButton");
-    fireEvent.press(infraButton);
-    const markers = await waitFor(() => findAllByTestId("infraMarker"));
-    const cards = await waitFor(() => findAllByTestId("infraCard"));
-    expect(markers).toHaveLength(2);
-    expect(cards).toHaveLength(2);
+      const infraButton = getByTestId("infraButton");
+      fireEvent.press(infraButton);
+      const markers = await waitFor(() => findAllByTestId("infraMarker"));
+      const cards = await waitFor(() => findAllByTestId("infraCard"));
+      expect(markers).toHaveLength(2);
+      expect(cards).toHaveLength(2);
+    });
+  });
+
+  it("Should show expanded modal when 'expand' button is clicked on incident card", async () => {
+    await waitFor(async () => {
+      const { getByTestId, findAllByTestId } = renderWithProviders(
+        <Map />,
+        store
+      );
+      const markers = await waitFor(() => findAllByTestId("incidentMarker"));
+      const cards = await waitFor(() => findAllByTestId("incidentMarker"));
+      expect(markers).toHaveLength(2);
+      expect(cards).toHaveLength(2);
+
+      const expandButton = getByTestId("expandButton-1");
+      fireEvent.press(expandButton);
+      const modal = getByTestId("modal-1");
+      expect(modal.props.visible).toBe(true);
+    });
+  });
+
+  it("Should show expanded modal when 'expand' button is clicked on incident card", async () => {
+    await waitFor(async () => {
+      const { getByTestId, findAllByTestId } = renderWithProviders(
+        <Map />,
+        store
+      );
+      const infraButton = getByTestId("infraButton");
+      fireEvent.press(infraButton);
+      const markers = await waitFor(() => findAllByTestId("infraMarker"));
+      const cards = await waitFor(() => findAllByTestId("infraMarker"));
+      expect(markers).toHaveLength(2);
+      expect(cards).toHaveLength(2);
+
+      const expandButton = getByTestId("expandButton-1");
+      fireEvent.press(expandButton);
+      const modal = getByTestId("modal-1");
+      expect(modal.props.visible).toBe(true);
     });
   });
 });

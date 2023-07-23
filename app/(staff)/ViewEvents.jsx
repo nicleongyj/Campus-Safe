@@ -52,7 +52,6 @@ export default function ViewEvents() {
     let eventData = await viewVerifiedReports("events");
     setEvents(eventData);
     setRefresh(false);
-    console.log("fetched data");
   };
 
   useEffect(() => {

@@ -130,7 +130,6 @@ export default function ViewReports() {
     setIncidents(incidentData);
     setInfrastructures(infrastructureData);
     setRefresh(false);
-    console.log("fetched data");
   }
 
   useEffect(() => {

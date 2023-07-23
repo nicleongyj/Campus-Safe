@@ -94,4 +94,22 @@ describe("Event map screen", () => {
     });
   });
 
+  it("Should show expanded modal when 'expand' button is clicked card", async () => {
+    await waitFor(async () => {
+      const { getByTestId, findAllByTestId } = renderWithProviders(
+        <EventMap />,
+        store
+      );
+      const markers = await waitFor(() => findAllByTestId("eventMarker"));
+      const cards = await waitFor(() => findAllByTestId("eventMarker"));
+      expect(markers).toHaveLength(2);
+      expect(cards).toHaveLength(2);
+
+      const expandButton = getByTestId("expandButton-1");
+      fireEvent.press(expandButton);
+      const modal = getByTestId("modal-1");
+      expect(modal.props.visible).toBe(true);
+    });
+  });
+
 });
