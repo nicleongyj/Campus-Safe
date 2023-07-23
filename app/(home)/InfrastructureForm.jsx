@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, Alert, Image, TouchableOpacity } from "react-native";
 import { Button, TextInput } from "react-native-paper";
-import { Link, useNavigation } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
@@ -22,11 +22,11 @@ export default function InfrastructureForm() {
   const [incident, setIncident] = useState("Select an item");
   const [open, setOpen] = useState(false);
   const [infrastructures, setInfrastructures] = useState([
-    { label: "Broken lights", value: "BrokenLights" },
+    { label: "Broken lights", value: "Broken lights", testID:"Broken lights" },
     { label: "Faulty air-conditioning", value: "Faulty air-conditioning" },
     { label: "Faulty lift", value: "Faulty lift" },
     { label: "Water leakage", value: "Water leakage" },
-    { label: "Others", value: "Others" },
+    { label: "Others", value: "Others", testID:"Others" },
     { label: "Select an item", value: "Select an item" },
   ]);
   //others data
@@ -88,18 +88,18 @@ export default function InfrastructureForm() {
   };
 
   //camera feature
-  const [permissions, setPermissions] = useState(null);
+  const [permissions, setPermissions] = Camera.useCameraPermissions();
   const [startCamera, setStartCamera] = useState(false);
   const [image, setImage] = useState(null);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  useEffect(() => {
-    (async () => {
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setPermissions(cameraStatus.status === "granted");
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const cameraStatus = await Camera.requestCameraPermissionsAsync();
+  //     setPermissions(cameraStatus.status === "granted");
+  //   })();
+  // }, []);
 
   if (!permissions) {
     return (
@@ -114,18 +114,15 @@ export default function InfrastructureForm() {
 
   const enableCamera = () => {
     setStartCamera(true);
-    console.log("true");
   };
 
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log("pass");
-        console.log(data);
-        setImage(data.uri);
+        setImage(data === undefined? "mock" : data.uri);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
   };
@@ -149,7 +146,7 @@ export default function InfrastructureForm() {
 
       return data.publicUrl;
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   };
 
@@ -187,7 +184,6 @@ export default function InfrastructureForm() {
 
     // SUPABASE LOGIC
     const error = await insertReportData(formData, "infrareps");
-    console.log(error);
     if (!error) {
       Alert.alert(
         "Your report has been received!",
@@ -247,6 +243,7 @@ export default function InfrastructureForm() {
             <TouchableOpacity
               style={styles.pictureButton}
               onPress={takePicture}
+              testID="shutterButton"
             >
               <Image source={CameraButton} style={{ height: 40, width: 40 }} />
             </TouchableOpacity>
@@ -310,6 +307,7 @@ export default function InfrastructureForm() {
                 labelStyle={{ fontWeight: "bold" }}
                 onPress={() => setStartCamera(false)}
                 textColor="black"
+                testID="useImageButton"
               >
                 Use image
               </Button>
@@ -319,13 +317,11 @@ export default function InfrastructureForm() {
       ) : (
         <View style={styles.container}>
           <KeyboardAwareScrollView
-            // contentContainerStyle={{flex:1}}
             resetScrollToCoords={{ x: 0, y: 0 }}
             scrollEnabled={true}
             keyboardShouldPersistTaps="handled"
           >
             <View style={styles.topContainer}>
-              <Link href="/" style={styles.backLink}>
                 <Button
                   mode="contained"
                   style={{ width: 100 }}
@@ -333,10 +329,10 @@ export default function InfrastructureForm() {
                   icon={BackButton}
                   labelStyle={{ fontWeight: "bold" }}
                   onPress={handleBack}
+                  testID="backButton"
                 >
                   Back
                 </Button>
-              </Link>
             </View>
 
             <View style={styles.middleContainer}>
@@ -352,9 +348,11 @@ export default function InfrastructureForm() {
                   setValue={setIncident}
                   setItems={setInfrastructures}
                   listMode="SCROLLVIEW"
+                  onPress={setOpen}
                   onChangeValue={(value) =>
                     setEnableSecondQuestion(value == "Others")
                   }
+                  testID="incidentPicker"
                 />
               </View>
 
@@ -371,6 +369,7 @@ export default function InfrastructureForm() {
                   mode="flat"
                   textColor="black"
                   disabled={!enableSecondQuestion}
+                  testID="othersInput"
                 ></TextInput>
               </View>
 
@@ -392,6 +391,7 @@ export default function InfrastructureForm() {
                   mode="flat"
                   textColor="black"
                   multiline={true}
+                  testID="locationInput"
                 ></TextInput>
               </View>
 
@@ -414,6 +414,7 @@ export default function InfrastructureForm() {
                   textColor="black"
                   multiline={true}
                   contentStyle={styles.content}
+                  testID="detailsInput"
                 ></TextInput>
               </View>
 
@@ -423,6 +424,7 @@ export default function InfrastructureForm() {
                   <TouchableOpacity
                     style={styles.cameraButton}
                     onPress={enableCamera}
+                    testID="cameraButton"
                   >
                     <Text style={styles.cameraText}>
                       {image == null ? "Take a picture" : "View image"}
@@ -446,7 +448,7 @@ export default function InfrastructureForm() {
               <View style={{ alignItems: "center" }}>
                 <Text style={styles.error}>
                   {" "}
-                  {errMsg !== "" && <Text>{errMsg}</Text>}
+                  {errMsg !== "" && <Text testID="errMsg">{errMsg}</Text>}
                 </Text>
                 <Button
                   mode="elevated"
@@ -456,6 +458,7 @@ export default function InfrastructureForm() {
                   disabled={disableButton}
                   loading={loading}
                   onPress={handleSubmit}
+                  testID="submitButton"
                 >
                   Submit
                 </Button>

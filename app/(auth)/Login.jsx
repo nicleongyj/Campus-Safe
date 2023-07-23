@@ -4,17 +4,14 @@ import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
 import { Link } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
-
-
-import { connect } from "react-redux";
-import { setUserEmail } from "../../redux/store";
+import { useNavigation } from '@react-navigation/native';
 
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
 import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
 
-function Login({ setUserEmail }) {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,16 +36,19 @@ function Login({ setUserEmail }) {
     if (email === "") {
       setErrMsg("Email cannot be empty!");
       setLoading(false);
+      console.log(errMsg);
       return;
     }
     if (password === "") {
       setErrMsg("Please input a password!");
       setLoading(false);
+      console.log(errMsg);
       return;
     }
 
-    setUserEmail(email);
+    // setUserEmail(email);
 
+    console.log("1");
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -62,10 +62,11 @@ function Login({ setUserEmail }) {
     setLoginMsg(true);
   };
 
-
   const handlePassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -74,9 +75,8 @@ function Login({ setUserEmail }) {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-        {/*LOGO CONTAINER*/}
         <View style={styles.logoContainer}>
-          <Image source={campusSafe} style={styles.logo} />
+          <Image source={campusSafe} style={styles.logo} testID="logoImage" />
           <Text style={styles.cs}>CampusSafe</Text>
         </View>
 
@@ -84,7 +84,6 @@ function Login({ setUserEmail }) {
           <Text style={styles.header}>Welcome back!</Text>
           <Text style={styles.subHeader}>Sign in to start reporting!</Text>
 
-          {/*EMAIL CONTAINER*/}
           <View style={styles.inputContainer}>
             <Image source={emailIcon} style={styles.emailIcon} />
             <TextInput
@@ -99,7 +98,6 @@ function Login({ setUserEmail }) {
             />
           </View>
 
-          {/*PASSWORD CONTAINER*/}
           <View style={styles.inputContainer}>
             <Image source={keyIcon} style={styles.emailIcon} />
             <TextInput
@@ -135,11 +133,10 @@ function Login({ setUserEmail }) {
           </View>
           <Text style={styles.error}>
             {" "}
-            {errMsg !== "" && <Text>{errMsg}</Text>}
+            {errMsg != "" && <Text>{errMsg}</Text>}
           </Text>
         </View>
 
-        {/*LOWER CONTAINER*/}
         <View style={styles.bottomContainer}>
           <Button
             onPress={handleSubmit}
@@ -148,54 +145,38 @@ function Login({ setUserEmail }) {
             buttonColor="black"
             loading={loading}
             textColor="white"
+            testID="signInButton"
           >
             Sign In
           </Button>
-          {/* <Link
-            href="/Stafflogin"
-            style={{
-              marginTop: 10,
-            }}
-          >
-            <Button
-              style={styles.staffButton}
-              mode="elevated"
-              buttonColor="white"
-              textColor="black"
-              icon={toolIcon}
-            >
-              Log in as staff
-            </Button>
-          </Link> */}
 
-          {/*REGISTER CONTAINER*/}
-          <View style={{ marginTop: 30}}>
-            <Text style={{ color: "dimgrey", fontWeight: "bold" }}>
-              Don&#39;t have an account? {" "}
-              <Link
-                href="/Register"
-                style={{
-                  color: "orangered",
-                  fontWeight: "bold",
-                  textDecorationLine: "underline",
-                }}
+          <View style={{ marginTop: 30 }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ color: "dimgrey", fontWeight: "bold" }}>
+                Don&#39;t have an account?{" "}
+              </Text>
+              <Button
+                onPress={() => navigation.navigate("Register")}
+                textColor="orangered"
+                testID="registerButton"
               >
                 Register an account
-              </Link>
-            </Text>
-            <Text style={{ marginTop: 10, color: "dimgrey", fontWeight: "bold" }}>
-              New staff member? {" "}
-              <Link 
-                href="StaffRegister"
-                style={{
-                  color: "orangered",
-                  fontWeight: "bold",
-                  textDecorationLine: "underline",
-                }}  
+              </Button>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text
+                style={{ marginTop: 10, color: "dimgrey", fontWeight: "bold" }}
+              >
+                New staff member?{" "}
+              </Text>
+              <Button
+                onPress={() => navigation.navigate("StaffRegister")}
+                textColor="orangered"
+                testID="staffRegisterButton"
               >
                 Register as staff
-              </Link>
-            </Text>
+              </Button>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -231,7 +212,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 110,
     height: 110,
-    resizeMode:'contain',
+    resizeMode: "contain",
   },
   error: {
     fontSize: 15,
@@ -284,5 +265,3 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
 });
-
-export default connect(null, { setUserEmail })(Login);
