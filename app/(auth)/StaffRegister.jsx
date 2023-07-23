@@ -97,6 +97,7 @@ export default function StaffRegister() {
               textColor="black"
               value={email}
               onChangeText={setEmail}
+              testID="emailInput"
             ></TextInput>
           </View>
 
@@ -110,6 +111,7 @@ export default function StaffRegister() {
               textColor="black"
               value={password}
               onChangeText={setPassword}
+              testID="passwordInput"
             ></TextInput>
           </View>
 
@@ -123,6 +125,7 @@ export default function StaffRegister() {
               textColor="black"
               value={secondaryPassword}
               onChangeText={setSecondaryPassword}
+              testID="secondaryPasswordInput"
             ></TextInput>
           </View>
 
@@ -136,6 +139,7 @@ export default function StaffRegister() {
               textColor="black"
               value={code}
               onChangeText={setCode}
+              testID="codeInput"
             ></TextInput>
           </View>
 
@@ -187,6 +191,7 @@ export default function StaffRegister() {
             buttonColor="black"
             loading={loading}
             textColor="white"
+            testID="submitRegister"
           >
             Register
           </Button>

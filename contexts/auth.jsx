@@ -15,10 +15,11 @@ export function useAuth() {
 function useProtectedRoute(user) {
   const segments = useSegments();
   const router = useRouter();
-  
+
   useEffect(() => {
     console.log(`useProtectedRoute useEffect called`);
-    const inRegisterPage = (segments[1] === "Register" || segments[1] === "StaffRegister");
+    const inRegisterPage =
+      segments[1] === "Register" || segments[1] === "StaffRegister";
     const inAuthGroup = segments[0] === "(auth)";
     if (!user && !inAuthGroup) {
       console.log(`inAuthGroup: ${inAuthGroup}`);
@@ -57,4 +58,6 @@ function AuthProvider({ children, setUserType }) {
   );
 }
 
-export const AuthenticateProvider = connect(null, { setUserType })(AuthProvider);
+export const AuthenticateProvider = connect(null, { setUserType })(
+  AuthProvider
+);

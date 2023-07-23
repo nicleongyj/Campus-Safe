@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ImageBackground, Image } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
-import { Link } from "expo-router";
 import SwitchSelector from "react-native-switch-selector";
 
 import { viewFilteredReport } from "../../lib/supabase";
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
+import { useNavigation } from "@react-navigation/native";
 
 const reportTypeOptions = [
   { label: "Incidents", value: "incidents" },
@@ -58,7 +58,7 @@ export default function TrackReports() {
     let filteredReport = await viewFilteredReport(viewMode, filter);
     setReports(filteredReport);
     setRefresh(false);
-    console.log("fetched data");
+    console.log(filteredReport);
   }
 
   useEffect(() => {
@@ -70,6 +70,8 @@ export default function TrackReports() {
       fetchReports();
     }
   }, [refresh]);
+
+  const navigation = useNavigation();
 
   function renderReport(report, reportType) {
     const { type, urgent_level, location, details, image_url } = report;
@@ -94,17 +96,16 @@ export default function TrackReports() {
         style={{ flex: 1 }}
       >
         <View style={styles.topContainer}>
-          <Link href="/" style={styles.backLink}>
             <Button
               mode="contained"
               style={styles.backButton}
               buttonColor="black"
               icon={BackButton}
               labelStyle={{ fontWeight: "bold" }}
+              onPress={()=> navigation.navigate("index")}
             >
               Back
             </Button>
-          </Link>
 
           <View style={{ marginTop: 10 }}>
             <SwitchSelector
