@@ -196,7 +196,6 @@ export default function VerifyForm() {
     const link = await getImageLink();
 
     const formData = {
-      id: id,
       type: incident != "Others" ? incident : others,
       details: incidentDetails,
       latitude: lat,

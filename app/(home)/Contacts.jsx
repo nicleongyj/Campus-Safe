@@ -30,7 +30,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("+65 6874 1616")}
+              onPress={() => handlePhoneNumberClick("68741616")}
             >
               <Text style={styles.text}>+65 6874 1616</Text>
             </TouchableOpacity>
@@ -39,7 +39,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("+65 6516 3636")}
+              onPress={() => handlePhoneNumberClick("65163636")}
             >
               <Text style={styles.text}>+65 6516 3636</Text>
             </TouchableOpacity>
@@ -48,9 +48,9 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("+65 6516 5568")}
+              onPress={() => handlePhoneNumberClick("65165568")}
             >
-              <Text style={styles.text}>+65 6516 5568 /+65 6222 5568</Text>
+              <Text style={styles.text}>+65 6516 5568</Text>
             </TouchableOpacity>
             <Text style={styles.normalText}>(Outram Campus)</Text>
           </View>
@@ -59,7 +59,7 @@ export default function Contact() {
           <Text style={styles.subHeader}>Lifeline NUS (24-HR)</Text>
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("+65 6516 7777")}
+              onPress={() => handlePhoneNumberClick("65167777")}
             >
               <Text style={styles.text}>+65 6516 7777 </Text>
             </TouchableOpacity>
