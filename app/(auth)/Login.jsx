@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
+import { View, Text, StyleSheet, Image, ImageBackground, Alert } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
 import { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
@@ -54,7 +54,10 @@ export default function Login() {
 
     setLoading(false);
     if (error) {
-      setErrMsg(error.message);
+      Alert.alert("Error", "Please try again!", [
+        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+      ]);
+      return;
     }
 
     setLoginMsg(true);

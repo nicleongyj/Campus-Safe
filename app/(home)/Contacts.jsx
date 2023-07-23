@@ -30,7 +30,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("+65 6874 1616")}
             >
               <Text style={styles.text}>+65 6874 1616</Text>
             </TouchableOpacity>
@@ -39,7 +39,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("+65 6516 3636")}
             >
               <Text style={styles.text}>+65 6516 3636</Text>
             </TouchableOpacity>
@@ -48,7 +48,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("+65 6516 5568")}
             >
               <Text style={styles.text}>+65 6516 5568 /+65 6222 5568</Text>
             </TouchableOpacity>
@@ -59,7 +59,7 @@ export default function Contact() {
           <Text style={styles.subHeader}>Lifeline NUS (24-HR)</Text>
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("+65 6516 7777")}
             >
               <Text style={styles.text}>+65 6516 7777 </Text>
             </TouchableOpacity>
@@ -71,7 +71,7 @@ export default function Contact() {
           <View style={styles.bottomSubContainer}>
             <Text style={styles.normalText}>SCDF Fire & Ambulance - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("995")}
             >
               <Text style={styles.text}> 995</Text>
             </TouchableOpacity>
@@ -79,7 +79,7 @@ export default function Contact() {
           <View style={styles.bottomSubContainer}>
             <Text style={styles.normalText}>Simgapore Police Force - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("999")}
             >
               <Text style={styles.text}>999</Text>
             </TouchableOpacity>
@@ -87,7 +87,7 @@ export default function Contact() {
           <View style={styles.bottomSubContainer}>
             <Text style={styles.normalText}>Non-emergenency Ambulance - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("1777")}
             >
               <Text style={styles.text}>1777</Text>
             </TouchableOpacity>
