@@ -259,6 +259,7 @@ export default function VerifyForm() {
             },
           ]
         );
+
       } else {
         Alert.alert("Error", "Please try again!", [
           { text: "OK", onPress: () => console.log("Error, OK Pressed") },
