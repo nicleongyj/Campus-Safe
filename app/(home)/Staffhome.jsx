@@ -10,7 +10,6 @@ import loginBackground from "../../assets/loginBackground.jpg";
 import recordIcon from "../../assets/manageRecord.png";
 import tickIcon from "../../assets/tick.png";
 
-
 function Homepage() {
   return (
     <View style={styles.container}>

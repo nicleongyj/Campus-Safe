@@ -18,7 +18,6 @@ import { Button, Card } from "react-native-paper";
 import MapView, { Marker } from "react-native-maps";
 
 import { viewMarkers } from "../../lib/supabase";
-import BackButton from "../../assets/backButton.png";
 import colouredEvent from "../../assets/colouredEvent.png";
 
 import { useNavigation } from "@react-navigation/native";

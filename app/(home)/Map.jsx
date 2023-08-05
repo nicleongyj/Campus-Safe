@@ -19,7 +19,6 @@ import { Button, Card } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
 import { viewMarkers } from "../../lib/supabase";
-import BackButton from "../../assets/backButton.png";
 import accidentIcon from "../../assets/accident.png";
 import constructionIcon from "../../assets/construction.png";
 import flameIcon from "../../assets/flame.png";

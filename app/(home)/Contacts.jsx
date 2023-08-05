@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import loginBackground from "../../assets/loginBackground.jpg";
 import lightBackground from "../../assets/lightBackground.png";
 
 export default function Contact() {
