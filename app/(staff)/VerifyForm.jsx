@@ -125,11 +125,9 @@ export default function VerifyForm() {
         const data = await cameraRef.current.takePictureAsync();
         setImage(data.uri);
       } catch (error) {
-          Alert.alert("Error", "Please try again!", [
-            { text: "OK" },
-          ]);
-          return;
-        }      
+        Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+        return;
+      }
     }
   };
 
@@ -156,7 +154,7 @@ export default function VerifyForm() {
       const { data, error2 } = await getImageURL(
         reportType === "incidents"
           ? "verifiedIncidentImages"
-          : reportType === "event" 
+          : reportType === "event"
           ? "eventImages"
           : "verifiedInfraImages",
         fileName
@@ -167,11 +165,9 @@ export default function VerifyForm() {
 
       return data.publicUrl;
     } catch (e) {
-        Alert.alert("Error", "Please try again!", [
-          { text: "OK" },
-        ]);
-        return;
-      }    
+      Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+      return;
+    }
   };
 
   const handleSubmit = async () => {
@@ -254,7 +250,6 @@ export default function VerifyForm() {
             },
           ]
         );
-
       } else {
         Alert.alert("Error", "Please try again!", [
           { text: "OK", onPress: () => console.log("Error, OK Pressed") },
@@ -488,8 +483,9 @@ export default function VerifyForm() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="black"
-                textColor="white"
+                buttonColor="gold"
+                textColor="black"
+                labelStyle={{ fontWeight: "bold", fontSize: 17 }}
                 disabled={disableButton}
                 loading={loading}
                 onPress={handleSubmit}
@@ -590,8 +586,9 @@ export default function VerifyForm() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="black"
-                textColor="white"
+                buttonColor="gold"
+                textColor="black"
+                labelStyle={{ fontWeight: "bold", fontSize: 17 }}
                 disabled={disableButton}
                 loading={loading}
                 onPress={handleSubmit}

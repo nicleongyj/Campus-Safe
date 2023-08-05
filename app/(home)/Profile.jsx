@@ -45,8 +45,9 @@ function Profile({ setUserType, userType }) {
             onPress={handleLogOut}
             mode="elevated"
             style={styles.button}
-            buttonColor="black"
-            textColor="white"
+            buttonColor="gold"
+            textColor="black"
+            labelStyle={{ fontSize:17}}
           >
             Log out
           </Button>
@@ -94,9 +95,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   textInput: {
     backgroundColor: "whitesmoke",
