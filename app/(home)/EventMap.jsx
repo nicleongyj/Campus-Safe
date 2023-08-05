@@ -1,3 +1,4 @@
+// React imports
 import { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -9,13 +10,18 @@ import {
   Modal,
   TouchableOpacity,
   Platform,
-  ImageBackground
+  ImageBackground,
+  Alert,
 } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import { viewMarkers } from "../../lib/supabase";
 
-import colouredEvent from "../../assets/colouredEvent.png";
 import { Button, Card } from "react-native-paper";
+import MapView, { Marker } from "react-native-maps";
+
+import { viewMarkers } from "../../lib/supabase";
+import BackButton from "../../assets/backButton.png";
+import colouredEvent from "../../assets/colouredEvent.png";
+
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
@@ -41,9 +47,14 @@ export default function EventMap() {
       const eventData = await viewMarkers("events");
       setEventMarkers(eventData);
     } catch (error) {
-      console.error("Error fetching markers:", error);
+      Alert.alert("Error fetching markers", "Please try again!", [
+        { text: "OK" },
+      ]);
+      return;
     }
   };
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (refresh) {
@@ -101,6 +112,18 @@ export default function EventMap() {
         onRegionChangeComplete={setRegion}
         testID="map"
       >
+        <View style={styles.topContainer}>
+          <Button
+            mode="contained"
+            style={{ width: 100 }}
+            buttonColor="black"
+            icon={BackButton}
+            labelStyle={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("index")}
+          >
+            Back
+          </Button>
+        </View>
         {eventMarkers.map((marker) => {
           return (
             <Marker
@@ -184,13 +207,6 @@ export default function EventMap() {
                   {marker.details}
                 </Text>
               </View>
-              {/* <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={() => handleExpand(eventMarkers.indexOf(marker))}
-                >
-                  Expand
-                </Button> */}
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => handleExpand(eventMarkers.indexOf(marker))}
@@ -271,6 +287,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     alignItems: "center",
+  },
+  topContainer: {
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   header: {
     flex: 1,

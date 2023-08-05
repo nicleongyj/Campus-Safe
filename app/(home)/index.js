@@ -1,19 +1,20 @@
+import React from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import "react-native-gesture-handler";
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { useToast } from "react-native-toast-notifications";
 import { useNavigation } from "@react-navigation/native";
-
-import event from "../../assets/event.png";
-import map from "../../assets/map.png";
-import lightbulb from "../../assets/lightbulb.png";
-import carCrash from "../../assets/carCrash.png";
-import trackRecord from "../../assets/trackRecord.png";
-import loginBackground from "../../assets/loginBackground.jpg";
 import { ScrollView } from "react-native-gesture-handler";
+
+import carCrash from "../../assets/carCrash.png";
+import event from "../../assets/event.png";
+import lightbulb from "../../assets/lightbulb.png";
+import loginBackground from "../../assets/loginBackground.jpg";
+import map from "../../assets/map.png";
+import trackRecord from "../../assets/trackRecord.png";
+
 
 function Homepage() {
   const { newRegister } = useLocalSearchParams();
@@ -171,7 +172,6 @@ const styles = StyleSheet.create({
   button: {
     width: 350,
     height: 100,
-    // marginTop:'2%',
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

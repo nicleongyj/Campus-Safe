@@ -21,7 +21,6 @@ export default function SelectMap() {
     const { coordinate } = event.nativeEvent;
     setLat(coordinate.latitude);
     setLong(coordinate.longitude);
-    console.log(reportType);
   };
 
   return (
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
   },
   link: {
     zIndex: 2,
-    // backgroundColor:'black',
   },
   button: {
     height: 50,

@@ -1,17 +1,19 @@
+import React from "react";
 import { Text, View, StyleSheet, Alert, Image, TouchableOpacity } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-import DisableFlashButton from "../../assets/disableFlash.png";
-import FlashButton from "../../assets/flash.png";
-import CameraButton from "../../assets/camera.png";
-import BackButton from "../../assets/backButton.png";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+
+import BackButton from "../../assets/backButton.png";
+import CameraButton from "../../assets/camera.png";
+import DisableFlashButton from "../../assets/disableFlash.png";
+import FlashButton from "../../assets/flash.png";
+
 
 export default function InfrastructureForm() {
   const [loading, setLoading] = useState(false);
@@ -94,13 +96,6 @@ export default function InfrastructureForm() {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const cameraStatus = await Camera.requestCameraPermissionsAsync();
-  //     setPermissions(cameraStatus.status === "granted");
-  //   })();
-  // }, []);
-
   if (!permissions) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -122,8 +117,11 @@ export default function InfrastructureForm() {
         const data = await cameraRef.current.takePictureAsync();
         setImage(data === undefined? "mock" : data.uri);
       } catch (error) {
-        // console.log(error);
-      }
+          Alert.alert("Error", "Please try again!", [
+            { text: "OK" },
+          ]);
+          return;
+        }      
     }
   };
 
@@ -146,8 +144,10 @@ export default function InfrastructureForm() {
 
       return data.publicUrl;
     } catch (e) {
-      // console.log(e);
-    }
+        Alert.alert("Error", "Please try again!", [
+          { text: "OK" },
+        ]);
+      }    
   };
 
 

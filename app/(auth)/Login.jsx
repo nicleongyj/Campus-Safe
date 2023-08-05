@@ -1,15 +1,16 @@
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, ImageBackground, Alert } from "react-native";
-import { Button, TextInput, Checkbox } from "react-native-paper";
-import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import { Link } from "expo-router";
-import { useToast } from "react-native-toast-notifications";
+import { Button, Checkbox, TextInput } from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
+import { useToast } from "react-native-toast-notifications";
 
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
 import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
+
+import { supabase } from "../../lib/supabase";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,20 +30,17 @@ export default function Login() {
   }, [loginMsg]);
 
   const handleSubmit = async () => {
-    //const toast = useToast();
     setLoading(true);
 
     // Handle login errors
     if (email === "") {
       setErrMsg("Email cannot be empty!");
       setLoading(false);
-      console.log(errMsg);
       return;
     }
     if (password === "") {
       setErrMsg("Please input a password!");
       setLoading(false);
-      console.log(errMsg);
       return;
     }
 
@@ -54,7 +52,7 @@ export default function Login() {
     setLoading(false);
     if (error) {
       Alert.alert("Error", "Please try again!", [
-        { text: "OK", onPress: () => console.log("Error, OK Pressed") },
+        { text: "OK" },
       ]);
       return;
     }

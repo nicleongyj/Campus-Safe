@@ -6,6 +6,7 @@ import {
   Linking,
   TouchableOpacity,
 } from "react-native";
+
 import loginBackground from "../../assets/loginBackground.jpg";
 
 export default function Contact() {

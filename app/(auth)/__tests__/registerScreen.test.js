@@ -1,13 +1,10 @@
 jest.useFakeTimers();
-// import "expo-router";
 import { cleanup, fireEvent, waitFor } from "@testing-library/react-native";
 import React from "react";
 import { renderWithProviders } from "../../../utils/test-utils";
 import createMockStore from "../../../utils/test-utils";
 import { useRouter } from "expo-router";
-import { setUserType } from "../../../redux/store"; // Import the setUserType function
-
-/* Component imports */
+import { setUserType } from "../../../redux/store";
 import Register from "../Register";
 
 jest.mock("expo-router", () => ({

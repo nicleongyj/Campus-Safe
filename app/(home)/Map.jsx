@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+// React imports
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
@@ -13,18 +14,19 @@ import {
 } from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
-import { viewMarkers } from "../../lib/supabase";
-
-import flameIcon from "../../assets/flame.png";
-import maintenanceIcon from "../../assets/maintenance.png";
-import accidentIcon from "../../assets/accident.png";
-import warningIcon from "../../assets/warning.png";
-import constructionIcon from "../../assets/construction.png";
 import SwitchSelector from "react-native-switch-selector";
 import { Button, Card } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+
+import { viewMarkers } from "../../lib/supabase";
+import BackButton from "../../assets/backButton.png";
+import accidentIcon from "../../assets/accident.png";
+import constructionIcon from "../../assets/construction.png";
+import flameIcon from "../../assets/flame.png";
+import maintenanceIcon from "../../assets/maintenance.png";
+import warningIcon from "../../assets/warning.png";
 
 const { width, height } = Dimensions.get("window");
-
 const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
@@ -38,6 +40,8 @@ export default function Map() {
   const [disableScroll, setDisableScroll] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
+
+  const navigation = useNavigation();
 
   const [region, setRegion] = useState({
     latitude: 1.29235,
@@ -149,6 +153,18 @@ export default function Map() {
         onRegionChangeComplete={setRegion}
         testID="map"
       >
+        <View style={styles.topContainer}>
+          <Button
+            mode="contained"
+            style={{ width: 100 }}
+            buttonColor="black"
+            icon={BackButton}
+            labelStyle={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("index")}
+          >
+            Back
+          </Button>
+        </View>
         {showMarkerType === "incidents" &&
           incidentMarkers.map((marker) => {
             return (
@@ -312,14 +328,6 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                {/* <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
-                >
-                  Expand
-                </Button> */}
-
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
@@ -403,15 +411,6 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                {/* <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={() => handleExpand(infraMarkers.indexOf(marker))}
-                  testID={`expandButton-${infraMarkers.indexOf(marker)}`}
-                >
-                  Expand
-                </Button> */}
-
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() => handleExpand(infraMarkers.indexOf(marker))}
@@ -480,12 +479,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#c0e4a4",
   },
   switchContainer: {
-    zIndex: 2,
+    position: "absolute",
+    top: 10,
+    left: 10,
+    zIndex: 1,
   },
   map: {
     flex: 9,
     width: "100%",
     height: "100%",
+  },
+  topContainer: {
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   legendContainer: {
     flex: 1,

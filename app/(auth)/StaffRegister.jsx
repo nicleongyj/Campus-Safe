@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import { supabase, upgradeUserRole } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
+
+import { supabase, upgradeUserRole } from "../../lib/supabase";
 
 export default function StaffRegister() {
   const [email, setEmail] = useState("");
@@ -57,9 +58,11 @@ export default function StaffRegister() {
     return;
   };
 
+  //show password
   const handlePassword = () => {
     setShowPassword(!showPassword);
   };
+  //show staff code
   const handleCode = () => {
     setShowCode(!showCode);
   };

@@ -12,6 +12,7 @@ import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { resolveReport, viewVerifiedReports } from "../../lib/supabase";
 import SwitchSelector from "react-native-switch-selector";
+
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 
@@ -75,7 +76,6 @@ export default function ViewVerifiedReports() {
         text: "OK",
         onPress: async () => {
           if (reportType === "incidents") {
-            console.log("resolve incident");
             await resolveReport(id, "incident");
           } else {
             await resolveReport(id, "infra");
@@ -236,6 +236,5 @@ const styles = StyleSheet.create({
   },
   cardSubheader: {
     fontSize: 13,
-
   },
 });

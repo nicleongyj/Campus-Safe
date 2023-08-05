@@ -13,6 +13,7 @@ import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { viewNewReports, rejectReport } from "../../lib/supabase";
 import SwitchSelector from "react-native-switch-selector";
+
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 

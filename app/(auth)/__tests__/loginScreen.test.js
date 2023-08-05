@@ -3,16 +3,12 @@ import { act, cleanup, fireEvent, waitFor } from "@testing-library/react-native"
 import React from "react";
 import { renderWithProviders } from "../../../utils/test-utils";
 import createMockStore from "../../../utils/test-utils";
-
-/* Component imports */
 import Login from "../Login";
-
 
 const mockedNavigate = jest.fn();
 const mockedShow = jest.fn();
 
 jest.mock("expo-router", () => ({
-  
 }));
 
 jest.mock("../../../contexts/auth", () => {
@@ -47,9 +43,7 @@ describe("Login screen", () => {
   const store = createMockStore(initialState);
 
   beforeEach(() => {
-    // Reset the number of times the mockedNavigate function is called before each test
     mockedNavigate.mockClear();
-    // Mock the useNavigation hook to return the mockedNavigate function
     jest
       .spyOn(require("@react-navigation/native"), "useNavigation")
       .mockReturnValue({

@@ -1,6 +1,7 @@
+import React, { useState, useRef } from "react";
 import {
-  Text,
   View,
+  Text,
   StyleSheet,
   Alert,
   TouchableOpacity,
@@ -8,17 +9,17 @@ import {
 } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect, useRef } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
-import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-import DisableFlashButton from "../../assets/disableFlash.png";
-import FlashButton from "../../assets/flash.png";
-import CameraButton from "../../assets/camera.png";
-import BackButton from "../../assets/backButton.png";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+import DropDownPicker from "react-native-dropdown-picker";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
+
+import BackButton from "../../assets/backButton.png";
+import CameraButton from "../../assets/camera.png";
+import DisableFlashButton from "../../assets/disableFlash.png";
+import FlashButton from "../../assets/flash.png";
 
 export default function IncidentForm() {
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function IncidentForm() {
     { label: "Fallen tree", value: "Fallen tree" },
     { label: "Motor accident", value: "Motor accident" },
     { label: "Suspicious activity", value: "Suspicious activity" },
-    { label: "Others", value: "Others", testID:"Others" },
+    { label: "Others", value: "Others", testID: "Others" },
     { label: "Select an item", value: "Select an item" },
   ]);
   //others data
@@ -107,13 +108,7 @@ export default function IncidentForm() {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const cameraStatus = await Camera.requestCameraPermissionsAsync();
-  //     setPermissions(cameraStatus.status === "granted");
-  //   })();
-  // }, []);
-
+  // If user has not enabled permissions for camera
   if (!permissions) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -133,9 +128,10 @@ export default function IncidentForm() {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        setImage(data === undefined? "jest" : data.uri);
+        setImage(data === undefined ? "jest" : data.uri);
       } catch (error) {
-        // console.log(error);
+        Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+        return;
       }
     }
   };
@@ -159,7 +155,8 @@ export default function IncidentForm() {
 
       return data.publicUrl;
     } catch (e) {
-      // console.log(e);
+      Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+      return;
     }
   };
 
@@ -190,7 +187,6 @@ export default function IncidentForm() {
       setErrMsg("Please attack an image for verification");
       return;
     }
-
 
     setLoading(true);
     setDisableButton(true);
@@ -232,7 +228,7 @@ export default function IncidentForm() {
 
   return (
     <View style={{ flex: 1 }}>
-      {startCamera && !image ? ( 
+      {startCamera && !image ? (
         <Camera
           style={styles.camera}
           type={Camera.Constants.Type.back}
@@ -249,7 +245,6 @@ export default function IncidentForm() {
               onPress={() => setStartCamera(false)}
               textColor="black"
               testID="cameraBackButton"
-
             >
               Back
             </Button>
@@ -341,179 +336,178 @@ export default function IncidentForm() {
           </View>
         </View>
       ) : (
-      <View style={styles.container}>
-        <KeyboardAwareScrollView
+        <View style={styles.container}>
+          <KeyboardAwareScrollView
             contentContainerStyle={{ padding: "2%" }}
             resetScrollToCoords={{ x: 0, y: 0 }}
             scrollEnabled={true}
             keyboardShouldPersistTaps="handled"
           >
-          <View style={styles.topContainer}>
-            <Button
-              mode="contained"
-              style={{ width: 100 }}
-              buttonColor="black"
-              icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
-              onPress={handleBack}
-              testID="backButton"
-            >
-              Back
-            </Button>
-          </View>
-
-          <View style={styles.middleContainer}>
-            <View style={styles.reportContainer}>
-              <Text style={styles.question}>1. What are you reporting?</Text>
-              <DropDownPicker
-                open={open}
-                value={incident}
-                items={incidentItems}
-                setOpen={setOpen}
-                setValue={setIncident}
-                setItems={setIncidentItems}
-                listMode="SCROLLVIEW"
-                onChangeValue={(value) =>
-                  setEnableSecondQuestion(value == "Others")
-                }
-                onPress={setOpen}
-                testID="incidentPicker"
-              />
-            </View>
-
-            <View style={styles.normalContainer}>
-              <Text style={styles.question}>
-                2. If you chose others, specify:
-              </Text>
-              <TextInput
-                style={styles.textInput}
-                value={others}
-                onChangeText={(text) => {
-                  if (text.trim() === "") {
-                    // Empty input, set others to an empty string
-                    setOthers("");
-                  } else {
-                    setOthers(text);
-                  }
-                }}
-                placeholder="Brief description"
-                autoCapitalize="none"
-                mode="flat"
-                textColor="black"
-                multiline={true}
-                disabled={!enableSecondQuestion}
-                testID="othersInput"
-              ></TextInput>
-            </View>
-
-            <View style={styles.urgencyContainer}>
-              <Text style={styles.question}>3. Level of urgency:</Text>
-              <DropDownPicker
-                open={open2}
-                value={urgency}
-                items={urgencyItems}
-                setOpen={setOpen2}
-                setValue={setUrgency}
-                setItems={setUrgencyItems}
-                listMode="SCROLLVIEW"
-                onPress={setOpen2}
-                testID="urgencyPicker"
-              />
-            </View>
-
-            <View style={styles.normalContainer}>
-              <Text style={styles.question}>4. Location of incident:</Text>
-              <TextInput
-                style={styles.textInput}
-                value={location}
-                onChangeText={(text) => {
-                  if (text.trim() === "") {
-                    // Empty input, set others to an empty string
-                    setLocation("");
-                  } else {
-                    setLocation(text);
-                  }
-                }}
-                placeholder="Exact location (building name, floor number ...)"
-                autoCapitalize="none"
-                mode="flat"
-                textColor="black"
-                testID="locationInput"
-              ></TextInput>
-            </View>
-
-            <View style={styles.normalContainer}>
-              <Text style={styles.question}>5. Additional details:</Text>
-              <TextInput
-                style={styles.textInput}
-                value={details}
-                onChangeText={(text) => {
-                  if (text.trim() === "") {
-                    // Empty input, set others to an empty string
-                    setDetails("");
-                  } else {
-                    setDetails(text);
-                  }
-                }}
-                placeholder="Details that staff should be aware about (optional)"
-                autoCapitalize="none"
-                mode="flat"
-                textColor="black"
-                contentStyle={styles.content}
-                multiline={true}
-                testID="detailsInput"
-              ></TextInput>
-            </View>
-
-            <View style={styles.normalContainer}>
-              <Text style={styles.question}>
-                5. Attach a picture of incident:
-              </Text>
-              <View style={{ alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.cameraButton}
-                  onPress={enableCamera}
-                  testID="cameraButton"
-                >
-                  <Text style={styles.cameraText}>
-                    {image == null ? "Take a picture" : "View image"}
-                  </Text>
-                </TouchableOpacity>
-
-                {image != null && (
-                  <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ fontWeight: "bold" }}>Image: </Text>
-                    <Image
-                      source={{ uri: image }}
-                      style={{ height: 60, width: 60 }}
-                    />
-                  </View>
-                )}
-              </View>
-            </View>
-
-            <View style={{ alignItems: "center" }}>
-              <Text style={styles.error}>
-                {" "}
-                {errMsg !== "" && <Text testID="errMsg">{errMsg}</Text>}
-              </Text>
+            <View style={styles.topContainer}>
               <Button
-                mode="elevated"
-                style={styles.button}
+                mode="contained"
+                style={{ width: 100 }}
                 buttonColor="black"
-                textColor="white"
-                disabled={disableButton}
-                onPress={handleSubmit}
-                loading={loading}
-                testID="submitButton"
+                icon={BackButton}
+                labelStyle={{ fontWeight: "bold" }}
+                onPress={handleBack}
+                testID="backButton"
               >
-                Submit
+                Back
               </Button>
             </View>
-          </View>
+
+            <View style={styles.middleContainer}>
+              <View style={styles.reportContainer}>
+                <Text style={styles.question}>1. What are you reporting?</Text>
+                <DropDownPicker
+                  open={open}
+                  value={incident}
+                  items={incidentItems}
+                  setOpen={setOpen}
+                  setValue={setIncident}
+                  setItems={setIncidentItems}
+                  listMode="SCROLLVIEW"
+                  onChangeValue={(value) =>
+                    setEnableSecondQuestion(value == "Others")
+                  }
+                  onPress={setOpen}
+                  testID="incidentPicker"
+                />
+              </View>
+
+              <View style={styles.normalContainer}>
+                <Text style={styles.question}>
+                  2. If you chose others, specify:
+                </Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={others}
+                  onChangeText={(text) => {
+                    if (text.trim() === "") {
+                      setOthers("");
+                    } else {
+                      setOthers(text);
+                    }
+                  }}
+                  placeholder="Brief description"
+                  autoCapitalize="none"
+                  mode="flat"
+                  textColor="black"
+                  multiline={true}
+                  disabled={!enableSecondQuestion}
+                  testID="othersInput"
+                ></TextInput>
+              </View>
+
+              <View style={styles.urgencyContainer}>
+                <Text style={styles.question}>3. Level of urgency:</Text>
+                <DropDownPicker
+                  open={open2}
+                  value={urgency}
+                  items={urgencyItems}
+                  setOpen={setOpen2}
+                  setValue={setUrgency}
+                  setItems={setUrgencyItems}
+                  listMode="SCROLLVIEW"
+                  onPress={setOpen2}
+                  testID="urgencyPicker"
+                />
+              </View>
+
+              <View style={styles.normalContainer}>
+                <Text style={styles.question}>4. Location of incident:</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={location}
+                  onChangeText={(text) => {
+                    if (text.trim() === "") {
+                      setLocation("");
+                    } else {
+                      setLocation(text);
+                    }
+                  }}
+                  placeholder="Exact location (building name, floor number ...)"
+                  autoCapitalize="none"
+                  mode="flat"
+                  textColor="black"
+                  testID="locationInput"
+                ></TextInput>
+              </View>
+
+              <View style={styles.normalContainer}>
+                <Text style={styles.question}>5. Additional details:</Text>
+                <TextInput
+                  style={styles.textInput}
+                  value={details}
+                  onChangeText={(text) => {
+                    if (text.trim() === "") {
+                      setDetails("");
+                    } else {
+                      setDetails(text);
+                    }
+                  }}
+                  placeholder="Details that staff should be aware about (optional)"
+                  autoCapitalize="none"
+                  mode="flat"
+                  textColor="black"
+                  contentStyle={styles.content}
+                  multiline={true}
+                  testID="detailsInput"
+                ></TextInput>
+              </View>
+
+              <View style={styles.normalContainer}>
+                <Text style={styles.question}>
+                  5. Attach a picture of incident:
+                </Text>
+                <View style={{ alignItems: "center" }}>
+                  <TouchableOpacity
+                    style={styles.cameraButton}
+                    onPress={enableCamera}
+                    testID="cameraButton"
+                  >
+                    <Text style={styles.cameraText}>
+                      {image == null ? "Take a picture" : "View image"}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {image != null && (
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>Image: </Text>
+                      <Image
+                        source={{ uri: image }}
+                        style={{ height: 60, width: 60 }}
+                      />
+                    </View>
+                  )}
+                </View>
+              </View>
+
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.error}>
+                  {" "}
+                  {errMsg !== "" && <Text testID="errMsg">{errMsg}</Text>}
+                </Text>
+                <Button
+                  mode="elevated"
+                  style={styles.button}
+                  buttonColor="black"
+                  textColor="white"
+                  disabled={disableButton}
+                  onPress={handleSubmit}
+                  loading={loading}
+                  testID="submitButton"
+                >
+                  Submit
+                </Button>
+              </View>
+            </View>
           </KeyboardAwareScrollView>
-      </View>
-       )}
+        </View>
+      )}
     </View>
   );
 }

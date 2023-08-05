@@ -3,10 +3,10 @@ import { Button } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
 import { connect } from "react-redux";
-import { setUserType, setUserEmail } from "../../redux/store";
+import { setUserType } from "../../redux/store";
 import { TextInput } from "react-native-paper";
 
-import loginBackground from '../../assets/loginBackground.jpg'
+import loginBackground from "../../assets/loginBackground.jpg";
 
 function Profile({ setUserType, userType }) {
   const handleLogOut = () => {
@@ -21,37 +21,36 @@ function Profile({ setUserType, userType }) {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-      <View style={styles.topContainer}>
-        <Text style={styles.header}>Profile page</Text>
-      </View>
-
-      <View style={styles.middleContainer}>
-        <View style={styles.infoContainer}>
-          <Text style={styles.text}>Account type:</Text>
-          <TextInput
-            mode="flat"
-            style={styles.textInput}
-            disabled={true}
-            placeholder="Account type"
-            textColor="black"
-          >
-            {userType}
-          </TextInput>
+        <View style={styles.topContainer}>
+          <Text style={styles.header}>Profile page</Text>
         </View>
 
-      </View>
+        <View style={styles.middleContainer}>
+          <View style={styles.infoContainer}>
+            <Text style={styles.text}>Account type:</Text>
+            <TextInput
+              mode="flat"
+              style={styles.textInput}
+              disabled={true}
+              placeholder="Account type"
+              textColor="black"
+            >
+              {userType}
+            </TextInput>
+          </View>
+        </View>
 
-      <View style={styles.bottomContainer}>
-        <Button
-          onPress={handleLogOut}
-          mode="elevated"
-          style={styles.button}
-          buttonColor="black"
-          textColor="white"
-        >
-          Log out
-        </Button>
-      </View>
+        <View style={styles.bottomContainer}>
+          <Button
+            onPress={handleLogOut}
+            mode="elevated"
+            style={styles.button}
+            buttonColor="black"
+            textColor="white"
+          >
+            Log out
+          </Button>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
     backgroundColor: "whitesmoke",
     height: 25,
     width: 300,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

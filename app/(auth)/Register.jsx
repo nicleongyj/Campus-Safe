@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import { supabase } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
+
+import { supabase } from "../../lib/supabase";
+
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -61,7 +63,6 @@ export default function Register() {
           >
             {" "}
             {errMsg !== "" && <Text testID="ErrMsg">{errMsg}</Text>}
-            {/* {loading && <ActivityIndicator />} */}
           </Text>
         </View>
 

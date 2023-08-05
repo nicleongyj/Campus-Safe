@@ -1,13 +1,15 @@
+import React from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import "react-native-gesture-handler";
+
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
 import { Link } from "expo-router";
 
 import manageEvent from "../../assets/manageEvent.png";
 import loginBackground from "../../assets/loginBackground.jpg";
-import tickIcon from "../../assets/tick.png";
 import recordIcon from "../../assets/manageRecord.png";
+import tickIcon from "../../assets/tick.png";
+
 
 function Homepage() {
   return (
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    // alignItems: "stretch",
   },
   topContainer: {
     flex: 1,

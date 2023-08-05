@@ -11,8 +11,10 @@ import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { resolveReport, viewVerifiedReports } from "../../lib/supabase";
+
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
+
 
 const ReportCard = ({ type, details, id, onResolve, image_url }) => {
   return (
