@@ -191,9 +191,10 @@ export default function StaffRegister() {
             onPress={handleSubmit}
             mode="elevated"
             style={styles.button}
-            buttonColor="black"
+            buttonColor="gold"
             loading={loading}
-            textColor="white"
+            textColor="black"
+            labelStyle={{fontWeight:'bold'}}
             testID="submitRegister"
           >
             Register
@@ -243,9 +244,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   textBox: {
     backgroundColor: "rgba(0,0,0,0)",

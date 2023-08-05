@@ -40,7 +40,7 @@ const ReportCard = ({
         <View style={styles.cardContainer}>
           <View style={styles.cardTextContainer}>
             <Text style={styles.cardHeader}>{`Incident: ${type}`}</Text>
-            <Text style={{fontSize:13, fontWeight:'bold'}}>
+            <Text style={{ fontSize: 13, fontWeight: "bold" }}>
               {reportType === "incidents" ? `Urgency: ${urgentLevel}` : null}
             </Text>
             <Text></Text>
@@ -198,9 +198,10 @@ export default function ViewReports() {
             <Button
               mode="contained"
               style={styles.backButton}
-              buttonColor="black"
+              buttonColor="whitesmoke"
+              textColor="black"
               icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
+              labelStyle={{ fontWeight: "bold", fontSize: 17 }}
             >
               Back
             </Button>
@@ -273,6 +274,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 100,
+    borderWidth: 1,
+    borderColor: "black",
   },
   reportContainer: {
     backgroundColor: "aliceblue",
@@ -283,7 +286,7 @@ const styles = StyleSheet.create({
   topContainer: {
     flex: 1,
     padding: 15,
-    justifyContent:'center',
+    justifyContent: "center",
   },
   bottomContainer: {
     flex: 8,
@@ -325,13 +328,13 @@ const styles = StyleSheet.create({
   image: {
     height: 120,
     width: 120,
-    borderRadius:10,
+    borderRadius: 10,
   },
-  cardHeader:{
-    fontSize:15,
-    fontWeight:'bold',
+  cardHeader: {
+    fontSize: 15,
+    fontWeight: "bold",
   },
-  cardSubheader:{
-    fontSize:13
+  cardSubheader: {
+    fontSize: 13,
   },
 });

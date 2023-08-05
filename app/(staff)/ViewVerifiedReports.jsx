@@ -115,9 +115,10 @@ export default function ViewVerifiedReports() {
             <Button
               mode="contained"
               style={styles.backButton}
-              buttonColor="black"
+              buttonColor="whitesmoke"
+              textColor="black"
               icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
+              labelStyle={{ fontWeight: "bold", fontSize: 17 }}
             >
               Back
             </Button>
@@ -190,6 +191,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 100,
+    borderWidth: 1,
+    borderColor: "black",
   },
   reportContainer: {
     backgroundColor: "aliceblue",

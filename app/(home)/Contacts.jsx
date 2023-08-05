@@ -8,6 +8,7 @@ import {
 } from "react-native";
 
 import loginBackground from "../../assets/loginBackground.jpg";
+import lightBackground from "../../assets/lightBackground.png";
 
 export default function Contact() {
   const handlePhoneNumberClick = (phoneNumber) => {
@@ -18,7 +19,7 @@ export default function Contact() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={loginBackground}
+        source={lightBackground}
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
@@ -78,7 +79,7 @@ export default function Contact() {
             </TouchableOpacity>
           </View>
           <View style={styles.bottomSubContainer}>
-            <Text style={styles.normalText}>Simgapore Police Force - </Text>
+            <Text style={styles.normalText}>Singapore Police Force - </Text>
             <TouchableOpacity
               onPress={() => handlePhoneNumberClick("999")}
             >
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   normalText:{
-    fontSize:16
+    fontSize:16,
+    fontWeight:'bold',
   }
 });

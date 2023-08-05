@@ -204,6 +204,7 @@ export default function InfrastructureForm() {
     setErrMsg("");
     setDisableButton(false);
     setLoading(false);
+    navigation.navigate("index");
   };
 
   return (
@@ -323,13 +324,14 @@ export default function InfrastructureForm() {
           >
             <View style={styles.topContainer}>
                 <Button
-                  mode="contained"
-                  style={{ width: 100 }}
-                  buttonColor="black"
-                  icon={BackButton}
-                  labelStyle={{ fontWeight: "bold" }}
-                  onPress={handleBack}
-                  testID="backButton"
+                mode="contained"
+                style={{width: 100, borderWidth:1, borderColor:"black"}}
+                textColor="black"
+                buttonColor="powderblue"
+                icon={BackButton}
+                labelStyle={{ fontWeight: "bold", fontSize:17 }}
+                onPress={handleBack}
+                testID="backButton"
                 >
                   Back
                 </Button>
@@ -453,8 +455,9 @@ export default function InfrastructureForm() {
                 <Button
                   mode="elevated"
                   style={styles.button}
-                  buttonColor="black"
-                  textColor="white"
+                  labelStyle={{ fontWeight: "bold", fontSize:17 }}
+                  buttonColor="powderblue"
+                  textColor="black"
                   disabled={disableButton}
                   loading={loading}
                   onPress={handleSubmit}
@@ -480,7 +483,6 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    padding: 10,
     alignItems: "flex-start",
   },
   middleContainer: {
@@ -530,7 +532,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: 200,
-    fontWeight: "bold",
   },
   homeButton: {
     borderColor: "black",

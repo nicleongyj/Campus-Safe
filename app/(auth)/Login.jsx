@@ -140,10 +140,11 @@ export default function Login() {
             onPress={handleSubmit}
             mode="elevated"
             style={styles.button}
-            buttonColor="black"
+            buttonColor="gold"
             loading={loading}
-            textColor="white"
+            textColor="black"
             testID="signInButton"
+            labelStyle={{ fontWeight:"bold"}}
           >
             Sign In
           </Button>
@@ -254,9 +255,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   staffButton: {
     borderWidth: 1,

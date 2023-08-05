@@ -115,9 +115,9 @@ export default function EventMap() {
         <View style={styles.topContainer}>
           <Button
             mode="contained"
-            style={{ width: 100 }}
-            buttonColor="black"
-            icon={BackButton}
+            style={{ width: 100, borderWidth:1, borderColor:'black', alignItems:'center' }}
+            buttonColor="powderblue"
+            textColor="black"
             labelStyle={{ fontWeight: "bold" }}
             onPress={() => navigation.navigate("index")}
           >

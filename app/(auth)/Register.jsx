@@ -126,10 +126,11 @@ export default function Register() {
             onPress={handleSubmit}
             style={styles.button}
             mode="elevated"
-            buttonColor="black"
+            buttonColor="gold"
             loading={loading}
-            textColor="white"
+            textColor="black"
             testID="submitRegister"
+            labelStyle={{fontWeight:'bold'}}
           >
             Register
           </Button>
@@ -180,15 +181,13 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   textBox: {
     backgroundColor: "rgba(0,0,0,0)",
     height: 30,
     width: 300,
     fontSize: 15,
-    // fontFamily: "Arial",
   },
 });

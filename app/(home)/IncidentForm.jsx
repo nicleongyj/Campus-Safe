@@ -224,6 +224,7 @@ export default function IncidentForm() {
     setErrMsg("");
     setDisableButton(false);
     setLoading(false);
+    navigation.navigate("index");
   };
 
   return (
@@ -346,10 +347,11 @@ export default function IncidentForm() {
             <View style={styles.topContainer}>
               <Button
                 mode="contained"
-                style={{ width: 100 }}
-                buttonColor="black"
+                style={{ width: 100, borderWidth:1, borderColor:"black" }}
+                textColor="black"
+                buttonColor="powderblue"
                 icon={BackButton}
-                labelStyle={{ fontWeight: "bold" }}
+                labelStyle={{ fontWeight: "bold", fontSize:17 }}
                 onPress={handleBack}
                 testID="backButton"
               >
@@ -494,8 +496,9 @@ export default function IncidentForm() {
                 <Button
                   mode="elevated"
                   style={styles.button}
-                  buttonColor="black"
-                  textColor="white"
+                  labelStyle={{ fontWeight: "bold", fontSize:17 }}
+                  buttonColor="powderblue"
+                  textColor="black"
                   disabled={disableButton}
                   onPress={handleSubmit}
                   loading={loading}
@@ -569,8 +572,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: 200,
-    fontWeight: "bold",
-  },
+    },
   homeButton: {
     borderColor: "black",
     borderWidth: 1,
