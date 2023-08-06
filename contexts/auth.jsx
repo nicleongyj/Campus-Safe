@@ -17,12 +17,10 @@ function useProtectedRoute(user) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(`useProtectedRoute useEffect called`);
     const inRegisterPage =
       segments[1] === "Register" || segments[1] === "StaffRegister";
     const inAuthGroup = segments[0] === "(auth)";
     if (!user && !inAuthGroup) {
-      console.log(`inAuthGroup: ${inAuthGroup}`);
       router.replace("/Login");
     } else if (user && inAuthGroup) {
       if (inRegisterPage) {
@@ -40,9 +38,7 @@ function AuthProvider({ children, setUserType }) {
   useProtectedRoute(user);
 
   useEffect(() => {
-    console.log(`AuthProvider useEffect called`);
     const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`onAuthStateChange event: ${event}`);
       if (event === "SIGNED_IN") {
         setUser(session.user);
         const userRole = await getUserRole();

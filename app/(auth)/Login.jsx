@@ -1,15 +1,16 @@
-import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
-import { Button, TextInput, Checkbox } from "react-native-paper";
-import { useState, useEffect } from "react";
-import { supabase } from "../../lib/supabase";
-import { Link } from "expo-router";
-import { useToast } from "react-native-toast-notifications";
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, ImageBackground, Alert } from "react-native";
+import { Button, Checkbox, TextInput } from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
+import { useToast } from "react-native-toast-notifications";
 
 import background from "../../assets/background.png";
 import campusSafe from "../../assets/CampusSafe.png";
 import emailIcon from "../../assets/emailIcon.png";
 import keyIcon from "../../assets/key.png";
+
+import { supabase } from "../../lib/supabase";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -29,26 +30,20 @@ export default function Login() {
   }, [loginMsg]);
 
   const handleSubmit = async () => {
-    //const toast = useToast();
     setLoading(true);
 
     // Handle login errors
     if (email === "") {
       setErrMsg("Email cannot be empty!");
       setLoading(false);
-      console.log(errMsg);
       return;
     }
     if (password === "") {
       setErrMsg("Please input a password!");
       setLoading(false);
-      console.log(errMsg);
       return;
     }
 
-    // setUserEmail(email);
-
-    console.log("1");
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -56,7 +51,10 @@ export default function Login() {
 
     setLoading(false);
     if (error) {
-      setErrMsg(error.message);
+      Alert.alert("Error", "Please try again!", [
+        { text: "OK" },
+      ]);
+      return;
     }
 
     setLoginMsg(true);
@@ -133,7 +131,7 @@ export default function Login() {
           </View>
           <Text style={styles.error}>
             {" "}
-            {errMsg != "" && <Text>{errMsg}</Text>}
+            {errMsg != "" && <Text testID="errMsg">{errMsg}</Text>}
           </Text>
         </View>
 
@@ -142,10 +140,11 @@ export default function Login() {
             onPress={handleSubmit}
             mode="elevated"
             style={styles.button}
-            buttonColor="black"
+            buttonColor="gold"
             loading={loading}
-            textColor="white"
+            textColor="black"
             testID="signInButton"
+            labelStyle={{ fontWeight:"bold"}}
           >
             Sign In
           </Button>
@@ -256,9 +255,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   staffButton: {
     borderWidth: 1,

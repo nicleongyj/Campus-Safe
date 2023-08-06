@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import { Text } from "react-native";
-
 import { connect } from "react-redux";
 
 function HomeLayout({ userType }) {

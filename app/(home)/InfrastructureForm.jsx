@@ -1,17 +1,25 @@
-import { Text, View, StyleSheet, Alert, Image, TouchableOpacity } from "react-native";
+import React from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { getImageURL, insertImage, insertReportData } from "../../lib/supabase";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
-import DisableFlashButton from "../../assets/disableFlash.png";
-import FlashButton from "../../assets/flash.png";
-import CameraButton from "../../assets/camera.png";
-import BackButton from "../../assets/backButton.png";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+
+import BackButton from "../../assets/backButton.png";
+import CameraButton from "../../assets/camera.png";
+import DisableFlashButton from "../../assets/disableFlash.png";
+import FlashButton from "../../assets/flash.png";
 
 export default function InfrastructureForm() {
   const [loading, setLoading] = useState(false);
@@ -22,11 +30,11 @@ export default function InfrastructureForm() {
   const [incident, setIncident] = useState("Select an item");
   const [open, setOpen] = useState(false);
   const [infrastructures, setInfrastructures] = useState([
-    { label: "Broken lights", value: "Broken lights", testID:"Broken lights" },
+    { label: "Broken lights", value: "Broken lights", testID: "Broken lights" },
     { label: "Faulty air-conditioning", value: "Faulty air-conditioning" },
     { label: "Faulty lift", value: "Faulty lift" },
     { label: "Water leakage", value: "Water leakage" },
-    { label: "Others", value: "Others", testID:"Others" },
+    { label: "Others", value: "Others", testID: "Others" },
     { label: "Select an item", value: "Select an item" },
   ]);
   //others data
@@ -94,13 +102,6 @@ export default function InfrastructureForm() {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
   const cameraRef = useRef(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const cameraStatus = await Camera.requestCameraPermissionsAsync();
-  //     setPermissions(cameraStatus.status === "granted");
-  //   })();
-  // }, []);
-
   if (!permissions) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -120,9 +121,10 @@ export default function InfrastructureForm() {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        setImage(data === undefined? "mock" : data.uri);
+        setImage(data === undefined ? "mock" : data.uri);
       } catch (error) {
-        // console.log(error);
+        Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+        return;
       }
     }
   };
@@ -146,10 +148,9 @@ export default function InfrastructureForm() {
 
       return data.publicUrl;
     } catch (e) {
-      // console.log(e);
+      Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
     }
   };
-
 
   const handleSubmit = async () => {
     if (incident == "Select an item") {
@@ -164,7 +165,6 @@ export default function InfrastructureForm() {
       setErrMsg("Fill up location!");
       return;
     }
-
     if (image == null) {
       setErrMsg("Please attack an image for verification");
       return;
@@ -172,7 +172,7 @@ export default function InfrastructureForm() {
 
     setLoading(true);
     setDisableButton(true);
-    
+
     const link = await getImageLink();
 
     const formData = {
@@ -204,6 +204,7 @@ export default function InfrastructureForm() {
     setErrMsg("");
     setDisableButton(false);
     setLoading(false);
+    navigation.navigate("index");
   };
 
   return (
@@ -322,17 +323,18 @@ export default function InfrastructureForm() {
             keyboardShouldPersistTaps="handled"
           >
             <View style={styles.topContainer}>
-                <Button
-                  mode="contained"
-                  style={{ width: 100 }}
-                  buttonColor="black"
-                  icon={BackButton}
-                  labelStyle={{ fontWeight: "bold" }}
-                  onPress={handleBack}
-                  testID="backButton"
-                >
-                  Back
-                </Button>
+              <Button
+                mode="contained"
+                style={{ width: 100, borderWidth: 1, borderColor: "black" }}
+                textColor="black"
+                buttonColor="powderblue"
+                icon={BackButton}
+                labelStyle={{ fontWeight: "bold", fontSize: 17 }}
+                onPress={handleBack}
+                testID="backButton"
+              >
+                Back
+              </Button>
             </View>
 
             <View style={styles.middleContainer}>
@@ -380,7 +382,6 @@ export default function InfrastructureForm() {
                   value={location}
                   onChangeText={(text) => {
                     if (text.trim() === "") {
-                      // Empty input, set others to an empty string
                       setLocation("");
                     } else {
                       setLocation(text);
@@ -402,7 +403,6 @@ export default function InfrastructureForm() {
                   value={details}
                   onChangeText={(text) => {
                     if (text.trim() === "") {
-                      // Empty input, set others to an empty string
                       setDetails("");
                     } else {
                       setDetails(text);
@@ -419,7 +419,9 @@ export default function InfrastructureForm() {
               </View>
 
               <View style={styles.normalContainer}>
-                <Text style={styles.question}>6. Attach a picture of the incident: </Text>
+                <Text style={styles.question}>
+                  6. Attach a picture of the incident:{" "}
+                </Text>
                 <View style={{ alignItems: "center" }}>
                   <TouchableOpacity
                     style={styles.cameraButton}
@@ -453,8 +455,9 @@ export default function InfrastructureForm() {
                 <Button
                   mode="elevated"
                   style={styles.button}
-                  buttonColor="black"
-                  textColor="white"
+                  labelStyle={{ fontWeight: "bold", fontSize: 17 }}
+                  buttonColor="powderblue"
+                  textColor="black"
                   disabled={disableButton}
                   loading={loading}
                   onPress={handleSubmit}
@@ -480,7 +483,6 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
-    padding: 10,
     alignItems: "flex-start",
   },
   middleContainer: {
@@ -530,7 +532,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     width: 200,
-    fontWeight: "bold",
   },
   homeButton: {
     borderColor: "black",

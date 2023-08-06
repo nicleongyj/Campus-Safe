@@ -3,15 +3,14 @@ import { Button } from "react-native-paper";
 import { supabase } from "../../lib/supabase";
 
 import { connect } from "react-redux";
-import { setUserType, setUserEmail } from "../../redux/store";
+import { setUserType } from "../../redux/store";
 import { TextInput } from "react-native-paper";
 
-import loginBackground from '../../assets/loginBackground.jpg'
+import loginBackground from "../../assets/loginBackground.jpg";
 
-function Profile({ setUserType, userType, userEmail }) {
+function Profile({ setUserType, userType }) {
   const handleLogOut = () => {
     setUserType("");
-    setUserEmail("");
     supabase.auth.signOut();
   };
 
@@ -22,52 +21,37 @@ function Profile({ setUserType, userType, userEmail }) {
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
-      <View style={styles.topContainer}>
-        <Text style={styles.header}>Profile page</Text>
-      </View>
-
-      <View style={styles.middleContainer}>
-        <View style={styles.infoContainer}>
-          <Text style={styles.text}>Account type:</Text>
-          <TextInput
-            mode="flat"
-            style={styles.textInput}
-            disabled={true}
-            placeholder="Account type"
-            textColor="black"
-          >
-            {userType}
-          </TextInput>
+        <View style={styles.topContainer}>
+          <Text style={styles.header}>Profile page</Text>
         </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.text}>Account email:</Text>
-          <TextInput
-            mode="flat"
-            style={styles.textInput}
-            disabled={true}
-            placeholder="Account email"
-            textColor="black"
-          >
-            {userEmail}
-          </TextInput>
-
-          {/* <Button mode='elevated' onPress={() => console.log(userType)}>Check usertype</Button> */}
+        <View style={styles.middleContainer}>
+          <View style={styles.infoContainer}>
+            <Text style={styles.text}>Account type:</Text>
+            <TextInput
+              mode="flat"
+              style={styles.textInput}
+              disabled={true}
+              placeholder="Account type"
+              textColor="black"
+            >
+              {userType}
+            </TextInput>
+          </View>
         </View>
 
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <Button
-          onPress={handleLogOut}
-          mode="elevated"
-          style={styles.button}
-          buttonColor="black"
-          textColor="white"
-        >
-          Log out
-        </Button>
-      </View>
+        <View style={styles.bottomContainer}>
+          <Button
+            onPress={handleLogOut}
+            mode="elevated"
+            style={styles.button}
+            buttonColor="gold"
+            textColor="black"
+            labelStyle={{ fontSize:17}}
+          >
+            Log out
+          </Button>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -111,21 +95,19 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   textInput: {
     backgroundColor: "whitesmoke",
     height: 25,
     width: 300,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
 const mapStateToProps = (state) => ({
   userType: state.userType,
-  userEmail: state.userEmail,
 });
 
-export default connect(mapStateToProps, { setUserType, setUserEmail })(Profile);
+export default connect(mapStateToProps, { setUserType })(Profile);

@@ -11,14 +11,14 @@ import { useNavigation } from "@react-navigation/native";
 
 const reportTypeOptions = [
   { label: "Incidents", value: "incidents" },
-  { label: "Infrastructure issues", value: "infrastructures" },
+  { label: "Infrastructure issues", value: "infrastructures", testID:"infrastructureButton" },
 ];
 
 const filterOptions = [
   { label: "Unverified", value: "unverified" },
-  { label: "Verified", value: "verified" },
-  { label: "Resolved", value: "resolved" },
-  { label: "Rejected", value: "rejected" },
+  { label: "Verified", value: "verified", testID: "verified"},
+  { label: "Resolved", value: "resolved", testID: "resolved" },
+  { label: "Rejected", value: "rejected", testID: "rejected" },
 ];
 
 const ReportCard = ({
@@ -30,7 +30,7 @@ const ReportCard = ({
   image_url,
 }) => {
   return (
-    <Card mode="outlined" style={styles.reportContainer}>
+    <Card mode="outlined" style={styles.reportContainer} testID="card">
       <Card.Content>
         <View style={styles.cardContainer}>
           <View style={styles.cardTextContainer}>
@@ -58,7 +58,6 @@ export default function TrackReports() {
     let filteredReport = await viewFilteredReport(viewMode, filter);
     setReports(filteredReport);
     setRefresh(false);
-    console.log(filteredReport);
   }
 
   useEffect(() => {
@@ -99,10 +98,12 @@ export default function TrackReports() {
             <Button
               mode="contained"
               style={styles.backButton}
-              buttonColor="black"
+              buttonColor="whitesmoke"
+              textColor="black"
               icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
+              labelStyle={{ fontWeight: "bold", fontSize:17 }}
               onPress={()=> navigation.navigate("index")}
+              testID="backButton"
             >
               Back
             </Button>
@@ -115,6 +116,7 @@ export default function TrackReports() {
               hasPadding
               buttonColor="slategray"
               borderColor="black"
+              testID="viewSwitchSelector"
             />
           </View>
 
@@ -126,6 +128,7 @@ export default function TrackReports() {
               hasPadding
               buttonColor="darkcyan"
               borderColor="black"
+              testID="filterSwitchSelector"
             />
           </View>
         </View>
@@ -177,6 +180,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 100,
+    borderWidth:1,
+    borderColor:'black'
   },
   reportContainer: {
     backgroundColor: "aliceblue",

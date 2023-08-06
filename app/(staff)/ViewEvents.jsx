@@ -11,8 +11,10 @@ import { FlatList } from "react-native-gesture-handler";
 import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { resolveReport, viewVerifiedReports } from "../../lib/supabase";
+
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
+
 
 const ReportCard = ({ type, details, id, onResolve, image_url }) => {
   return (
@@ -52,7 +54,6 @@ export default function ViewEvents() {
     let eventData = await viewVerifiedReports("events");
     setEvents(eventData);
     setRefresh(false);
-    console.log("fetched data");
   };
 
   useEffect(() => {
@@ -108,9 +109,10 @@ export default function ViewEvents() {
             <Button
               mode="contained"
               style={styles.backButton}
-              buttonColor="black"
+              buttonColor="whitesmoke"
+              textColor="black"
               icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
+              labelStyle={{ fontWeight: "bold", fontSize:17 }}
             >
               Back
             </Button>
@@ -168,6 +170,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 100,
+    borderWidth:1,
+    borderColor:'black'
   },
   reportContainer: {
     backgroundColor: "aliceblue",

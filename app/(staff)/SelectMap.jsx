@@ -21,7 +21,6 @@ export default function SelectMap() {
     const { coordinate } = event.nativeEvent;
     setLat(coordinate.latitude);
     setLong(coordinate.longitude);
-    console.log(reportType);
   };
 
   return (
@@ -40,11 +39,25 @@ export default function SelectMap() {
       </MapView>
 
       <View style={styles.submit}>
-        <Link href={{
-          pathname:"/VerifyForm",
-          params: {latitude: lat, longitude: long, reportType: reportType, id: id}
-        }} style={styles.link} >
-          <Button mode="contained" style={styles.button} buttonColor="black">
+        <Link
+          href={{
+            pathname: "/VerifyForm",
+            params: {
+              latitude: lat,
+              longitude: long,
+              reportType: reportType,
+              id: id,
+            },
+          }}
+          style={styles.link}
+        >
+          <Button
+            mode="contained"
+            style={styles.button}
+            buttonColor="gold"
+            textColor="black"
+            labelStyle={{ fontSize: 17, fontWeight: "bold" }}
+          >
             Next
           </Button>
         </Link>
@@ -69,7 +82,6 @@ const styles = StyleSheet.create({
   },
   link: {
     zIndex: 2,
-    // backgroundColor:'black',
   },
   button: {
     height: 50,
@@ -77,5 +89,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "black",
   },
 });

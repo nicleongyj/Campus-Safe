@@ -1,13 +1,10 @@
 jest.useFakeTimers();
-// import "expo-router";
 import { cleanup, fireEvent, waitFor } from "@testing-library/react-native";
 import React from "react";
 import { renderWithProviders } from "../../../utils/test-utils";
 import createMockStore from "../../../utils/test-utils";
 import { useRouter } from "expo-router";
-import { setUserType } from "../../../redux/store"; // Import the setUserType function
-
-/* Component imports */
+import { setUserType } from "../../../redux/store";
 import Register from "../Register";
 
 jest.mock("expo-router", () => ({
@@ -100,5 +97,23 @@ describe("Register screen", () => {
 
     const errorMessage = getByText("Passwords do not match");
     expect(errorMessage).toBeTruthy();
+  });
+
+  it("Does show error message register fields are filled up", async () => {
+    const { getByTestId, queryByTestId } = renderWithProviders(<Register />, store);
+    const emailInput = getByTestId("emailInput");
+    const password = getByTestId("passwordInput");
+    const secPassword = getByTestId("secondaryPasswordInput");
+    const register = getByTestId("submitRegister");
+
+    fireEvent.changeText(emailInput, "test@gmail.com");
+    fireEvent.changeText(password, "000000");
+    fireEvent.changeText(secPassword, "000000");
+    
+    await waitFor(async () => {
+      fireEvent.press(register);
+    });
+    const errMsg = queryByTestId("ErrMsg");
+    expect(errMsg).toBeFalsy();
   });
 });

@@ -12,6 +12,7 @@ import { Card, Button } from "react-native-paper";
 import { Link } from "expo-router";
 import { resolveReport, viewVerifiedReports } from "../../lib/supabase";
 import SwitchSelector from "react-native-switch-selector";
+
 import BackButton from "../../assets/backButton.png";
 import blueBackground from "../../assets/blueBackground.png";
 
@@ -57,7 +58,6 @@ export default function ViewVerifiedReports() {
     setIncidents(incidentData);
     setInfrastructures(infrastructureData);
     setRefresh(false);
-    console.log("fetched data");
   }
 
   useEffect(() => {
@@ -76,7 +76,6 @@ export default function ViewVerifiedReports() {
         text: "OK",
         onPress: async () => {
           if (reportType === "incidents") {
-            console.log("resolve incident");
             await resolveReport(id, "incident");
           } else {
             await resolveReport(id, "infra");
@@ -116,9 +115,10 @@ export default function ViewVerifiedReports() {
             <Button
               mode="contained"
               style={styles.backButton}
-              buttonColor="black"
+              buttonColor="whitesmoke"
+              textColor="black"
               icon={BackButton}
-              labelStyle={{ fontWeight: "bold" }}
+              labelStyle={{ fontWeight: "bold", fontSize: 17 }}
             >
               Back
             </Button>
@@ -191,6 +191,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     width: 100,
+    borderWidth: 1,
+    borderColor: "black",
   },
   reportContainer: {
     backgroundColor: "aliceblue",
@@ -237,6 +239,5 @@ const styles = StyleSheet.create({
   },
   cardSubheader: {
     fontSize: 13,
-
   },
 });

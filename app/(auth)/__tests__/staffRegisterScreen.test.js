@@ -58,6 +58,7 @@ describe("Staff register screen", () => {
     expect(password).toBeTruthy();
     expect(secPassword).toBeTruthy();
     expect(button).toBeTruthy();
+    expect(code).toBeTruthy();
   });
 
   it("Should show error message when email is empty", async () => {
@@ -132,5 +133,25 @@ describe("Staff register screen", () => {
 
     const errorMessage = getByText("Staff code cannot be empty!");
     expect(errorMessage).toBeTruthy();
+  });
+
+  it("Does show error message register fields are filled up", async () => {
+    const { getByTestId, queryByTestId } = renderWithProviders(<StaffRegister />, store);
+    const register = getByTestId("submitRegister");
+    const emailInput = getByTestId("emailInput");
+    const password = getByTestId("passwordInput");
+    const secPassword = getByTestId("secondaryPasswordInput");
+    const codeInput = getByTestId("codeInput")
+
+    fireEvent.changeText(emailInput, "test@gmail.com");
+    fireEvent.changeText(password, "000000");
+    fireEvent.changeText(secPassword, "000000");
+    fireEvent.changeText(codeInput, "0000");
+    
+    await waitFor(async () => {
+      fireEvent.press(register);
+    });
+    const errMsg = queryByTestId("ErrMsg");
+    expect(errMsg).toBeFalsy();
   });
 });

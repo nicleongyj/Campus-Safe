@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
-import { supabase, upgradeUserRole } from "../../lib/supabase";
 
 import background from "../../assets/background.png";
+
+import { supabase, upgradeUserRole } from "../../lib/supabase";
 
 export default function StaffRegister() {
   const [email, setEmail] = useState("");
@@ -57,9 +58,11 @@ export default function StaffRegister() {
     return;
   };
 
+  //show password
   const handlePassword = () => {
     setShowPassword(!showPassword);
   };
+  //show staff code
   const handleCode = () => {
     setShowCode(!showCode);
   };
@@ -82,7 +85,7 @@ export default function StaffRegister() {
             }}
           >
             {" "}
-            {errMsg !== "" && <Text>{errMsg}</Text>}
+            {errMsg !== "" && <Text testID="ErrMsg">{errMsg}</Text>}
             {/* {loading && <ActivityIndicator />} */}
           </Text>
         </View>
@@ -188,9 +191,10 @@ export default function StaffRegister() {
             onPress={handleSubmit}
             mode="elevated"
             style={styles.button}
-            buttonColor="black"
+            buttonColor="gold"
             loading={loading}
-            textColor="white"
+            textColor="black"
+            labelStyle={{fontWeight:'bold'}}
             testID="submitRegister"
           >
             Register
@@ -240,9 +244,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: "black",
-    borderWidth: 0,
+    borderWidth: 1,
     width: "70%",
-    fontWeight: "bold",
   },
   textBox: {
     backgroundColor: "rgba(0,0,0,0)",

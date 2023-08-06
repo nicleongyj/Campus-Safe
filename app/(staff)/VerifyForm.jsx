@@ -117,18 +117,16 @@ export default function VerifyForm() {
 
   const enableCamera = () => {
     setStartCamera(true);
-    console.log("true");
   };
 
   const takePicture = async () => {
     if (cameraRef) {
       try {
         const data = await cameraRef.current.takePictureAsync();
-        console.log("pass");
-        console.log(data);
         setImage(data.uri);
       } catch (error) {
-        console.log(error);
+        Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+        return;
       }
     }
   };
@@ -156,7 +154,7 @@ export default function VerifyForm() {
       const { data, error2 } = await getImageURL(
         reportType === "incidents"
           ? "verifiedIncidentImages"
-          : reportType === "event" 
+          : reportType === "event"
           ? "eventImages"
           : "verifiedInfraImages",
         fileName
@@ -165,10 +163,10 @@ export default function VerifyForm() {
       if (error) throw new Error(error.message);
       if (error2) throw new Error(error.message);
 
-      console.log(data.publicUrl);
       return data.publicUrl;
     } catch (e) {
-      console.log(e);
+      Alert.alert("Error", "Please try again!", [{ text: "OK" }]);
+      return;
     }
   };
 
@@ -196,7 +194,6 @@ export default function VerifyForm() {
     const link = await getImageLink();
 
     const formData = {
-      id: id,
       type: incident != "Others" ? incident : others,
       details: incidentDetails,
       latitude: lat,
@@ -209,10 +206,7 @@ export default function VerifyForm() {
     }
 
     if (reportType == "event") {
-      console.log(formData);
-      console.log(verifiedTableName);
       const error = await insertVerifiedReport(formData, verifiedTableName);
-      console.log("pass");
       if (!error) {
         Alert.alert(
           "Event submitted",
@@ -229,17 +223,14 @@ export default function VerifyForm() {
             },
           ]
         );
-        console.log("pass2");
       } else {
         Alert.alert("Error", "Please try again!", [
           { text: "OK", onPress: () => console.log("Error, OK Pressed") },
         ]);
-        console.log(error);
         return;
       }
       setDisableButton(false);
     } else {
-      console.log(formData);
       //SUPABASE LOGIC
       const error1 = await insertVerifiedReport(formData, verifiedTableName);
       const error2 = await verifyReport(tableName, id);
@@ -259,7 +250,6 @@ export default function VerifyForm() {
             },
           ]
         );
-
       } else {
         Alert.alert("Error", "Please try again!", [
           { text: "OK", onPress: () => console.log("Error, OK Pressed") },
@@ -380,7 +370,6 @@ export default function VerifyForm() {
       ) : reportType == "incidents" || reportType == "infrastructures" ? (
         <View style={styles.container}>
           <KeyboardAwareScrollView
-            // contentContainerStyle={{flex:1}}
             resetScrollToCoords={{ x: 0, y: 0 }}
             scrollEnabled={true}
             keyboardShouldPersistTaps="handled"
@@ -494,8 +483,9 @@ export default function VerifyForm() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="black"
-                textColor="white"
+                buttonColor="gold"
+                textColor="black"
+                labelStyle={{ fontWeight: "bold", fontSize: 17 }}
                 disabled={disableButton}
                 loading={loading}
                 onPress={handleSubmit}
@@ -596,8 +586,9 @@ export default function VerifyForm() {
               <Button
                 mode="elevated"
                 style={styles.button}
-                buttonColor="black"
-                textColor="white"
+                buttonColor="gold"
+                textColor="black"
+                labelStyle={{ fontWeight: "bold", fontSize: 17 }}
                 disabled={disableButton}
                 loading={loading}
                 onPress={handleSubmit}

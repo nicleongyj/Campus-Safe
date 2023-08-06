@@ -6,7 +6,8 @@ import {
   Linking,
   TouchableOpacity,
 } from "react-native";
-import loginBackground from "../../assets/loginBackground.jpg";
+
+import lightBackground from "../../assets/lightBackground.png";
 
 export default function Contact() {
   const handlePhoneNumberClick = (phoneNumber) => {
@@ -17,7 +18,7 @@ export default function Contact() {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={loginBackground}
+        source={lightBackground}
         resizeMode="stretch"
         style={{ flex: 1 }}
       >
@@ -30,7 +31,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("68741616")}
             >
               <Text style={styles.text}>+65 6874 1616</Text>
             </TouchableOpacity>
@@ -39,7 +40,7 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("65163636")}
             >
               <Text style={styles.text}>+65 6516 3636</Text>
             </TouchableOpacity>
@@ -48,9 +49,9 @@ export default function Contact() {
 
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("65165568")}
             >
-              <Text style={styles.text}>+65 6516 5568 /+65 6222 5568</Text>
+              <Text style={styles.text}>+65 6516 5568</Text>
             </TouchableOpacity>
             <Text style={styles.normalText}>(Outram Campus)</Text>
           </View>
@@ -59,7 +60,7 @@ export default function Contact() {
           <Text style={styles.subHeader}>Lifeline NUS (24-HR)</Text>
           <View style={styles.textContainer}>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("65167777")}
             >
               <Text style={styles.text}>+65 6516 7777 </Text>
             </TouchableOpacity>
@@ -71,15 +72,15 @@ export default function Contact() {
           <View style={styles.bottomSubContainer}>
             <Text style={styles.normalText}>SCDF Fire & Ambulance - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("995")}
             >
               <Text style={styles.text}> 995</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.bottomSubContainer}>
-            <Text style={styles.normalText}>Simgapore Police Force - </Text>
+            <Text style={styles.normalText}>Singapore Police Force - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("999")}
             >
               <Text style={styles.text}>999</Text>
             </TouchableOpacity>
@@ -87,7 +88,7 @@ export default function Contact() {
           <View style={styles.bottomSubContainer}>
             <Text style={styles.normalText}>Non-emergenency Ambulance - </Text>
             <TouchableOpacity
-              onPress={() => handlePhoneNumberClick("86872138")}
+              onPress={() => handlePhoneNumberClick("1777")}
             >
               <Text style={styles.text}>1777</Text>
             </TouchableOpacity>
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   normalText:{
-    fontSize:16
+    fontSize:16,
+    fontWeight:'bold',
   }
 });

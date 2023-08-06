@@ -1,20 +1,32 @@
-import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal, TouchableOpacity } from "react-native";
+// React imports
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Animated,
+  Dimensions,
+  Modal,
+  TouchableOpacity,
+  Platform,
+  ImageBackground,
+} from "react-native";
 
 import MapView, { Marker } from "react-native-maps";
-import { viewMarkers } from "../../lib/supabase";
-
-import flameIcon from "../../assets/flame.png";
-import maintenanceIcon from "../../assets/maintenance.png";
-import accidentIcon from "../../assets/accident.png";
-import warningIcon from "../../assets/warning.png";
-import constructionIcon from "../../assets/construction.png";
 import SwitchSelector from "react-native-switch-selector";
 import { Button, Card } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+
+import { viewMarkers } from "../../lib/supabase";
+import accidentIcon from "../../assets/accident.png";
+import constructionIcon from "../../assets/construction.png";
+import flameIcon from "../../assets/flame.png";
+import maintenanceIcon from "../../assets/maintenance.png";
+import warningIcon from "../../assets/warning.png";
 
 const { width, height } = Dimensions.get("window");
-
-const CARD_HEIGHT = (height / 4);
+const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default function Map() {
@@ -27,6 +39,8 @@ export default function Map() {
   const [disableScroll, setDisableScroll] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
+
+  const navigation = useNavigation();
 
   const [region, setRegion] = useState({
     latitude: 1.29235,
@@ -123,7 +137,7 @@ export default function Map() {
           {
             label: `Infrastructure issues  (${infraMarkers.length})`,
             value: "infrastructures",
-            testID: "infraButton"
+            testID: "infraButton",
           },
         ]}
         onPress={handleSwitchPress}
@@ -138,6 +152,18 @@ export default function Map() {
         onRegionChangeComplete={setRegion}
         testID="map"
       >
+        <View style={styles.topContainer}>
+          <Button
+            mode="contained"
+            style={{ width: 100, borderWidth:1, borderColor:'black' }}
+            buttonColor="powderblue"
+            textColor="black"
+            labelStyle={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("index")}
+          >
+            Back
+          </Button>
+        </View>
         {showMarkerType === "incidents" &&
           incidentMarkers.map((marker) => {
             return (
@@ -153,28 +179,54 @@ export default function Map() {
                 }
                 testID="incidentMarker"
               >
-                <Image
-                  source={
-                    marker.type === "Fire"
-                      ? flameIcon
-                      : marker.type === "Motor accident"
-                      ? accidentIcon
-                      : warningIcon
-                  }
-              
-                  style={[
-                    selectedIncidentCardIndex !==
-                      incidentMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
-                    },
-                    selectedIncidentCardIndex ===
-                      incidentMarkers.indexOf(marker) && {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                />
+                {Platform.OS === "ios" && (
+                  <Image
+                    source={
+                      marker.type === "Fire"
+                        ? flameIcon
+                        : marker.type === "Motor accident"
+                        ? accidentIcon
+                        : warningIcon
+                    }
+                    style={[
+                      selectedIncidentCardIndex !==
+                        incidentMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedIncidentCardIndex ===
+                        incidentMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  />
+                )}
+                {Platform.OS === "android" && (
+                  <ImageBackground
+                    source={
+                      marker.type === "Fire"
+                        ? flameIcon
+                        : marker.type === "Motor accident"
+                        ? accidentIcon
+                        : warningIcon
+                    }
+                    style={[
+                      selectedIncidentCardIndex !==
+                        incidentMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedIncidentCardIndex ===
+                        incidentMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  >
+                    <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                  </ImageBackground>
+                )}
               </Marker>
             );
           })}
@@ -191,23 +243,50 @@ export default function Map() {
                 onPress={() => handleMarkerPress(infraMarkers.indexOf(marker))}
                 testID="infraMarker"
               >
-                <Image
-                  source={
-                    marker.type === "Construction"
-                      ? constructionIcon
-                      : maintenanceIcon
-                  }
-                  style={[
-                    selectedInfraCardIndex !== infraMarkers.indexOf(marker) && {
-                      width: 30,
-                      height: 30,
-                    },
-                    selectedInfraCardIndex === infraMarkers.indexOf(marker) && {
-                      width: 70,
-                      height: 70,
-                    },
-                  ]}
-                />
+                {Platform.OS === "ios" && (
+                  <Image
+                    source={
+                      marker.type === "Construction"
+                        ? constructionIcon
+                        : maintenanceIcon
+                    }
+                    style={[
+                      selectedInfraCardIndex !==
+                        infraMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedInfraCardIndex ===
+                        infraMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  />
+                )}
+                {Platform.OS === "android" && (
+                  <ImageBackground
+                    source={
+                      marker.type === "Construction"
+                        ? constructionIcon
+                        : maintenanceIcon
+                    }
+                    style={[
+                      selectedInfraCardIndex !==
+                        infraMarkers.indexOf(marker) && {
+                        width: 30,
+                        height: 30,
+                      },
+                      selectedInfraCardIndex ===
+                        infraMarkers.indexOf(marker) && {
+                        width: 70,
+                        height: 70,
+                      },
+                    ]}
+                  >
+                    <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                  </ImageBackground>
+                )}
               </Marker>
             );
           })}
@@ -233,7 +312,7 @@ export default function Map() {
                   selectedIncidentCardIndex ===
                     incidentMarkers.indexOf(marker) && styles.selectedCard,
                 ]}
-                testID='incidentCard'
+                testID="incidentCard"
               >
                 <Image
                   source={{ uri: marker.image_url }}
@@ -248,20 +327,21 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                {/* <Button
-                  mode="contained"
+                <TouchableOpacity
                   style={styles.button}
                   onPress={() => handleExpand(incidentMarkers.indexOf(marker))}
+                  testID={`expandButton-${incidentMarkers.indexOf(marker)}`}
                 >
-                  Expand
-                </Button> */}
-
-                <TouchableOpacity style={styles.button} onPress={() => handleExpand(eventMarkers.indexOf(marker))}>
-                  <Text style={{color:'white', alignSelf:'center'}}>Expand</Text>
+                  <Text style={{ color: "white", alignSelf: "center" }}>
+                    Expand
+                  </Text>
                 </TouchableOpacity>
 
-
-                <Modal visible={modalVisible} transparent={true}>
+                <Modal
+                  visible={modalVisible}
+                  transparent={true}
+                  testID={`modal-${incidentMarkers.indexOf(marker)}`}
+                >
                   <View style={styles.imageModalContainer}>
                     {selectedMarkerIndex != null && (
                       <Card mode="outlined" style={styles.reportContainer}>
@@ -330,15 +410,21 @@ export default function Map() {
                     {marker.details}
                   </Text>
                 </View>
-                <Button
-                  mode="contained"
+                <TouchableOpacity
                   style={styles.button}
                   onPress={() => handleExpand(infraMarkers.indexOf(marker))}
+                  testID={`expandButton-${infraMarkers.indexOf(marker)}`}
                 >
-                  Expand
-                </Button>
+                  <Text style={{ color: "white", alignSelf: "center" }}>
+                    Expand
+                  </Text>
+                </TouchableOpacity>
 
-                <Modal visible={modalVisible} transparent={true}>
+                <Modal
+                  visible={modalVisible}
+                  transparent={true}
+                  testID={`modal-${infraMarkers.indexOf(marker)}`}
+                >
                   <View style={styles.imageModalContainer}>
                     {selectedMarkerIndex != null && (
                       <Card mode="outlined" style={styles.reportContainer}>
@@ -392,12 +478,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#c0e4a4",
   },
   switchContainer: {
-    zIndex: 2,
+    position: "absolute",
+    top: 10,
+    left: 10,
+    zIndex: 1,
   },
   map: {
     flex: 9,
     width: "100%",
     height: "100%",
+  },
+  topContainer: {
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   legendContainer: {
     flex: 1,
@@ -489,10 +582,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "black",
     width: "80%",
-    height:"15%",
+    height: "15%",
     alignSelf: "center",
-    justifyContent:'center',
-    borderRadius:20,
+    justifyContent: "center",
+    borderRadius: 20,
   },
   cardImage: {
     flex: 3,

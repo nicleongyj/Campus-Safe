@@ -1,14 +1,30 @@
+// React imports
 import { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated, Dimensions, Modal, TouchableOpacity } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import { viewMarkers } from "../../lib/supabase";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Animated,
+  Dimensions,
+  Modal,
+  TouchableOpacity,
+  Platform,
+  ImageBackground,
+  Alert,
+} from "react-native";
 
-import colouredEvent from "../../assets/colouredEvent.png";
 import { Button, Card } from "react-native-paper";
+import MapView, { Marker } from "react-native-maps";
+
+import { viewMarkers } from "../../lib/supabase";
+import colouredEvent from "../../assets/colouredEvent.png";
+
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get("window");
 
-const CARD_HEIGHT = (height / 4);
+const CARD_HEIGHT = height / 4;
 const CARD_WIDTH = CARD_HEIGHT - 50;
 
 export default function EventMap() {
@@ -29,11 +45,15 @@ export default function EventMap() {
     try {
       const eventData = await viewMarkers("events");
       setEventMarkers(eventData);
-      console.log("Fetched data");
     } catch (error) {
-      console.error("Error fetching markers:", error);
+      Alert.alert("Error fetching markers", "Please try again!", [
+        { text: "OK" },
+      ]);
+      return;
     }
   };
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (refresh) {
@@ -61,8 +81,8 @@ export default function EventMap() {
 
   const handleMarkerPress = (index) => {
     setDisableScroll(true);
-      setSelectedCardIndex(index);
-      handleExpand(index);
+    setSelectedCardIndex(index);
+    handleExpand(index);
 
     scrollViewRef.current.scrollTo({
       x: index * CARD_WIDTH,
@@ -85,45 +105,71 @@ export default function EventMap() {
 
   return (
     <View style={styles.container}>
-    
       <MapView
         style={styles.map}
         region={region}
         onRegionChangeComplete={setRegion}
         testID="map"
       >
+        <View style={styles.topContainer}>
+          <Button
+            mode="contained"
+            style={{ width: 100, borderWidth:1, borderColor:'black', alignItems:'center' }}
+            buttonColor="powderblue"
+            textColor="black"
+            labelStyle={{ fontWeight: "bold" }}
+            onPress={() => navigation.navigate("index")}
+          >
+            Back
+          </Button>
+        </View>
         {eventMarkers.map((marker) => {
-            return (
-              <Marker
-                key={eventMarkers.indexOf(marker)}
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                tracksViewChanges={false}
-                onPress={() =>
-                  handleMarkerPress(eventMarkers.indexOf(marker))
-                }
-                testID='eventMarker'
-              >
+          return (
+            <Marker
+              key={eventMarkers.indexOf(marker)}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+              tracksViewChanges={false}
+              onPress={() => handleMarkerPress(eventMarkers.indexOf(marker))}
+              testID="eventMarker"
+            >
+              {Platform.OS === "ios" && (
                 <Image
                   source={colouredEvent}
                   style={[
-                    selectedCardIndex !==
-                      eventMarkers.indexOf(marker) && {
+                    selectedCardIndex !== eventMarkers.indexOf(marker) && {
                       width: 35,
                       height: 35,
                     },
-                    selectedCardIndex ===
-                      eventMarkers.indexOf(marker) && {
+                    selectedCardIndex === eventMarkers.indexOf(marker) && {
                       width: 70,
                       height: 70,
                     },
                   ]}
                 />
-              </Marker>
-            );
-          })}
+              )}
+              {Platform.OS === "android" && (
+                <ImageBackground
+                  source={colouredEvent}
+                  style={[
+                    selectedCardIndex !== eventMarkers.indexOf(marker) && {
+                      width: 35,
+                      height: 35,
+                    },
+                    selectedCardIndex === eventMarkers.indexOf(marker) && {
+                      width: 70,
+                      height: 70,
+                    },
+                  ]}
+                >
+                  <Text style={{ width: 0, height: 0 }}>{Math.random()}</Text>
+                </ImageBackground>
+              )}
+            </Marker>
+          );
+        })}
       </MapView>
       <Animated.ScrollView
         horizontal
@@ -137,83 +183,86 @@ export default function EventMap() {
         testID="scrollView"
       >
         {eventMarkers.map((marker) => {
-            return (
-              <View
-                key={eventMarkers.indexOf(marker)}
-                style={[
-                  styles.card,
-                  selectedCardIndex === eventMarkers.indexOf(marker) &&
-                    styles.selectedCard,
-                ]}
-                testID="eventCard"
-              >
-                <Image
-                  source={{ uri: marker.image_url }}
-                  style={styles.cardImage}
-                  resizeMode="cover"
-                />
-                <View style={styles.textContent}>
-                  <Text numberOfLines={1} style={styles.cardtitle}>
-                    {marker.type}
-                  </Text>
-                  <Text numberOfLines={1} style={styles.cardDescription}>
-                    {marker.details}
-                  </Text>
-                </View>
-                {/* <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={() => handleExpand(eventMarkers.indexOf(marker))}
-                >
-                  Expand
-                </Button> */}
-                <TouchableOpacity style={styles.button} onPress={() => handleExpand(eventMarkers.indexOf(marker))}>
-                  <Text style={{color:'white', alignSelf:'center'}}>Expand</Text>
-                </TouchableOpacity>
-
-                <Modal visible={modalVisible} transparent={true}>
-                  <View style={styles.imageModalContainer}>
-                    {selectedMarkerIndex != null && (
-                      <Card mode="outlined" style={styles.reportContainer}>
-                        <Card.Content>
-                          <Card.Cover
-                            source={{
-                              uri: eventMarkers[selectedMarkerIndex].image_url,
-                            }}
-                            style={{
-                              width: "100%",
-                              height: "85%",
-                              alignSelf: "center",
-                            }}
-                          />
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              fontWeight: "bold",
-                              marginTop: "2%",
-                            }}
-                          >
-                            {eventMarkers[selectedMarkerIndex].type}
-                          </Text>
-                          <Text numberOfLines={3} style={{ fontSize: 15 }}>
-                            {eventMarkers[selectedMarkerIndex].details}
-                          </Text>
-                        </Card.Content>
-                      </Card>
-                    )}
-                    <Button
-                      mode="outlined"
-                      buttonColor="white"
-                      textColor="black"
-                      onPress={toggleImageModal}
-                    >
-                      Close
-                    </Button>
-                  </View>
-                </Modal>
+          return (
+            <View
+              key={eventMarkers.indexOf(marker)}
+              style={[
+                styles.card,
+                selectedCardIndex === eventMarkers.indexOf(marker) &&
+                  styles.selectedCard,
+              ]}
+              testID="eventCard"
+            >
+              <Image
+                source={{ uri: marker.image_url }}
+                style={styles.cardImage}
+                resizeMode="cover"
+              />
+              <View style={styles.textContent}>
+                <Text numberOfLines={1} style={styles.cardtitle}>
+                  {marker.type}
+                </Text>
+                <Text numberOfLines={1} style={styles.cardDescription}>
+                  {marker.details}
+                </Text>
               </View>
-            );
-          })}
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleExpand(eventMarkers.indexOf(marker))}
+                testID={`expandButton-${eventMarkers.indexOf(marker)}`}
+              >
+                <Text style={{ color: "white", alignSelf: "center" }}>
+                  Expand
+                </Text>
+              </TouchableOpacity>
+
+              <Modal
+                visible={modalVisible}
+                transparent={true}
+                testID={`modal-${eventMarkers.indexOf(marker)}`}
+              >
+                <View style={styles.imageModalContainer}>
+                  {selectedMarkerIndex != null && (
+                    <Card mode="outlined" style={styles.reportContainer}>
+                      <Card.Content>
+                        <Card.Cover
+                          source={{
+                            uri: eventMarkers[selectedMarkerIndex].image_url,
+                          }}
+                          style={{
+                            width: "100%",
+                            height: "85%",
+                            alignSelf: "center",
+                          }}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            fontWeight: "bold",
+                            marginTop: "2%",
+                          }}
+                        >
+                          {eventMarkers[selectedMarkerIndex].type}
+                        </Text>
+                        <Text numberOfLines={3} style={{ fontSize: 15 }}>
+                          {eventMarkers[selectedMarkerIndex].details}
+                        </Text>
+                      </Card.Content>
+                    </Card>
+                  )}
+                  <Button
+                    mode="outlined"
+                    buttonColor="white"
+                    textColor="black"
+                    onPress={toggleImageModal}
+                  >
+                    Close
+                  </Button>
+                </View>
+              </Modal>
+            </View>
+          );
+        })}
       </Animated.ScrollView>
     </View>
   );
@@ -237,6 +286,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     alignItems: "center",
+  },
+  topContainer: {
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   header: {
     flex: 1,
@@ -322,10 +375,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "black",
     width: "80%",
-    height:"15%",
+    height: "15%",
     alignSelf: "center",
-    justifyContent:'center',
-    borderRadius:20,
+    justifyContent: "center",
+    borderRadius: 20,
   },
   cardImage: {
     flex: 3,

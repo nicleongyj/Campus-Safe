@@ -1,19 +1,14 @@
 jest.useFakeTimers();
-import "expo-router";
-import { cleanup, fireEvent, waitFor } from "@testing-library/react-native";
+import { act, cleanup, fireEvent, waitFor } from "@testing-library/react-native";
 import React from "react";
 import { renderWithProviders } from "../../../utils/test-utils";
 import createMockStore from "../../../utils/test-utils";
-import { useRouter } from "expo-router";
-import { setUserType } from "../../../redux/store"; // Import the setUserType function
-
-/* Component imports */
 import Login from "../Login";
 
+const mockedNavigate = jest.fn();
+const mockedShow = jest.fn();
+
 jest.mock("expo-router", () => ({
-  Link: ({ children, href }) => <>{children}</>,
-  // useNavigation: jest.fn(),
-  // useLocalSearchParams: jest.fn(),
 }));
 
 jest.mock("../../../contexts/auth", () => {
@@ -24,36 +19,22 @@ jest.mock("../../../contexts/auth", () => {
   };
 });
 
-const mockedReplace = jest.fn();
-
-const mockedNavigate = jest.fn();
-
-// jest.mock('@react-navigation/native', () => {
-//   const actualNav = jest.requireActual('@react-navigation/native');
-//   return {
-//     ...actualNav,
-//     useNavigation: () => ({
-//       navigate: mockedNavigate,
-//     }),
-//   };
-// });
+jest.mock("react-native-toast-notifications", () => ({
+  useToast: () => ({
+    show: mockedShow
+  }),
+}));
 
 jest.mock("../../../lib/supabase", () => ({
   supabase: {
     auth: {
       onAuthStateChange: jest.fn(),
-      signInWithPassword: jest.fn(),
+      signInWithPassword: jest.fn(() => "error"),
     },
   },
   getUserRole: jest.fn(() => "staff"), // Replace 'user' with the role you want to test
 }));
 
-// Mock the `expo-router` library
-jest.mock("expo-router", () => ({
-  useRouter: () => ({
-    replace: jest.fn(),
-  }),
-}));
 
 describe("Login screen", () => {
   const initialState = {
@@ -62,17 +43,12 @@ describe("Login screen", () => {
   const store = createMockStore(initialState);
 
   beforeEach(() => {
-    // Reset the number of times the mockedNavigate function is called before each test
     mockedNavigate.mockClear();
-    // Mock the useNavigation hook to return the mockedNavigate function
     jest
       .spyOn(require("@react-navigation/native"), "useNavigation")
       .mockReturnValue({
         navigate: mockedNavigate,
       });
-    // jest.spyOn(require("expo-router"), "useSegments").mockReturnValue({
-    //   replace: mockedReplace,
-    // });
   });
 
   afterEach(() => {
@@ -138,47 +114,19 @@ describe("Login screen", () => {
     expect(mockedNavigate).toHaveBeenCalledWith("StaffRegister");
   });
 
-  // it("Navigates to home page once signed in", async () => {
-  //   const { getByTestId, getByText, getByPlaceholderText } =
-  //     renderWithProviders(<Login />, store);
+  it("Does show error message login fields are filled up", async () => {
+    const { getByPlaceholderText, getByTestId, queryByTestId } = renderWithProviders(<Login />, store);
+    const emailInput = getByPlaceholderText("Email");
+    const passwordInput = getByPlaceholderText("Password");
+    const signInButton = getByTestId("signInButton");
 
-  //   const signInButton = getByTestId("signInButton");
-  //   const emailInput = getByPlaceholderText("Email");
-  //   const passwordInput = getByPlaceholderText("Password");
-
-  //   await waitFor(() => {
-  //     fireEvent.changeText(emailInput, "test@gmail.com");
-  //     fireEvent.changeText(passwordInput, "000000");
-  //   });
-
-  //   const { useRouter } = require('expo-router');
-  //   const router = useRouter();
-
-  //   await waitFor(() => {
-  //     fireEvent.press(signInButton);
-  //   });
-
-  //   const { onAuthStateChange } = require('../../../lib/supabase').supabase.auth;
-  //   onAuthStateChange.mockImplementation((handler) => handler({ event: 'SIGNED_IN' }));
-
-  //   expect(router.replace).toHaveBeenCalledTimes(1);
-
-  //   // const mockedOnAuthStateChange = require("../../../lib/supabase").supabase.auth.onAuthStateChange;
-  //   // const user = { /* Provide the user object that represents a signed-in user */ };
-  //   // // Simulate a successful sign-in event
-  //   // mockedOnAuthStateChange.mockImplementation((callback) => callback("SIGNED_IN", { user }));
-
-  //   // // Render the Login component with providers
-
-  //   // // Assuming you have a unique header text on the home page
-  //   // // You can assert that the user is navigated to the home page
-  //   // const homePageHeaderText = getByText("Welcome!");
-  //   // expect(homePageHeaderText).toBeTruthy();
-
-  //   // // Now, check whether the 'router.replace' method was called with the correct arguments
-  //   // const replaceSpy = useRouter().replace;
-  //   // expect(replaceSpy).toHaveBeenCalledTimes(1);
-  //   // expect(replaceSpy).toHaveBeenCalledWith({ pathname: "/", params: { newRegister: false } });
-
-  // });
+    fireEvent.changeText(emailInput, "test@gmail.com");
+    fireEvent.changeText(passwordInput, "000000");
+    
+    await waitFor(async () => {
+      fireEvent.press(signInButton);
+    });
+    const errMsg = queryByTestId("ErrMsg");
+    expect(errMsg).toBeFalsy();
+  });
 });
