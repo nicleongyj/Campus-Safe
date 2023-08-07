@@ -20,8 +20,6 @@ import MapView, { Marker } from "react-native-maps";
 import { viewMarkers } from "../../lib/supabase";
 import colouredEvent from "../../assets/colouredEvent.png";
 
-import { useNavigation } from "@react-navigation/native";
-
 const { width, height } = Dimensions.get("window");
 
 const CARD_HEIGHT = height / 4;
@@ -52,8 +50,6 @@ export default function EventMap() {
       return;
     }
   };
-
-  const navigation = useNavigation();
 
   useEffect(() => {
     if (refresh) {
@@ -111,18 +107,6 @@ export default function EventMap() {
         onRegionChangeComplete={setRegion}
         testID="map"
       >
-        <View style={styles.topContainer}>
-          <Button
-            mode="contained"
-            style={{ width: 100, borderWidth:1, borderColor:'black', alignItems:'center' }}
-            buttonColor="powderblue"
-            textColor="black"
-            labelStyle={{ fontWeight: "bold" }}
-            onPress={() => navigation.navigate("index")}
-          >
-            Back
-          </Button>
-        </View>
         {eventMarkers.map((marker) => {
           return (
             <Marker
@@ -286,10 +270,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "white",
     alignItems: "center",
-  },
-  topContainer: {
-    alignItems: "flex-start",
-    justifyContent: "center",
   },
   header: {
     flex: 1,
