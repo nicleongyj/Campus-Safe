@@ -16,7 +16,6 @@ import {
 import MapView, { Marker } from "react-native-maps";
 import SwitchSelector from "react-native-switch-selector";
 import { Button, Card } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
 
 import { viewMarkers } from "../../lib/supabase";
 import accidentIcon from "../../assets/accident.png";
@@ -39,8 +38,6 @@ export default function Map() {
   const [disableScroll, setDisableScroll] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarkerIndex, setSelectedMarkerIndex] = useState(null);
-
-  const navigation = useNavigation();
 
   const [region, setRegion] = useState({
     latitude: 1.29235,
@@ -152,18 +149,6 @@ export default function Map() {
         onRegionChangeComplete={setRegion}
         testID="map"
       >
-        <View style={styles.topContainer}>
-          <Button
-            mode="contained"
-            style={{ width: 100, borderWidth:1, borderColor:'black' }}
-            buttonColor="powderblue"
-            textColor="black"
-            labelStyle={{ fontWeight: "bold" }}
-            onPress={() => navigation.navigate("index")}
-          >
-            Back
-          </Button>
-        </View>
         {showMarkerType === "incidents" &&
           incidentMarkers.map((marker) => {
             return (
@@ -487,10 +472,6 @@ const styles = StyleSheet.create({
     flex: 9,
     width: "100%",
     height: "100%",
-  },
-  topContainer: {
-    alignItems: "flex-start",
-    justifyContent: "center",
   },
   legendContainer: {
     flex: 1,
