@@ -2,9 +2,6 @@ import React from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
-import { useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
-import { useToast } from "react-native-toast-notifications";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -17,14 +14,7 @@ import trackRecord from "../../assets/trackRecord.png";
 
 
 function Homepage() {
-  const { newRegister } = useLocalSearchParams();
-  const toast = useToast();
   const navigation = useNavigation();
-  useEffect(() => {
-    if (newRegister == "true") {
-      toast.show("Account Registered");
-    }
-  }, []);
   const navigateTo = (destination) => {
     navigation.navigate(destination);
   }

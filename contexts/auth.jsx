@@ -17,19 +17,13 @@ function useProtectedRoute(user) {
   const router = useRouter();
 
   useEffect(() => {
-    const inRegisterPage =
-      segments[1] === "Register" || segments[1] === "StaffRegister";
     const inAuthGroup = segments[0] === "(auth)";
     if (!user && !inAuthGroup) {
       router.replace("/Login");
     } else if (user && inAuthGroup) {
-      if (inRegisterPage) {
-        router.replace({ pathname: "/", params: { newRegister: true } });
-      } else {
-        router.replace({ pathname: "/", params: { newRegister: false } });
+        router.replace("/");
       }
-    }
-  }, [user, segments, router]);
+    }, [user, segments, router]);
 }
 
 function AuthProvider({ children, setUserType }) {
