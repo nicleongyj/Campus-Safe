@@ -2,11 +2,14 @@ import { useState } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
 import { Button, TextInput, Checkbox } from "react-native-paper";
 
+import { connect } from "react-redux";
+import { setUserType } from "../../redux/store";
+
 import background from "../../assets/background.png";
 
 import { supabase, upgradeUserRole } from "../../lib/supabase";
 
-export default function StaffRegister() {
+function StaffRegister({ setUserType }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secondaryPassword, setSecondaryPassword] = useState("");
@@ -55,7 +58,11 @@ export default function StaffRegister() {
     if (roleUpdateError) {
       setErrMsg(roleUpdateError.message);
     }
+
+    setUserType("staff");
+
     return;
+
   };
 
   //show password
@@ -254,3 +261,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
+export default connect(null, { setUserType })(StaffRegister);

@@ -25,7 +25,11 @@
         "backgroundColor": "#ffffff"
       },
       "softwareKeyboardLayoutMode": "pan",
-      "package": "com.nickyujun.orbitalapp"
+      "package": "com.nickyujun.orbitalapp",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,6 +55,7 @@
           "isAccessMediaLocationEnabled": true
         }
       ]
-    ]
+    ],
+    "owner": "nickyujun"
   }
 }
