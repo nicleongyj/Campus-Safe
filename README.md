@@ -1,9 +1,9 @@
 # CampusSafe - Your one-stop incident reporting app
 
 <p float="left">
-  <img src="assets/Home.PNG" width="33%" />
-  <img src="assets/Login.PNG" width="33%" />
-  <img src="assets/Mapimage.PNG" width="33%" />
+  <img src="assets/Home.PNG" width="30%" />
+  <img src="assets/Login.PNG" width="30%" />
+  <img src="assets/Mapimage.PNG" width="30%" />
 </p>
 
 ## About the project
