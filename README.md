@@ -40,7 +40,7 @@ Staff members:
 
 ## Poster
   <div style="padding: 5px;">
-    <img src="assets/Poster.PNG" alt="Image 3" style="width: 100%;">
+    <img src="assets/poster.png" alt="Image 3" style="width: 100%;">
   </div>
 
 
