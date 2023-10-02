@@ -2,13 +2,13 @@
 
 <div style="display: flex;">
   <div style="flex: 33.33%; padding: 5px;">
-    <img src="assets/Home.PNG" alt="Image 1" style="width: 100%;">
+    <img src="assets/Home.PNG" alt="Image 1" style="width: 33.3%;">
   </div>
   <div style="flex: 33.33%; padding: 5px;">
-    <img src="assets/Login.PNG" alt="Image 2" style="width: 100%;">
+    <img src="assets/Login.PNG" alt="Image 2" style="width: 33.3%;">
   </div>
   <div style="flex: 33.33%; padding: 5px;">
-    <img src="assets/Mapimage.PNG" alt="Image 3" style="width: 100%;">
+    <img src="assets/Mapimage.PNG" alt="Image 3" style="width: 33.3%;">
   </div>
 </div>
 
